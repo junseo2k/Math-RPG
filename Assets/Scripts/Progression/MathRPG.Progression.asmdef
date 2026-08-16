@@ -1,0 +1,18 @@
+{
+    "name": "MathRPG.Progression",
+    "rootNamespace": "MathRPG.Progression",
+    "references": [
+        "MathRPG.Core",
+        "MathRPG.Data",
+        "MathRPG.MathQuiz"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

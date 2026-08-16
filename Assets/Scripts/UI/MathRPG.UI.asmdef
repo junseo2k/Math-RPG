@@ -1,0 +1,21 @@
+{
+    "name": "MathRPG.UI",
+    "rootNamespace": "MathRPG.UI",
+    "references": [
+        "MathRPG.Core",
+        "MathRPG.Data",
+        "MathRPG.Combat",
+        "MathRPG.MathQuiz",
+        "MathRPG.Progression",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

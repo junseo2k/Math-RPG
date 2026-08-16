@@ -1,0 +1,17 @@
+{
+    "name": "MathRPG.MathQuiz",
+    "rootNamespace": "MathRPG.MathQuiz",
+    "references": [
+        "MathRPG.Core",
+        "MathRPG.Data"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
