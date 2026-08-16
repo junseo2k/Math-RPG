@@ -1,17 +1,19 @@
 {
-    "name": "MathRPG.UI",
-    "rootNamespace": "MathRPG.UI",
+    "name": "MathRPG.Editor",
+    "rootNamespace": "MathRPG.EditorTools",
     "references": [
         "MathRPG.Core",
         "MathRPG.Data",
         "MathRPG.Combat",
-        "MathRPG.MathQuiz",
-        "MathRPG.Progression",
+        "MathRPG.Player",
+        "MathRPG.UI",
         "Unity.InputSystem",
         "UnityEngine.UI",
         "Unity.TextMeshPro"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
