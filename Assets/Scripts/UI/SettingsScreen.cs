@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using MathRPG.Core;
 using TMPro;
@@ -8,15 +7,16 @@ using UnityEngine.UI;
 namespace MathRPG.UI
 {
     /// <summary>
-    /// 설정 화면. 현재는 화면(해상도·전체화면)과 소리(마스터/BGM/효과음)만 다룬다.
+    /// 설정 씬의 컨트롤러. 현재는 화면(해상도·전체화면)과 소리(마스터/BGM/효과음)만 다룬다.
     ///
     /// 편집 중인 값은 <see cref="_draft"/>에만 반영되고, [적용]을 눌러야 실제로 저장된다.
     /// 슬라이더를 만질 때마다 해상도가 바뀌는 것을 막기 위한 구조다.
+    ///
+    /// 뒤로 가기는 <see cref="MenuNavigation"/>이 기억한 곳으로 돌아가므로,
+    /// 나중에 게임 중 일시정지에서 설정을 열어도 그대로 동작한다.
     /// </summary>
-    public sealed class SettingsPanel : MonoBehaviour
+    public sealed class SettingsScreen : MonoBehaviour
     {
-        [SerializeField] private GameObject root;
-
         [Header("화면")]
         [SerializeField] private TMP_Dropdown resolutionDropdown;
         [SerializeField] private Toggle fullScreenToggle;
@@ -34,16 +34,14 @@ namespace MathRPG.UI
         [SerializeField] private Button resetButton;
         [SerializeField] private Button backButton;
 
-        /// <summary>패널이 닫힐 때 발생. 메인 메뉴가 버튼을 다시 보여주는 데 쓴다.</summary>
-        public event Action Closed;
-
         private readonly List<ScreenSize> _resolutions = new List<ScreenSize>();
         private GameSettingsData _draft;
 
+        /// <summary>이 화면에 들어올 때의 볼륨. 저장하지 않고 나가면 되돌린다.</summary>
+        private float _masterVolumeOnEnter;
+
         private void Awake()
         {
-            BuildResolutionOptions();
-
             if (masterSlider != null)
             {
                 masterSlider.onValueChanged.AddListener(OnMasterChanged);
@@ -71,8 +69,26 @@ namespace MathRPG.UI
 
             if (backButton != null)
             {
-                backButton.onClick.AddListener(Hide);
+                backButton.onClick.AddListener(GoBack);
             }
+        }
+
+        private void Start()
+        {
+            RefreshFromSettings();
+        }
+
+        /// <summary>
+        /// 저장된 설정을 읽어 해상도 목록과 각 컨트롤을 채운다.
+        /// 에디터 미리보기 도구에서도 호출한다.
+        /// </summary>
+        public void RefreshFromSettings()
+        {
+            BuildResolutionOptions();
+
+            _masterVolumeOnEnter = SettingsService.Current.masterVolume;
+            _draft = SettingsService.Current.Clone();
+            PushDraftToControls();
         }
 
         private void OnDestroy()
@@ -104,29 +120,16 @@ namespace MathRPG.UI
 
             if (backButton != null)
             {
-                backButton.onClick.RemoveListener(Hide);
+                backButton.onClick.RemoveListener(GoBack);
             }
         }
 
-        public void Show()
+        public void GoBack()
         {
-            _draft = SettingsService.Current.Clone();
-
-            // 활성화를 먼저 해야 Awake가 돌아 해상도 목록이 채워진다.
-            // 순서를 바꾸면 드롭다운이 빈 상태에서 값을 넣게 된다.
-            SetVisible(true);
-            PushDraftToControls();
-        }
-
-        public void Hide()
-        {
-            SetVisible(false);
-
-            Action handler = Closed;
-            if (handler != null)
-            {
-                handler.Invoke();
-            }
+            // 마스터 볼륨은 미리듣기를 위해 즉시 반영했으므로,
+            // 적용하지 않고 나가면 들어올 때 값으로 되돌려 놓는다.
+            AudioListener.volume = _masterVolumeOnEnter;
+            MenuNavigation.GoBack();
         }
 
         private void BuildResolutionOptions()
@@ -266,28 +269,20 @@ namespace MathRPG.UI
             }
 
             SettingsService.Apply(_draft);
+
             _draft = SettingsService.Current.Clone();
+            _masterVolumeOnEnter = _draft.masterVolume;
         }
 
         private void ResetToDefault()
         {
             SettingsService.ResetToDefault();
             _draft = SettingsService.Current.Clone();
+            _masterVolumeOnEnter = _draft.masterVolume;
             PushDraftToControls();
         }
 
-        private void SetVisible(bool visible)
-        {
-            GameObject target = root != null ? root : gameObject;
-            target.SetActive(visible);
-        }
-
 #if UNITY_EDITOR
-        public void EditorBindRoot(GameObject panelRoot)
-        {
-            root = panelRoot;
-        }
-
         public void EditorBindScreen(TMP_Dropdown dropdown, Toggle fullScreen)
         {
             resolutionDropdown = dropdown;
