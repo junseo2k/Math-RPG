@@ -1,0 +1,8 @@
+﻿<Solution>
+  <Project Path="MathRPG.UI.csproj" />
+  <Project Path="MathRPG.Core.csproj" />
+  <Project Path="MathRPG.Editor.csproj" />
+  <Project Path="MathRPG.Player.csproj" />
+  <Project Path="MathRPG.Data.csproj" />
+  <Project Path="MathRPG.Combat.csproj" />
+</Solution>
