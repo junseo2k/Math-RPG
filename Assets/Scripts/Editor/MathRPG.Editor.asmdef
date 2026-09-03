@@ -6,6 +6,7 @@
         "MathRPG.Data",
         "MathRPG.Combat",
         "MathRPG.Player",
+        "MathRPG.Enemy",
         "MathRPG.UI",
         "Unity.InputSystem",
         "UnityEngine.UI",

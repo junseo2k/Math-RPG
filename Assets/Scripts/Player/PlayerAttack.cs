@@ -29,10 +29,14 @@ namespace MathRPG.Player
         public bool IsAttacking => _timeline != null && _timeline.IsPlaying;
 
         private AttackTimeline _timeline;
+        private Hitbox _hitbox;
+        private PlayerLocomotion _locomotion;
 
         private void Awake()
         {
             _timeline = GetComponent<AttackTimeline>();
+            _hitbox = GetComponent<Hitbox>();
+            _locomotion = GetComponent<PlayerLocomotion>();
         }
 
         private void OnEnable()
@@ -64,6 +68,12 @@ namespace MathRPG.Player
             {
                 Debug.LogError($"[{nameof(PlayerAttack)}] 평타 타이밍 데이터가 비어 있습니다.", this);
                 return;
+            }
+
+            // 히트박스가 어느 쪽을 때릴지, 스윙이 시작되기 전에 지금 바라보는 방향으로 맞춰둔다.
+            if (_hitbox != null && _locomotion != null)
+            {
+                _hitbox.Facing = _locomotion.FacingDirection;
             }
 
             _timeline.Play(basicAttackTiming);
