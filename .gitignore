@@ -32,3 +32,6 @@
 
 crashlytics-build.properties
 sysinfo.txt
+
+# Node.js (mcp-unity 등 Packages 내 Server~ 포함)
+node_modules/
