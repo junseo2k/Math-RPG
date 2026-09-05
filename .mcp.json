@@ -3,7 +3,7 @@
     "mcp-unity": {
       "command": "node",
       "args": [
-        "C:/Users/이준서/Documents/GitHub/Math RPG/Library/PackageCache/com.gamelovers.mcp-unity@0e9fdb65b3cc/Server~/build/index.js"
+        "C:/Users/이준서/Documents/GitHub/Math RPG/Packages/com.gamelovers.mcp-unity/Server~/build/index.js"
       ]
     }
   }

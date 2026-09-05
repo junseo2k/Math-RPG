@@ -54,6 +54,7 @@ namespace MathRPG.Enemy
 
         private Rigidbody2D _rb;
         private EnemyAttack _attack;
+        private KnockbackReceiver _knockback;
         private State _state = State.Patrol;
         private float _homeX;
         private int _facing = 1;
@@ -63,6 +64,7 @@ namespace MathRPG.Enemy
         {
             _rb = GetComponent<Rigidbody2D>();
             _attack = GetComponent<EnemyAttack>();
+            _knockback = GetComponent<KnockbackReceiver>();
 
             _rb.gravityScale = gravityScale;
             _rb.freezeRotation = true;
@@ -96,6 +98,13 @@ namespace MathRPG.Enemy
         private void FixedUpdate()
         {
             if (_state == State.Dead)
+            {
+                return;
+            }
+
+            // 맞고 밀려나는 동안에는 AI가 속도를 만지지 않는다. SetVelocityX가 매 물리 스텝
+            // 속도를 통째로 덮어쓰기 때문에, 이 가드가 없으면 넉백이 한 프레임 만에 지워진다.
+            if (_knockback != null && _knockback.IsStaggered)
             {
                 return;
             }

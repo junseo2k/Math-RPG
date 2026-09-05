@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Math-RPG.slnx",
+    "dotnet.defaultSolution": "Math RPG.slnx",
     "git.ignoreLimitWarning": true
 }

@@ -11,7 +11,19 @@ namespace MathRPG.Combat
     public readonly struct AttackWindupStartedEvent : IGameEvent
     {
         public readonly GameObject Attacker;
-        public AttackWindupStartedEvent(GameObject attacker) => Attacker = attacker;
+
+        /// <summary>
+        /// 이 공격 때문에 다음 입력이 막히는 총 시간 (초) = 윈드업 + 액티브 + 후딜.
+        /// 공격 쿨다운 바가 이 값으로 길이를 잡는다. 히트스톱으로 실제 경과가 늘어나도
+        /// 바와 타임라인 둘 다 스케일된 시간을 쓰므로 어긋나지 않는다.
+        /// </summary>
+        public readonly float LockSeconds;
+
+        public AttackWindupStartedEvent(GameObject attacker, float lockSeconds)
+        {
+            Attacker = attacker;
+            LockSeconds = lockSeconds;
+        }
     }
 
     public readonly struct AttackHitEvent : IGameEvent

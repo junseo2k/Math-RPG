@@ -1,8 +1,11 @@
 ﻿<Solution>
+  <Project Path="McpUnity.Editor.csproj" />
   <Project Path="MathRPG.UI.csproj" />
   <Project Path="MathRPG.Core.csproj" />
+  <Project Path="MathRPG.Enemy.csproj" />
+  <Project Path="McpUnity.Editor.Tests.csproj" />
   <Project Path="MathRPG.Editor.csproj" />
+  <Project Path="MathRPG.Combat.csproj" />
   <Project Path="MathRPG.Player.csproj" />
   <Project Path="MathRPG.Data.csproj" />
-  <Project Path="MathRPG.Combat.csproj" />
 </Solution>

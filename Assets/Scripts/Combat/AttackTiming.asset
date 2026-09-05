@@ -15,5 +15,7 @@ MonoBehaviour:
   windupSeconds: 0.15
   activeSeconds: 0
   recoverySeconds: 0.2
-  hitstopSeconds: 0.05
+  hitstopSeconds: 0.06
+  hitstopReferenceDamage: 12
+  hitstopScaleRange: {x: 0.6, y: 2}
   effectLeadSeconds: 0

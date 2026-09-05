@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MathRPG.Combat;
 using UnityEngine;
 
 namespace MathRPG.Player
@@ -85,6 +86,7 @@ namespace MathRPG.Player
 
         private Rigidbody2D _rb;
         private CapsuleCollider2D _collider;
+        private KnockbackReceiver _knockback;
 
         private readonly List<Collider2D> _overlapResults = new List<Collider2D>();
         private ContactFilter2D _groundFilter;
@@ -97,6 +99,7 @@ namespace MathRPG.Player
         {
             _rb = GetComponent<Rigidbody2D>();
             _collider = GetComponent<CapsuleCollider2D>();
+            _knockback = GetComponent<KnockbackReceiver>();
 
             _rb.gravityScale = gravityScale;
             _rb.freezeRotation = true;
@@ -160,8 +163,17 @@ namespace MathRPG.Player
         private void FixedUpdate()
         {
             UpdateGrounded();
-            ApplyHorizontalMovement();
-            ApplyJump();
+
+            // 넉백으로 밀려나는 동안에는 이동·점프 제어를 넘긴다. 여기서 속도를 계산하면
+            // KnockbackReceiver가 준 속도를 같은 프레임에 덮어써서 넉백이 사라지고,
+            // 맞아도 조작이 끊기지 않아 피격에 무게가 안 실린다 (경직).
+            bool staggered = _knockback != null && _knockback.IsStaggered;
+            if (!staggered)
+            {
+                ApplyHorizontalMovement();
+                ApplyJump();
+            }
+
             ApplyGravityFeel();
         }
 
