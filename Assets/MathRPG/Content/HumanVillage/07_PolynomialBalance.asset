@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 07_PolynomialBalance
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: polynomial-equations-inequalities
+  title: "\uC794\uD574 \uC0AC\uC774\uC758 \uADE0\uD615"
+  steps:
+  - phase: "\uC870\uC900"
+    prompt: "(x\xB2 + 2x + 1) - (x\xB2 - x + 3)\uC744 \uC815\uB9AC\uD558\uBA74?"
+    choices:
+    - x - 2
+    - 3x + 4
+    - 3x - 2
+    - "2x\xB2 + x - 2"
+    correctIndex: 2
+    hint: "\uB4A4 \uAD04\uD638\uC758 \uBAA8\uB4E0 \uD56D\uC5D0 -\uB97C \uBD99\uC5EC.
+      x\xB2+2x+1-x\xB2+x-3\uC5D0\uC11C \uAC19\uC740 \uCC28\uC218\uB07C\uB9AC \uB354\uD558\uBA74
+      3x-2\uC57C."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []
+  - phase: "\uCC28\uC9D5"
+    prompt: "\uC815\uB9AC\uD55C \uC2DD\uC73C\uB85C 3x - 2 = 7\uC744 \uD480\uBA74?"
+    choices:
+    - x=3
+    - x=5
+    - x=7/3
+    - x=-3
+    correctIndex: 0
+    hint: "\uC591\uBCC0\uC5D0 2\uB97C \uB354\uD558\uBA74 3x=9\uC57C. \uC591\uBCC0\uC744
+      3\uC73C\uB85C \uB098\uB204\uBA74 x=3\uC774\uC57C."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []
+  - phase: "\uBC1C\uC0AC"
+    prompt: "\uBD80\uB4F1\uC2DD -2x + 4 > 0\uC758 \uD574\uB294?"
+    choices:
+    - x>2
+    - x<2
+    - "x<\u22122"
+    - "x\u22652"
+    correctIndex: 1
+    hint: "-2x>-4\uC5D0\uC11C \uC74C\uC218 -2\uB85C \uB098\uB204\uBA74 \uBD80\uB4F1\uD638
+      \uBC29\uD5A5\uC774 \uBC14\uB00C\uC5B4. \uB530\uB77C\uC11C x<2\uC57C."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []

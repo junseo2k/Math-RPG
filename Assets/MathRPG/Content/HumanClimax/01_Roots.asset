@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 01_Roots
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: climax-quadratic-roots
+  title: "\uAC08\uB77C\uC9C4 \uD575"
+  steps:
+  - phase: "\uC870\uC900"
+    prompt: "x\xB2 - 5x + 6\uC744 \uC778\uC218\uBD84\uD574\uD558\uBA74?"
+    choices:
+    - (x-2)(x-3)
+    - (x+2)(x+3)
+    - (x-1)(x-6)
+    - (x-2)(x+3)
+    correctIndex: 0
+    hint: "\uACF1\uD574\uC11C 6, \uB354\uD574\uC11C -5\uC778 \uC218\uB294 -2\uC640
+      -3\uC774\uC57C."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []
+  - phase: "\uCC28\uC9D5"
+    prompt: "x\xB2 - 5x + 6 = 0\uC758 \uB450 \uD574\uB294?"
+    choices:
+    - -2, -3
+    - 1, 6
+    - 2, 3
+    - -2, 3
+    correctIndex: 2
+    hint: "(x-2)(x-3)=0\uC774\uBBC0\uB85C \uB458 \uC911 \uD55C \uC778\uC218\uAC00
+      0\uC774\uC57C. x=2 \uB610\uB294 x=3\uC774\uC57C."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []

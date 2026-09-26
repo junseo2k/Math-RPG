@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 02_Log
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: rematch-log
+  title: "\uBA87 \uBC88 \uACF1\uD588\uC744\uAE4C"
+  steps:
+  - phase: "\uC870\uC900"
+    prompt: "log\u20828 = x\uB97C \uC9C0\uC218\uC2DD\uC73C\uB85C \uBC14\uAFB8\uBA74?"
+    choices:
+    - "8\u02E3=2"
+    - "2\u02E3=8"
+    - "x\xB2=8"
+    - "2\xD7x=8"
+    correctIndex: 1
+    hint: "\uB85C\uADF8\uB294 \uC9C0\uC218\uB97C \uBB3B\uB294 \uD45C\uD604\uC774\uC57C.
+      2\uB97C x\uBC88 \uACF1\uD574 8\uC774 \uB41C\uB2E4\uB294 \uB73B\uC774\uC57C."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []
+  - phase: "\uBC1C\uB3D9"
+    prompt: "2\u02E3 = 8\uC77C \uB54C x\uB294?"
+    choices:
+    - 2
+    - 4
+    - 8
+    - 3
+    correctIndex: 3
+    hint: "2\xD72\xD72=8\uC774\uBBC0\uB85C x=3\uC774\uC57C."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []

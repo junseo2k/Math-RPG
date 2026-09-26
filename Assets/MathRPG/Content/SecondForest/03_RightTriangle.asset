@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 03_RightTriangle
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: pythagorean-theorem
+  title: "\uC9C1\uAC01\uC744 \uAC74\uB108\uB294 \uBE5B"
+  steps:
+  - phase: "\uC870\uC900"
+    prompt: "\u2220B\uAC00 \uC9C1\uAC01\uC774\uACE0 AB=3, BC=4\uB2E4. \uBE57\uBCC0
+      AC=x\uB97C \uAD6C\uD560 \uC2DD\uC740?"
+    choices:
+    - x = 3 + 4
+    - "x\xB2 = 4\xB2 - 3\xB2"
+    - "x\xB2 = 3\xB2 + 4\xB2"
+    - "x = 3 \xD7 4"
+    correctIndex: 2
+    hint: "\uD53C\uD0C0\uACE0\uB77C\uC2A4 \uC815\uB9AC\uB294 \uC9C1\uAC01\uC0BC\uAC01\uD615\uC5D0\uC11C
+      \uC368. \uC9C1\uAC01 \uB9DE\uC740\uD3B8 \uBE57\uBCC0\uC758 \uC81C\uACF1\uC740
+      \uB098\uBA38\uC9C0 \uB450 \uBCC0\uC758 \uC81C\uACF1\uC758 \uD569\uC774\uC57C."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures:
+      - kind: 0
+        radiusLabel: 
+        heightLabel: 
+        vertices:
+        - {x: 0, y: 0}
+        - {x: 0, y: 1}
+        - {x: 1, y: 1}
+        vertexLabels:
+        - A
+        - B
+        - C
+        edgeLabels:
+        - 3
+        - 4
+        - '?'
+        rightAngleIndex: 1
+  - phase: "\uCC28\uC9D5"
+    prompt: "x\xB2 = 9 + 16 = 25. \uAE38\uC774 x\uB294 \uC5BC\uB9C8\uC77C\uAE4C?"
+    choices:
+    - 5
+    - 7
+    - 12
+    - 25
+    correctIndex: 0
+    hint: "5 \xD7 5 = 25\uC57C. \uAE38\uC774\uB294 \uC591\uC218\uC774\uBBC0\uB85C
+      x\uB294 5\uC57C."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures:
+      - kind: 0
+        radiusLabel: 
+        heightLabel: 
+        vertices:
+        - {x: 0, y: 0}
+        - {x: 0, y: 1}
+        - {x: 1, y: 1}
+        vertexLabels:
+        - A
+        - B
+        - C
+        edgeLabels:
+        - 3
+        - 4
+        - '?'
+        rightAngleIndex: 1

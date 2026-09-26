@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e823a3c88d906eb458a1c34c4d34f45a, type: 3}
+  m_Name: RivalSecondRematch
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.RivalSecondRematchDefinition
+  rivalName: "\uB77C\uC774\uBC8C2"
+  introduction: "\uC8FC\uC778\uACF5\uC740 \uAC80\uC744 \uAC70\uB450\uACE0 \uC7AC\uC559\uC774
+    \uBC88\uC9C0\uB294 \uAE38\uB85C \uBC1C\uC744 \uB3CC\uB838\uB2E4.\n\uB77C\uC774\uBC8C1:
+    \u2026\uADF8\uB798. \uB124\uAC00 \uC815\uD55C \uAE38\uC774\uBA74, \uAC00 \uBD10.\n\n\uBD80\uC0C1\uC790\uB4E4\uC744
+    \uB3CC\uB824\uBCF4\uB0B8 \uCD1D\uC0AC\uB839\uAD00\uC774 \uC55E\uC744 \uB9C9\uC558\uB2E4.\n\uB77C\uC774\uBC8C2:
+    \uB10C \uB098\uD55C\uD14C \uC84C\uB2E4. \uB098\uC870\uCC28 \uB9C9\uC9C0 \uBABB\uD55C
+    \uC7AC\uC559\uC5D0\n\uB108\uB97C \uBCF4\uB0BC \uC21C \uC5C6\uC5B4. \uAC00\uACE0
+    \uC2F6\uB2E4\uBA74 \uC99D\uBA85\uD574.\n\uC8FC\uC778\uACF5: \uC774\uBC88\uC5D0\uB294
+    \uB0B4\uAC00 \uC6D0\uD574\uC11C \uAC00\uB294 \uAC70\uC57C."
+  lesson: "\uC815\uB839: \uBCC0\uC9C8\uB41C \uD750\uB984\uB3C4 \uD55C \uC904\uC529
+    \uBCF4\uBA74 \uB3FC.\n\n\uC9C0\uC218: 2\xB3\uC740 2\uB97C \uC138 \uBC88 \uACF1\uD55C
+    \uAC12, 8\uC774\uC57C.\n\uAC19\uC740 \uBC11\uC744 \uACF1\uD558\uBA74 \uC9C0\uC218\uB97C
+    \uB354\uD574. 2\xB2 \xD7 2\xB3 = 2\u2075.\n\uB85C\uADF8: log\u20828\uC740 \u20182\uC758
+    \uBA87 \uC81C\uACF1\uC774 8\uC778\uAC00\u2019, \uADF8\uB798\uC11C 3\uC774\uC57C.\n\uBC11\uC740
+    \uC591\uC218\uC774\uBA70 1\uC774 \uC544\uB2C8\uC5B4\uC57C \uD558\uACE0, \uB85C\uADF8
+    \uC548\uC758 \uC218\uB3C4 \uC591\uC218\uC57C.\nlog\u2082a + log\u2082b = log\u2082(ab) 
+    (a, b > 0).\n\n\uBB38\uC81C\uC5D0\uB294 \uC2DC\uAC04 \uC81C\uD55C\uC774 \uC5C6\uC5B4.
+    \uC7A5\uD310\uC740 \uC810\uD504 \uB300\uC2E0 \uD45C\uC2DC \uBC16\uC73C\uB85C
+    \uD53C\uD558\uC790."
+  phaseDialogue: "\uB77C\uC774\uBC8C2\uAC00 \uAC80\uC744 \uB2E4\uC2DC \uACE0\uCCD0
+    \uC950\uC5C8\uB2E4.\n\uB77C\uC774\uBC8C2: \u2026\uBC29\uAE08\uB3C4 \uC2DD\uC740
+    \uB9DE\uC558\uC5B4. \uC65C \uC190\uC774\u2026\n\n\uC774\uBC88\uC5D0\uB294 \uB0AE\uC740
+    \uAC80\uACA9\uC744 \uC5F0\uC774\uC5B4 \uC11E\uC73C\uBA70 \uAC70\uB9AC\uB97C \uC881\uD614\uB2E4.\n\uB77C\uC774\uBC8C2:
+    \uC544\uC9C1 \uB05D\uB09C \uAC8C \uC544\uB2C8\uC57C. \uB110 \uBCF4\uB0B4\uB294
+    \uAC74 \uB0B4 \uCC45\uC784\uC774\uB2C8\uAE4C.\n\n\uB450 \uBC88\uC9F8 \uD398\uC774\uC988
+    \u2014 \uAC80\uACA9 \uC21C\uC11C\uC640 \uAC04\uACA9\uC774 \uBC14\uB010\uB2E4."
+  victory: "\uB77C\uC774\uBC8C2\uC758 \uAC80\uB05D\uC774 \uB0B4\uB824\uAC14\uB2E4.\n\uB77C\uC774\uBC8C2:
+    \u2026\uB410\uC5B4. \uC774\uC81C \uB0B4\uAC00 \uB9C9\uC744 \uBA85\uBD84\uC740
+    \uC5C6\uAD70.\n\n\uC8FC\uC778\uACF5: \uB09C \uB0B4\uAC00 \uD560 \uC218 \uC788\uB294
+    \uAC78 \uD574\uBCFC \uAC70\uC57C.\n\uB77C\uC774\uBC8C2: \uB9C8\uC74C\uB300\uB85C
+    \uD574. \uC4F0\uB7EC\uC9C0\uC9C0\uB9CC \uB9C8.\n\n\uADF8\uB294 \uB05D\uB0B4 \uC2DC\uC120\uC744
+    \uB9C8\uC8FC\uCE58\uC9C0 \uC54A\uACE0 \uC606\uC73C\uB85C \uBE44\uCF1C\uC130\uB2E4."
+  departure: "\uB77C\uC774\uBC8C2\uB294 \uB0A8\uC740 \uBCD1\uC0AC\uB4E4\uC5D0\uAC8C
+    \uB3CC\uC544\uAC14\uB2E4.\n\uC8FC\uC778\uACF5 \uC55E\uC5D0\uB294 \uC7AC\uC559\uC744
+    \uD5A5\uD55C \uAE38\uC774 \uB0A8\uC558\uB2E4.\n\n\uC815\uB839: \uAC08 \uAC70\uC9C0?\n\uC8FC\uC778\uACF5:
+    \uC751.\n\n\uB300\uB2F5\uC740 \uC9E7\uC558\uB2E4. \uC774\uBC88\uC5D0\uB294 \uBC1C\uAC78\uC74C\uC774
+    \uBA48\uCD94\uC9C0 \uC54A\uC558\uB2E4."
+  questions:
+  - {fileID: 11400000, guid: f93863998000b294c90ceda596d1e20d, type: 2}
+  - {fileID: 11400000, guid: 4b03ba3a38bb740488700c5917f27a26, type: 2}
+  - {fileID: 11400000, guid: 7ca8cd6c35c0c5b478bf48103bad7e63, type: 2}
+  health: 560
+  swordDamage: 12
+  runeDamage: 65
+  wrongDamage: 8
+  narrowHazardDamage: 16
+  rageDamage: 3
+  maximumRage: 3
+  runeFailureChance: 0.35
+  phaseTwoFailureChance: 0.5
+  phaseThreshold: 0.5
+  attackInterval: 2
+  attackWindup: 1
+  phaseTwoIntervalMultiplier: 0.75
+  rageSpeedStep: 0.08
+  questionInterval: 6
+  moveSpeed: 2.3
+  attackRange: 2.8
+  arenaHalfWidth: 9
+  narrowHazardRadius: 0.9
+  wideHazardRadius: 2.3
+  hazardWarning: 2.4
+  rivalColor: {r: 0.68, g: 0.44, b: 0.32, a: 1}
+  hazardColor: {r: 1, g: 0.32, b: 0.25, a: 0.38}

@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 26_UnitCircle
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: hunting-26_UnitCircle
+  title: "\uC6D0 \uC704\uC758 \uB450 \uC88C\uD45C"
+  steps:
+  - type: 0
+    calculation:
+      function: 0
+      blocks: []
+      operandCount: 2
+      acceptedPaths: []
+      expectedResults: []
+      tolerance: 0.000001
+    phase: "\uD750\uB984 \uC77D\uAE30"
+    prompt: "\uB2E8\uC704\uC6D0\uC5D0\uC11C 180\xB0\uC5D0 \uD574\uB2F9\uD558\uB294
+      \uC810\uC740 (\u22121, 0)\uC774\uB2E4. cos 180\xB0\uB294?"
+    choices:
+    - 0
+    - 1
+    - "\u22121"
+    - 180
+    correctIndex: 2
+    hint: "cos\uB294 \uC6D0 \uC704 \uC810\uC758 x\uC88C\uD45C\uC57C."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []

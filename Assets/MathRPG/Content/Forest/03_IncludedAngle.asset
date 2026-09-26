@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 03_IncludedAngle
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: triangle-sas
+  title: "\uB450 \uC904\uAE30 \uC0AC\uC774\uC758 \uBE5B"
+  steps:
+  - phase: "\uC870\uC900"
+    prompt: "\uAE38\uC774 5\uC640 7\uC778 \uB450 \uBCC0, \uADF8 \uC0AC\uC774\uC758
+      \uAC01 60\xB0\uAC00 \uAC01\uAC01 \uAC19\uB2E4.\n\uC5B4\uB5A4 \uD569\uB3D9 \uC870\uAC74\uC77C\uAE4C?"
+    choices:
+    - "\uB450 \uBCC0\uACFC \uADF8 \uC0AC\uC774 \uAC01 (SAS)"
+    - "\uC138 \uAC01 (AAA)"
+    - "\uD55C \uBCC0\uB9CC \uAC19\uB2E4"
+    - "\uB113\uC774\uB9CC \uAC19\uB2E4"
+    correctIndex: 0
+    hint: "SAS\uC5D0\uC11C A\uB294 \uAC19\uC740 \uB450 \uBCC0 \uC0AC\uC774\uC5D0
+      \uB07C\uC778 \uAC01\uC774\uC5B4\uC57C \uD574."
+    diagram:
+      showPair: 1
+      leftTop: A
+      leftBottomLeft: "B \xB7 60\xB0"
+      leftBottomRight: C
+      leftSideLeft: 5
+      leftSideRight: 
+      leftBase: 7
+      rightTop: D
+      rightBottomLeft: "E \xB7 60\xB0"
+      rightBottomRight: F
+      rightSideLeft: 5
+      rightSideRight: 
+      rightBase: 7
+    geometry:
+      figures: []
+  - phase: "\uCC28\uC9D5"
+    prompt: "AB\uC640 BC \uC0AC\uC774\uC5D0 \uB07C\uC778 \uAC01\uC740 \uC5B4\uB290
+      \uAF2D\uC9D3\uC810\uC758 \uAC01\uC77C\uAE4C?"
+    choices:
+    - A
+    - B
+    - C
+    - D
+    correctIndex: 1
+    hint: "AB\uC640 BC\uAC00 \uD568\uAED8 \uB9CC\uB098\uB294 \uAF2D\uC9D3\uC810 B\uB97C
+      \uCC3E\uC544\uBD10."
+    diagram:
+      showPair: 1
+      leftTop: A
+      leftBottomLeft: "B \xB7 60\xB0"
+      leftBottomRight: C
+      leftSideLeft: 5
+      leftSideRight: 
+      leftBase: 7
+      rightTop: D
+      rightBottomLeft: "E \xB7 60\xB0"
+      rightBottomRight: F
+      rightSideLeft: 5
+      rightSideRight: 
+      rightBase: 7
+    geometry:
+      figures: []

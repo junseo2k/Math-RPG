@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 09_Slope
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: linear-slope
+  title: "\uD750\uB984\uC758 \uAE30\uC6B8\uAE30"
+  steps:
+  - phase: "\uC870\uC900"
+    prompt: "y = 2x + 1\uC5D0\uC11C x\uAC00 1 \uCEE4\uC9C8 \uB54C, y\uB294?"
+    choices:
+    - "1 \uCEE4\uC9C4\uB2E4"
+    - "2 \uCEE4\uC9C4\uB2E4"
+    - "2 \uC791\uC544\uC9C4\uB2E4"
+    - "\uBCC0\uD558\uC9C0 \uC54A\uB294\uB2E4"
+    correctIndex: 1
+    hint: "x \uC55E\uC758 \uC218 2\uAC00 x\uC758 \uBCC0\uD654\uC5D0 \uB530\uB978
+      y\uC758 \uBCC0\uD654\uB97C \uC54C\uB824\uC918."
+  - phase: "\uCC28\uC9D5"
+    prompt: "y = 2x + 1\uC758 \uAE30\uC6B8\uAE30\uB294?"
+    choices:
+    - 1
+    - -1
+    - 2
+    - 0
+    correctIndex: 2
+    hint: "x\uAC00 1 \uCEE4\uC9C8 \uB54C y\uB294 2 \uCEE4\uC84C\uC5B4. \uADF8 \uBE44\uC728\uC774
+      \uAE30\uC6B8\uAE30\uC57C."
