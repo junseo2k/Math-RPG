@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 03_SteadyFlow
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: linear-function
+  title: "\uD754\uB4E4\uB9AC\uC9C0 \uC54A\uB294 \uD750\uB984"
+  steps:
+  - phase: "\uC870\uC900"
+    prompt: "y = 2x + 1\uC5D0\uC11C x\uAC00 1 \uCEE4\uC9C0\uBA74 y\uB294?"
+    choices:
+    - "1 \uCEE4\uC9C4\uB2E4"
+    - "2 \uC791\uC544\uC9C4\uB2E4"
+    - "2 \uCEE4\uC9C4\uB2E4"
+    - "\uBCC0\uD558\uC9C0 \uC54A\uB294\uB2E4"
+    correctIndex: 2
+    hint: "x \uC55E\uC758 \uC218\uAC00 2\uC57C. x\uAC00 \uD558\uB098 \uCEE4\uC9C8
+      \uB54C y\uB294 \uB450 \uAC1C \uCEE4\uC838."
+  - phase: "\uCC28\uC9D5"
+    prompt: "\uAC19\uC740 \uC2DD\uC5D0\uC11C x = 1\uC774\uBA74, y\uB294?"
+    choices:
+    - 3
+    - 2
+    - 1
+    - 4
+    correctIndex: 0
+    hint: "2 \xD7 1\uC5D0 1\uC744 \uB354\uD55C \uAC12\uC744 \uC77D\uC5B4\uBD10."

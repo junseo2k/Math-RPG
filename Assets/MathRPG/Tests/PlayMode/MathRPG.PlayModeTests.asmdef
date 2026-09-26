@@ -1,0 +1,6 @@
+{
+  "name": "MathRPG.PlayModeTests",
+  "references": ["MathRPG.Runtime"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

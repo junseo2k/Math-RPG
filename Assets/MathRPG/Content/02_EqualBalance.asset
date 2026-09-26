@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 02_EqualBalance
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: equation-balance
+  title: "\uADE0\uD615\uC744 \uC9C0\uD0A4\uB294 \uB8EC"
+  steps:
+  - phase: "\uC870\uC900"
+    prompt: "x + 3 = 7. x\uB9CC \uB0A8\uAE30\uBA74\uC11C \uADE0\uD615\uC744 \uC9C0\uD0A4\uB824\uBA74?"
+    choices:
+    - "\uC591\uCABD\uC5D0\uC11C 3\uC744 \uBE80\uB2E4"
+    - "\uC67C\uCABD\uC5D0\uB9CC 3\uC744 \uB354\uD55C\uB2E4"
+    - "\uC591\uCABD\uC744 3\uC73C\uB85C \uB098\uB208\uB2E4"
+    - "\uC624\uB978\uCABD\uC5D0\uC11C\uB9CC 3\uC744 \uBE80\uB2E4"
+    correctIndex: 0
+    hint: "\uC591\uCABD\uC5D0 \uAC19\uC740 \uC77C\uC744 \uD574\uC57C \uADE0\uD615\uC774
+      \uC720\uC9C0\uB3FC. +3\uC744 \uC9C0\uC6B0\uB294 \uC77C\uC744 \uACE8\uB77C\uBD10."
+  - phase: "\uCC28\uC9D5"
+    prompt: "\uC591\uCABD\uC5D0\uC11C 3\uC744 \uBE7C\uBA74 x = 7 - 3.\n\uB8EC\uC5D0
+      \uB2F4\uC744 x\uC758 \uAC12\uC740?"
+    choices:
+    - 10
+    - 3
+    - -4
+    - 4
+    correctIndex: 3
+    hint: "7\uC5D0\uC11C 3\uC744 \uB35C\uC5B4\uB0B8 \uAC12\uC774\uC57C. x + 3\uC5D0
+      \uB2E4\uC2DC \uB123\uC5B4 \uD655\uC778\uD574\uB3C4 \uC88B\uC544."

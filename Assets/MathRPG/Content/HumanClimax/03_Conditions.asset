@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 03_Conditions
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: climax-function-conditions
+  title: "\uB0A8\uACA8\uC9C4 \uAE38"
+  steps:
+  - phase: "\uC870\uC900"
+    prompt: "\uC2E4\uC218 \uBC94\uC704\uC5D0\uC11C \u221A(x - 1)\uACFC 1/(x - 2)\uB97C\n\uB458
+      \uB2E4 \uACC4\uC0B0\uD560 \uC218 \uC788\uB294 x\uC758 \uC870\uAC74\uC740?"
+    choices:
+    - x>2
+    - "x\u22651, x\u22602"
+    - "x\u22651"
+    - "x\u22641, x\u22602"
+    correctIndex: 1
+    hint: "\uC81C\uACF1\uADFC\uC740 x-1\u22650, \uBD84\uBAA8\uB294 x-2\u22600\uC774\uC5B4\uC57C
+      \uD574. \uB450 \uC870\uAC74\uC744 \uD568\uAED8 \uC9C0\uCF1C\uC57C \uD574."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []
+  - phase: "\uCC28\uC9D5"
+    prompt: "\uC9C1\uC120 y=2x-1\uC5D0\uC11C y\u22655\uAC00 \uB418\uB294 x\uC758
+      \uBC94\uC704\uB294?"
+    choices:
+    - "x\u22643"
+    - "x\u22652"
+    - x>3
+    - "x\u22653"
+    correctIndex: 3
+    hint: "2x-1\u22655\uC5D0\uC11C 2x\u22656\uC774\uBBC0\uB85C x\u22653\uC774\uC57C.
+      \uC591\uC218\uB85C \uB098\uB204\uBBC0\uB85C \uBD80\uB4F1\uD638\uB294 \uADF8\uB300\uB85C\uC57C."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []

@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 22_Line
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: hunting-22_Line
+  title: "\uB450 \uC810 \uC0AC\uC774\uC758 \uBCC0\uD654"
+  steps:
+  - type: 0
+    calculation:
+      function: 0
+      blocks: []
+      operandCount: 2
+      acceptedPaths: []
+      expectedResults: []
+      tolerance: 0.000001
+    phase: "\uD750\uB984 \uC77D\uAE30"
+    prompt: "(0, 1)\uACFC (2, 5)\uB97C \uC9C0\uB098\uB294 \uC9C1\uC120\uC758 \uAE30\uC6B8\uAE30\uB294?"
+    choices:
+    - 4
+    - 1/2
+    - 2
+    - 3
+    correctIndex: 2
+    hint: "\uC138\uB85C \uBCC0\uD654\uB7C9 4\uB97C \uAC00\uB85C \uBCC0\uD654\uB7C9
+      2\uB85C \uB098\uB220."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []

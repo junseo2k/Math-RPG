@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 02_ThreeSides
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: triangle-sss
+  title: "\uACB9\uCCD0\uC9C0\uB294 \uC138 \uBCC0"
+  steps:
+  - phase: "\uC870\uC900"
+    prompt: "\uB450 \uC0BC\uAC01\uD615\uC758 \uB300\uC751\uD558\uB294 \uC138 \uBCC0\uC774
+      \uAC01\uAC01 5, 6, 7\uB85C \uAC19\uB2E4.\n\uD569\uB3D9\uC744 \uC54C \uC218
+      \uC788\uB294 \uC870\uAC74\uC740?"
+    choices:
+    - "\uC138 \uAC01\uC774 \uAC19\uB2E4 (AAA)"
+    - "\uD55C \uBCC0\uB9CC \uAC19\uB2E4"
+    - "\uC138 \uBCC0\uC774 \uAC19\uB2E4 (SSS)"
+    - "\uB113\uC774\uB9CC \uAC19\uB2E4"
+    correctIndex: 2
+    hint: "SSS\uB294 \uC138 \uBCC0\uC774 \uAC01\uAC01 \uAC19\uB2E4\uB294 \uB73B\uC774\uC57C.
+      \uBAA8\uC591\uACFC \uD06C\uAE30\uAC00 \uBAA8\uB450 \uAC19\uC544\uC838."
+    diagram:
+      showPair: 1
+      leftTop: A
+      leftBottomLeft: B
+      leftBottomRight: C
+      leftSideLeft: 5
+      leftSideRight: 6
+      leftBase: 7
+      rightTop: D
+      rightBottomLeft: E
+      rightBottomRight: F
+      rightSideLeft: 5
+      rightSideRight: 6
+      rightBase: 7
+    geometry:
+      figures: []
+  - phase: "\uCC28\uC9D5"
+    prompt: "AB\uC5D0 \uB300\uC751\uD558\uB294 \uBCC0\uC740 DE\uC57C. \uAE38\uC774\uAC00
+      7\uC778 BC\uC5D0 \uB300\uC751\uD558\uB294 \uBCC0\uC740?"
+    choices:
+    - DE
+    - DF
+    - AB
+    - EF
+    correctIndex: 3
+    hint: "A\u2194D, B\u2194E, C\u2194F\uB85C \uC9DD\uC9C0\uC5B4 \uBD10. BC\uC758
+      \uC9DD\uC740 EF\uC57C."
+    diagram:
+      showPair: 1
+      leftTop: A
+      leftBottomLeft: B
+      leftBottomRight: C
+      leftSideLeft: 5
+      leftSideRight: 6
+      leftBase: 7
+      rightTop: D
+      rightBottomLeft: E
+      rightBottomRight: F
+      rightSideLeft: 5
+      rightSideRight: 6
+      rightBase: 7
+    geometry:
+      figures: []

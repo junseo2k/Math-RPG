@@ -1,0 +1,423 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d7491b703de1b41adb7ce1145d33cd, type: 3}
+  m_Name: HuntingGrounds
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.HuntingGroundDefinition
+  areas:
+  - locationName: "\uC5EC\uBA85 \uB4E4\uD310"
+    chapterIntroduction: "\uC22B\uC790\uC758 \uBC29\uD5A5\uC5D0\uC11C \uC2DC\uC791\uD574
+      \uC2DD\uACFC \uADF8\uB798\uD504\uAE4C\uC9C0 \uC775\uD788\uB294 \uAE38\uC774\uB2E4.\n\uC791\uC740
+      \uD750\uB984\uC744 \uC77D\uB294 \uD798\uC774 \uB2E4\uC74C \uD6C8\uB828\uC18C\uB85C
+      \uAC00\uB294 \uAE38\uC744 \uC5F0\uB2E4."
+    lessons:
+    - title: "\uC11C\uB85C \uBC18\uB300\uC778 \uD798"
+      explanation: "\uC591\uC218\uC640 \uC74C\uC218\uB294 \uBC18\uB300 \uBC29\uD5A5\uC744
+        \uB098\uD0C0\uB0B8\uB2E4. \uC11C\uB85C \uB2E4\uB978 \uBD80\uD638\uB97C \uB354\uD558\uBA74
+        \uD070 \uCABD\uC758 \uBC29\uD5A5\uC774 \uB0A8\uB294\uB2E4."
+      example: "\uC624\uB978\uCABD +5\uC640 \uC67C\uCABD \u22123\uC774 \uB9CC\uB098\uBA74
+        +2\uAC00 \uB0A8\uB294\uB2E4."
+      question: {fileID: 11400000, guid: 10ceca64da1df03489d74e0f94f5d114, type: 2}
+    - title: "\uB098\uB208 \uB9CC\uD07C\uC758 \uD06C\uAE30"
+      explanation: "\uBD84\uC218\uB294 \uC804\uCCB4\uB97C \uAC19\uC740 \uD06C\uAE30\uB85C
+        \uB098\uB208 \uC870\uAC01\uC758 \uC218\uB2E4. \uB354\uD560 \uB54C\uB294 \uC870\uAC01\uC758
+        \uD06C\uAE30\uC778 \uBD84\uBAA8\uB97C \uB9DE\uCD98\uB2E4."
+      example: "1/2\uC740 2/4\uC640 \uAC19\uB2E4. \uADF8\uB798\uC11C 1/2 + 1/4 =
+        3/4\uC774\uB2E4."
+      question: {fileID: 11400000, guid: 29bef2611ef55b941b1deddfbd447818, type: 2}
+    - title: "\uAC00\uC7A5 \uC791\uC740 \uACF1\uC758 \uC870\uAC01"
+      explanation: "\uC18C\uC218\uB294 1\uBCF4\uB2E4 \uD070 \uC790\uC5F0\uC218 \uC911
+        \uC57D\uC218\uAC00 1\uACFC \uC790\uAE30 \uC790\uC2E0\uBFD0\uC778 \uC218\uB2E4.
+        \uC18C\uC778\uC218\uBD84\uD574\uB294 \uC218\uB97C \uC18C\uC218\uB4E4\uC758
+        \uACF1\uC73C\uB85C \uB098\uD0C0\uB0B8\uB2E4."
+      example: "12 = 2 \xD7 2 \xD7 3. 4\uB294 2 \xD7 2\uB85C \uB354 \uB098\uB20C
+        \uC218 \uC788\uB2E4."
+      question: {fileID: 11400000, guid: 9bc7ae92b39a6ae4aa5fa67d2f365731, type: 2}
+    huntTarget: 3
+    enemyHealth: 52
+    enemyDamage: 5
+    wrongAnswerDamage: 2
+    killHeal: 4
+    attackWindup: 1.4
+    respawnDelay: 2
+    questionInterval: 6
+    landscape: {r: 0.23, g: 0.29, b: 0.22, a: 1}
+    creature: {r: 0.6, g: 0.72, b: 0.36, a: 1}
+  - locationName: "\uBC14\uB78C\uAE38 \uAD6C\uB989"
+    chapterIntroduction: "\uC22B\uC790\uC758 \uBC29\uD5A5\uC5D0\uC11C \uC2DC\uC791\uD574
+      \uC2DD\uACFC \uADF8\uB798\uD504\uAE4C\uC9C0 \uC775\uD788\uB294 \uAE38\uC774\uB2E4.\n\uC791\uC740
+      \uD750\uB984\uC744 \uC77D\uB294 \uD798\uC774 \uB2E4\uC74C \uD6C8\uB828\uC18C\uB85C
+      \uAC00\uB294 \uAE38\uC744 \uC5F0\uB2E4."
+    lessons:
+    - title: "\uC218\uB97C \uB300\uC2E0\uD558\uB294 \uC774\uB984"
+      explanation: "\uBB38\uC790\uB294 \uC544\uC9C1 \uC815\uD558\uC9C0 \uC54A\uC740
+        \uC218\uB97C \uB300\uC2E0\uD55C\uB2E4. 3x\uB294 3\uACFC x\uB97C \uACF1\uD55C\uB2E4\uB294
+        \uB73B\uC774\uB2E4."
+      example: "x = 2\uB77C\uBA74 3x + 1 = 3 \xD7 2 + 1 = 7\uC774\uB2E4."
+      question: {fileID: 11400000, guid: 6e8e485c24a1cdb41ba8951157c99d79, type: 2}
+    - title: "\uADE0\uD615\uC744 \uC9C0\uD0A4\uB294 \uC2DD"
+      explanation: "\uB4F1\uC2DD\uC758 \uC591\uCABD\uC5D0 \uAC19\uC740 \uC218\uB97C
+        \uB354\uD558\uAC70\uB098 \uBE7C\uBA74 \uADE0\uD615\uC774 \uC720\uC9C0\uB41C\uB2E4.
+        \uACF1\uD558\uAC70\uB098 \uB098\uB20C \uB54C\uB3C4 \uC591\uCABD\uC5D0 \uAC19\uC740
+        \uC77C\uC744 \uD55C\uB2E4. 0\uC73C\uB85C \uB098\uB20C \uC218\uB294 \uC5C6\uB2E4."
+      example: "x + 3 = 7\uC5D0\uC11C \uC591\uCABD\uC5D0 3\uC744 \uBE7C\uBA74 x =
+        4\uC774\uB2E4."
+      question: {fileID: 11400000, guid: d315cc11b019c444d9a18177aeec5b19, type: 2}
+    huntTarget: 3
+    enemyHealth: 52
+    enemyDamage: 5
+    wrongAnswerDamage: 2
+    killHeal: 4
+    attackWindup: 1.4
+    respawnDelay: 2
+    questionInterval: 6
+    landscape: {r: 0.23, g: 0.29, b: 0.22, a: 1}
+    creature: {r: 0.6, g: 0.72, b: 0.36, a: 1}
+  - locationName: "\uBCC4\uBE5B \uBE44\uD0C8"
+    chapterIntroduction: "\uC22B\uC790\uC758 \uBC29\uD5A5\uC5D0\uC11C \uC2DC\uC791\uD574
+      \uC2DD\uACFC \uADF8\uB798\uD504\uAE4C\uC9C0 \uC775\uD788\uB294 \uAE38\uC774\uB2E4.\n\uC791\uC740
+      \uD750\uB984\uC744 \uC77D\uB294 \uD798\uC774 \uB2E4\uC74C \uD6C8\uB828\uC18C\uB85C
+      \uAC00\uB294 \uAE38\uC744 \uC5F0\uB2E4."
+    lessons:
+    - title: "\uBC18\uBCF5\uB418\uB294 \uACF1"
+      explanation: "\uC9C0\uC218\uB294 \uAC19\uC740 \uC218\uB97C \uBA87 \uBC88 \uACF1\uD558\uB294\uC9C0
+        \uB098\uD0C0\uB0B8\uB2E4. \uAC19\uC740 \uBC11\uC758 \uAC70\uB4ED\uC81C\uACF1\uC744
+        \uACF1\uD558\uBA74 \uC9C0\uC218\uB97C \uB354\uD55C\uB2E4."
+      example: "a\xB2 \xD7 a\xB3 = a\u2075. a \uB450 \uAC1C\uC640 \uC138 \uAC1C\uB97C
+        \uC774\uC5B4\uC11C \uACF1\uD558\uAE30 \uB54C\uBB38\uC774\uB2E4."
+      question: {fileID: 11400000, guid: 6d4f363624853b449ba634940bbbb557, type: 2}
+    - title: "\uB450 \uC218\uB85C \uC77D\uB294 \uC704\uCE58"
+      explanation: "\uC88C\uD45C (x, y)\uB294 \uAC00\uB85C \uC704\uCE58\uC640 \uC138\uB85C
+        \uC704\uCE58\uB97C \uC21C\uC11C\uB300\uB85C \uB098\uD0C0\uB0B8\uB2E4. \uC624\uB978\uCABD
+        \uC774\uB3D9\uC740 x, \uC704\uCABD \uC774\uB3D9\uC740 y\uAC00 \uCEE4\uC9C4\uB2E4."
+      example: "(2, 1)\uC5D0\uC11C \uC624\uB978\uCABD\uC73C\uB85C 3 \uC774\uB3D9\uD558\uBA74
+        (5, 1)\uC774\uB2E4."
+      question: {fileID: 11400000, guid: f6acfd3c193095a4f88fd3810fbe750f, type: 2}
+    - title: "\uC77C\uC815\uD558\uAC8C \uBC14\uB00C\uB294 \uB192\uC774"
+      explanation: "y = ax + b\uC5D0\uC11C a\uB294 \uAE30\uC6B8\uAE30, b\uB294 y\uC808\uD3B8\uC774\uB2E4.
+        x\uAC00 1 \uB298\uC5B4\uB0A0 \uB54C y\uAC00 \uC5BC\uB9C8\uB098 \uBC14\uB00C\uB294\uC9C0
+        a\uAC00 \uC54C\uB824\uC900\uB2E4."
+      example: "y = 2x + 1\uC740 x\uAC00 1 \uB298\uBA74 y\uAC00 2 \uB298\uACE0, y\uCD95\uC744
+        (0, 1)\uC5D0\uC11C \uB9CC\uB09C\uB2E4."
+      question: {fileID: 11400000, guid: 61503347813647240be6acc436c9a4f6, type: 2}
+    huntTarget: 3
+    enemyHealth: 52
+    enemyDamage: 5
+    wrongAnswerDamage: 2
+    killHeal: 4
+    attackWindup: 1.4
+    respawnDelay: 2
+    questionInterval: 6
+    landscape: {r: 0.23, g: 0.29, b: 0.22, a: 1}
+    creature: {r: 0.6, g: 0.72, b: 0.36, a: 1}
+  - locationName: "\uC138\uAC08\uB798 \uC232\uAE38"
+    chapterIntroduction: "\uC815\uB839\uC758 \uC232\uC5D0\uC11C\uB294 \uBAA8\uC591\uACFC
+      \uAD00\uACC4\uAC00 \uD798\uC774 \uB41C\uB2E4.\n\uC0BC\uAC01\uD615\uC5D0\uC11C
+      \uC0AC\uAC01\uD615, \uC6D0\uC73C\uB85C \uBC94\uC704\uB97C \uB113\uD788\uBA70
+      \uBE5B\uC758 \uC5F0\uACB0\uC744 \uC77D\uC790."
+    lessons:
+    - title: "\uC138 \uAC01\uC774 \uB9CC\uB4DC\uB294 \uBAA8\uC591"
+      explanation: "\uC0BC\uAC01\uD615\uC758 \uC138 \uB0B4\uAC01\uC758 \uD569\uC740
+        180\xB0\uB2E4. \uB450 \uAC01\uC744 \uC54C\uBA74 \uB0A8\uC740 \uAC01\uC744
+        \uAD6C\uD560 \uC218 \uC788\uB2E4."
+      example: "\uB450 \uAC01\uC774 50\xB0, 60\xB0\uC774\uBA74 \uB0A8\uC740 \uAC01\uC740
+        180\xB0 \u2212 50\xB0 \u2212 60\xB0 = 70\xB0\uB2E4."
+      question: {fileID: 11400000, guid: 2facc0805114a4746a136732eb0b0090, type: 2}
+    - title: "\uD3EC\uAC1C\uC9C0\uB294 \uBAA8\uC591"
+      explanation: "\uC0BC\uAC01\uD615\uC758 \uD569\uB3D9\uC740 \uD06C\uAE30\uC640
+        \uBAA8\uC591\uC774 \uBAA8\uB450 \uAC19\uC740 \uAC83\uC774\uB2E4. \uC138 \uBCC0(SSS),
+        \uB450 \uBCC0\uACFC \uB07C\uC778\uAC01(SAS), \uD55C \uBCC0\uACFC \uC591 \uB05D\uAC01(ASA)\uC73C\uB85C
+        \uD655\uC778\uD55C\uB2E4."
+      example: "\uB450 \uBCC0\uACFC \uADF8 \uC0AC\uC774 \uAC01\uC774 \uAC01\uAC01
+        \uAC19\uC73C\uBA74 SAS \uD569\uB3D9\uC774\uB2E4. \uAC01\uC758 \uC704\uCE58\uB3C4
+        \uC911\uC694\uD558\uB2E4."
+      question: {fileID: 11400000, guid: 1d2658b9df085544f801ff690483f73a, type: 2}
+    huntTarget: 3
+    enemyHealth: 64
+    enemyDamage: 7
+    wrongAnswerDamage: 3
+    killHeal: 4
+    attackWindup: 1.3
+    respawnDelay: 2
+    questionInterval: 6
+    landscape: {r: 0.12, g: 0.25, b: 0.23, a: 1}
+    creature: {r: 0.4, g: 0.75, b: 0.65, a: 1}
+  - locationName: "\uBB3C\uBE44\uB298 \uC2B5\uC9C0"
+    chapterIntroduction: "\uC815\uB839\uC758 \uC232\uC5D0\uC11C\uB294 \uBAA8\uC591\uACFC
+      \uAD00\uACC4\uAC00 \uD798\uC774 \uB41C\uB2E4.\n\uC0BC\uAC01\uD615\uC5D0\uC11C
+      \uC0AC\uAC01\uD615, \uC6D0\uC73C\uB85C \uBC94\uC704\uB97C \uB113\uD788\uBA70
+      \uBE5B\uC758 \uC5F0\uACB0\uC744 \uC77D\uC790."
+    lessons:
+    - title: "\uB9C8\uC8FC \uBCF4\uB294 \uBCC0"
+      explanation: "\uD3C9\uD589\uC0AC\uBCC0\uD615\uC740 \uB9C8\uC8FC \uBCF4\uB294
+        \uB450 \uC30D\uC758 \uBCC0\uC774 \uAC01\uAC01 \uD3C9\uD589\uD558\uB2E4. \uB9C8\uC8FC
+        \uBCF4\uB294 \uBCC0\uC758 \uAE38\uC774\uC640 \uAC01\uC758 \uD06C\uAE30\uB3C4
+        \uAC01\uAC01 \uAC19\uB2E4."
+      example: "\uD3C9\uD589\uC0AC\uBCC0\uD615\uC758 \uD55C \uBCC0\uC774 5\uB77C\uBA74
+        \uB9C8\uC8FC \uBCF4\uB294 \uBCC0\uB3C4 5\uC774\uB2E4."
+      question: {fileID: 11400000, guid: 1fa97a234c308ce4ebb23cd3bb458610, type: 2}
+    - title: "\uD06C\uAE30\uB9CC \uB2EC\uB77C\uC9C4 \uBAA8\uC591"
+      explanation: "\uB2EE\uC740 \uB3C4\uD615\uC740 \uB300\uC751\uD558\uB294 \uAC01\uC774
+        \uAC19\uACE0, \uB300\uC751\uD558\uB294 \uBCC0\uC758 \uAE38\uC774\uC758 \uBE44\uAC00
+        \uC77C\uC815\uD558\uB2E4."
+      example: "\uC791\uC740 \uB3C4\uD615\uC5D0\uC11C \uD070 \uB3C4\uD615\uC73C\uB85C
+        \uAE38\uC774\uAC00 2\uBC30\uB77C\uBA74, \uB300\uC751\uD558\uB294 \uB2E4\uB978
+        \uBCC0\uB3C4 2\uBC30\uAC00 \uB41C\uB2E4."
+      question: {fileID: 11400000, guid: fe271eace78f081418b875fe8e36710b, type: 2}
+    - title: "\uC9C1\uAC01\uC744 \uC787\uB294 \uAE38"
+      explanation: "\uC9C1\uAC01\uC0BC\uAC01\uD615\uC5D0\uC11C \uB450 \uC9C1\uAC01\uBCC0\uC758
+        \uC81C\uACF1\uC758 \uD569\uC740 \uBE57\uBCC0\uC758 \uC81C\uACF1\uACFC \uAC19\uB2E4.
+        \uBE57\uBCC0\uC740 \uC9C1\uAC01\uC744 \uB9C8\uC8FC \uBCF4\uB294 \uAC00\uC7A5
+        \uAE34 \uBCC0\uC774\uB2E4."
+      example: "\uC9C1\uAC01\uBCC0\uC774 3, 4\uC774\uBA74 \uBE57\uBCC0\uC740 5\uC774\uB2E4.
+        3\xB2 + 4\xB2 = 5\xB2."
+      question: {fileID: 11400000, guid: 1fce5f07d09bcca43b599b862894ca7e, type: 2}
+    huntTarget: 3
+    enemyHealth: 64
+    enemyDamage: 7
+    wrongAnswerDamage: 3
+    killHeal: 4
+    attackWindup: 1.3
+    respawnDelay: 2
+    questionInterval: 6
+    landscape: {r: 0.12, g: 0.25, b: 0.23, a: 1}
+    creature: {r: 0.4, g: 0.75, b: 0.65, a: 1}
+  - locationName: "\uB2EC\uACE0\uB9AC \uD638\uC22B\uAC00"
+    chapterIntroduction: "\uC815\uB839\uC758 \uC232\uC5D0\uC11C\uB294 \uBAA8\uC591\uACFC
+      \uAD00\uACC4\uAC00 \uD798\uC774 \uB41C\uB2E4.\n\uC0BC\uAC01\uD615\uC5D0\uC11C
+      \uC0AC\uAC01\uD615, \uC6D0\uC73C\uB85C \uBC94\uC704\uB97C \uB113\uD788\uBA70
+      \uBE5B\uC758 \uC5F0\uACB0\uC744 \uC77D\uC790."
+    lessons:
+    - title: "\uC6D0\uC5D0 \uB2FF\uB294 \uC120"
+      explanation: "\uC6D0\uC758 \uC811\uC120\uC740 \uC6D0\uACFC \uD55C \uC810\uC5D0\uC11C
+        \uB9CC\uB09C\uB2E4. \uADF8 \uC811\uC810\uC73C\uB85C \uD5A5\uD558\uB294 \uBC18\uC9C0\uB984\uC740
+        \uC811\uC120\uACFC \uC218\uC9C1\uC774\uB2E4."
+      example: "\uC811\uC810 T\uC5D0\uC11C \uBC18\uC9C0\uB984 OT\uC640 \uC811\uC120\uC774
+        \uC774\uB8E8\uB294 \uAC01\uC740 90\xB0\uB2E4."
+      question: {fileID: 11400000, guid: 8bf2981749878354c91cc2496670b97a, type: 2}
+    - title: "\uAC01\uB3C4\uAC00 \uC815\uD558\uB294 \uBE44\uC728"
+      explanation: "\uC9C1\uAC01\uC0BC\uAC01\uD615\uC5D0\uC11C \uAE30\uC900\uAC01\uC5D0
+        \uB300\uD574 sin\uC740 \uB300\uBCC0/\uBE57\uBCC0, cos\uB294 \uC774\uC6C3\uD55C
+        \uC9C1\uAC01\uBCC0/\uBE57\uBCC0, tan\uC740 \uB300\uBCC0/\uC774\uC6C3\uD55C
+        \uC9C1\uAC01\uBCC0\uC774\uB2E4."
+      example: "\uAE30\uC900\uAC01\uC758 \uB300\uBCC0\uACFC \uBE57\uBCC0\uC744 \uC5F0\uACB0\uD558\uB824\uBA74
+        sin\uC744 \uC4F4\uB2E4. \uC5B4\uB5A4 \uBCC0\uC744 \uC544\uB294\uC9C0 \uBA3C\uC800
+        \uBCF4\uC790."
+      question: {fileID: 11400000, guid: 07476f503136a014888bc0db3e7f7797, type: 2}
+    huntTarget: 3
+    enemyHealth: 64
+    enemyDamage: 7
+    wrongAnswerDamage: 3
+    killHeal: 4
+    attackWindup: 1.3
+    respawnDelay: 2
+    questionInterval: 6
+    landscape: {r: 0.12, g: 0.25, b: 0.23, a: 1}
+    creature: {r: 0.4, g: 0.75, b: 0.65, a: 1}
+  - locationName: "\uC7BF\uBE5B \uB454\uB355"
+    chapterIntroduction: "\uC778\uAC04 \uB9C8\uC744 \uBC16\uC5D0\uC11C\uB294 \uAC19\uC740
+      \uC2DD\uC744 \uB2E4\uB978 \uBAA8\uC2B5\uC73C\uB85C \uBCF4\uB294 \uD798\uC774
+      \uD544\uC694\uD558\uB2E4.\n\uC81C\uACF1\uACFC \uACF1, \uADF8\uB798\uD504\uC758
+      \uBAA8\uC591\uC744 \uCC28\uB840\uB85C \uC775\uD788\uC790."
+    lessons:
+    - title: "\uC81C\uACF1 \uC774\uC804\uC758 \uC218"
+      explanation: "\uC5B4\uB5A4 \uC218\uB97C \uC81C\uACF1\uD574 a\uAC00 \uB418\uBA74
+        \uADF8 \uC218\uB294 a\uC758 \uC81C\uACF1\uADFC\uC774\uB2E4. \uC591\uC218
+        a\uC758 \uC81C\uACF1\uADFC\uC740 \uB450 \uAC1C\uC774\uBA70 \u221Aa\uB294
+        \uADF8\uC911 \uC591\uC218\uC778 \uAC12\uC774\uB2E4."
+      example: "9\uC758 \uC81C\uACF1\uADFC\uC740 3\uACFC \u22123\uC774\uC9C0\uB9CC,
+        \u221A9\uB294 3\uC774\uB2E4."
+      question: {fileID: 11400000, guid: 5beb9e6098e00554192d393092c9c4f9, type: 2}
+    - title: "\uACF1\uC73C\uB85C \uB418\uB3CC\uB9AC\uAE30"
+      explanation: "\uC778\uC218\uBD84\uD574\uB294 \uB2E4\uD56D\uC2DD\uC744 \uACF1\uC758
+        \uD615\uD0DC\uB85C \uBC14\uAFB8\uB294 \uAC83\uC774\uB2E4. \uACF5\uD1B5\uC778\uC218\uB97C
+        \uCC3E\uAC70\uB098 \uACF1\uC148\uACF5\uC2DD\uC744 \uAC70\uAFB8\uB85C \uC77D\uB294\uB2E4."
+      example: "x\xB2 \u2212 9 = (x \u2212 3)(x + 3). \uB450 \uC81C\uACF1\uC758 \uCC28\uB97C
+        \uACF1\uC73C\uB85C \uBC14\uAFBC \uBAA8\uC2B5\uC774\uB2E4."
+      question: {fileID: 11400000, guid: f1e0395e54251604ca4b3f89758c81c7, type: 2}
+    - title: "\uACC4\uC218\uC5D0\uC11C \uB450 \uADFC\uC73C\uB85C"
+      explanation: "ax\xB2 + bx + c = 0\uC5D0\uC11C a \u2260 0\uC774\uBA74 \uC774\uCC28\uBC29\uC815\uC2DD\uC774\uB2E4.
+        \uADFC\uC758\uACF5\uC2DD\uC744 \uC0AC\uC6A9\uD560 \uB54C\uB294 \uBD80\uD638\uB97C
+        \uD3EC\uD568\uD55C a, b, c\uB97C \uBA3C\uC800 \uC77D\uB294\uB2E4."
+      example: "x\xB2 \u2212 5x + 6 = 0\uC758 \uACC4\uC218\uB294 a=1, b=\u22125,
+        c=6\uC774\uB2E4. \uACC4\uC0B0\uAE30\uB294 \uC774 \uACC4\uC218\uB85C \uADFC\uC744
+        \uAD6C\uD55C\uB2E4."
+      question: {fileID: 11400000, guid: 2f80586f87436bc43b2c37a9e7b140ea, type: 2}
+    huntTarget: 3
+    enemyHealth: 76
+    enemyDamage: 9
+    wrongAnswerDamage: 4
+    killHeal: 4
+    attackWindup: 1.2
+    respawnDelay: 2
+    questionInterval: 6
+    landscape: {r: 0.24, g: 0.22, b: 0.23, a: 1}
+    creature: {r: 0.66, g: 0.44, b: 0.36, a: 1}
+  - locationName: "\uBC14\uB78C\uACE0\uAC1C \uC0AC\uBA74"
+    chapterIntroduction: "\uC778\uAC04 \uB9C8\uC744 \uBC16\uC5D0\uC11C\uB294 \uAC19\uC740
+      \uC2DD\uC744 \uB2E4\uB978 \uBAA8\uC2B5\uC73C\uB85C \uBCF4\uB294 \uD798\uC774
+      \uD544\uC694\uD558\uB2E4.\n\uC81C\uACF1\uACFC \uACF1, \uADF8\uB798\uD504\uC758
+      \uBAA8\uC591\uC744 \uCC28\uB840\uB85C \uC775\uD788\uC790."
+    lessons:
+    - title: "\uD3EC\uBB3C\uC120\uC758 \uBC29\uD5A5"
+      explanation: "y = a(x \u2212 p)\xB2 + q\uC5D0\uC11C a\uAC00 \uC591\uC218\uC774\uBA74
+        \uC704\uB85C, \uC74C\uC218\uC774\uBA74 \uC544\uB798\uB85C \uC5F4\uB9B0 \uD3EC\uBB3C\uC120\uC774\uB2E4."
+      example: "y = \u22122x\xB2\uB294 \uC544\uB798\uB85C \uC5F4\uB9B0\uB2E4. \uACC4\uC218\uC758
+        \uBD80\uD638\uAC00 \uBC29\uD5A5\uC744 \uC815\uD55C\uB2E4."
+      question: {fileID: 11400000, guid: b96eeeb22a75bf948ac8d73893359a34, type: 2}
+    - title: "\uBC29\uD5A5\uC774 \uBC14\uB00C\uB294 \uC790\uB9AC"
+      explanation: "y = a(x \u2212 p)\xB2 + q\uC758 \uAF2D\uC9D3\uC810\uC740 (p,
+        q)\uB2E4. \uC704\uB85C \uC5F4\uB9AC\uBA74 \uAF2D\uC9D3\uC810\uC5D0\uC11C
+        \uCD5C\uC19F\uAC12, \uC544\uB798\uB85C \uC5F4\uB9AC\uBA74 \uCD5C\uB313\uAC12\uC744
+        \uAC16\uB294\uB2E4."
+      example: "y = (x \u2212 2)\xB2 + 1\uC758 \uAF2D\uC9D3\uC810\uC740 (2, 1), \uCD5C\uC19F\uAC12\uC740
+        1\uC774\uB2E4."
+      question: {fileID: 11400000, guid: 284874299ffcef04684b6a10d326a1a0, type: 2}
+    huntTarget: 3
+    enemyHealth: 76
+    enemyDamage: 9
+    wrongAnswerDamage: 4
+    killHeal: 4
+    attackWindup: 1.2
+    respawnDelay: 2
+    questionInterval: 6
+    landscape: {r: 0.24, g: 0.22, b: 0.23, a: 1}
+    creature: {r: 0.66, g: 0.44, b: 0.36, a: 1}
+  - locationName: "\uB3CC\uBE5B \uD3D0\uB3C4"
+    chapterIntroduction: "\uC778\uAC04 \uB9C8\uC744 \uBC16\uC5D0\uC11C\uB294 \uAC19\uC740
+      \uC2DD\uC744 \uB2E4\uB978 \uBAA8\uC2B5\uC73C\uB85C \uBCF4\uB294 \uD798\uC774
+      \uD544\uC694\uD558\uB2E4.\n\uC81C\uACF1\uACFC \uACF1, \uADF8\uB798\uD504\uC758
+      \uBAA8\uC591\uC744 \uCC28\uB840\uB85C \uC775\uD788\uC790."
+    lessons:
+    - title: "\uAC19\uC740 \uD56D\uB07C\uB9AC \uBAA8\uC73C\uAE30"
+      explanation: "\uBB38\uC790\uC640 \uCC28\uC218\uAC00 \uAC19\uC740 \uD56D\uB07C\uB9AC
+        \uACC4\uC218\uB97C \uB354\uD558\uAC70\uB098 \uBE80\uB2E4. \uAD04\uD638 \uC55E\uC758
+        \uC74C\uC218\uB294 \uAD04\uD638 \uC548\uC758 \uBAA8\uB4E0 \uD56D\uC5D0 \uC801\uC6A9\uD55C\uB2E4."
+      example: "(3x + 2) \u2212 (x \u2212 4) = 3x + 2 \u2212 x + 4 = 2x + 6."
+      question: {fileID: 11400000, guid: 2421cf681b955d14a862c8687bd7e2ac, type: 2}
+    - title: "\uB450 \uC810 \uC0AC\uC774\uC758 \uBCC0\uD654"
+      explanation: "\uC9C1\uC120\uC758 \uAE30\uC6B8\uAE30\uB294 y\uC758 \uBCC0\uD654\uB7C9\uC744
+        x\uC758 \uBCC0\uD654\uB7C9\uC73C\uB85C \uB098\uB208 \uAC12\uC774\uB2E4. \uC11C\uB85C
+        \uB2E4\uB978 \uB450 \uC810\uC744 \uAC19\uC740 \uC21C\uC11C\uB85C \uBE7C\uC57C
+        \uD55C\uB2E4."
+      example: "(1, 2)\uC5D0\uC11C (3, 6)\uC73C\uB85C \uAC00\uBA74 \uAE30\uC6B8\uAE30\uB294
+        (6\u22122)/(3\u22121) = 2\uC774\uB2E4."
+      question: {fileID: 11400000, guid: cf20ff8b0040e434eae8876640db2924, type: 2}
+    huntTarget: 3
+    enemyHealth: 76
+    enemyDamage: 9
+    wrongAnswerDamage: 4
+    killHeal: 4
+    attackWindup: 1.2
+    respawnDelay: 2
+    questionInterval: 6
+    landscape: {r: 0.24, g: 0.22, b: 0.23, a: 1}
+    creature: {r: 0.66, g: 0.44, b: 0.36, a: 1}
+  - locationName: "\uC794\uD5A5 \uADE0\uC5F4\uC9C0"
+    chapterIntroduction: "\uC7AC\uC559\uC73C\uB85C \uBCC0\uD55C \uAE38\uC5D0\uB294
+      \uC548\uC804\uD55C \uB9C8\uC744\uC774 \uC5C6\uB2E4.\n\uBC18\uBCF5\uB418\uB294
+      \uD798\uACFC \uD68C\uC804, \uBCC0\uD654\uC758 \uADDC\uCE59\uC744 \uC775\uD788\uBA70
+      \uC55E\uC73C\uB85C \uB098\uC544\uAC00\uC790."
+    lessons:
+    - title: "\uAC19\uC740 \uBE44\uC728\uB85C \uCEE4\uC9C0\uB294 \uD798"
+      explanation: "\uC9C0\uC218\uD568\uC218\uB294 \uC9C0\uC218\uC5D0 \uBCC0\uC218\uAC00
+        \uB4E4\uC5B4 \uC788\uB294 \uD568\uC218\uB2E4. y = 2\u02E3\uC5D0\uC11C\uB294
+        x\uAC00 1 \uB298 \uB54C\uB9C8\uB2E4 y\uAC00 2\uBC30\uAC00 \uB41C\uB2E4."
+      example: "x\uAC00 0, 1, 2, 3\uC774\uBA74 2\u02E3\uB294 1, 2, 4, 8\uC774\uB2E4."
+      question: {fileID: 11400000, guid: 5318469d44f714d429437e11d676d514, type: 2}
+    - title: "\uBA87 \uBC88 \uACF1\uD588\uB294\uAC00"
+      explanation: "\uB85C\uADF8\uB294 \uAC70\uB4ED\uC81C\uACF1\uC758 \uC9C0\uC218\uB97C
+        \uB418\uBB3B\uB294 \uD45C\uD604\uC774\uB2E4. \uC591\uC218 a\u22601\uC5D0
+        \uB300\uD574 a\u1D47=c\uC774\uBA74 log\u2090c=b\uC774\uB2E4."
+      example: "2\xB3 = 8\uC774\uBBC0\uB85C log\u20828 = 3\uC774\uB2E4. \uBC11\uACFC
+        \uACB0\uACFC\uB97C \uBCF4\uACE0 \uC9C0\uC218\uB97C \uCC3E\uB294\uB2E4."
+      question: {fileID: 11400000, guid: ec645a3a23fdfed4e81a72b9b5c95381, type: 2}
+    huntTarget: 3
+    enemyHealth: 88
+    enemyDamage: 11
+    wrongAnswerDamage: 5
+    killHeal: 4
+    attackWindup: 1.1
+    respawnDelay: 2
+    questionInterval: 6
+    landscape: {r: 0.18, g: 0.14, b: 0.24, a: 1}
+    creature: {r: 0.63, g: 0.39, b: 0.75, a: 1}
+  - locationName: "\uB4A4\uD2C0\uB9B0 \uD68C\uB791"
+    chapterIntroduction: "\uC7AC\uC559\uC73C\uB85C \uBCC0\uD55C \uAE38\uC5D0\uB294
+      \uC548\uC804\uD55C \uB9C8\uC744\uC774 \uC5C6\uB2E4.\n\uBC18\uBCF5\uB418\uB294
+      \uD798\uACFC \uD68C\uC804, \uBCC0\uD654\uC758 \uADDC\uCE59\uC744 \uC775\uD788\uBA70
+      \uC55E\uC73C\uB85C \uB098\uC544\uAC00\uC790."
+    lessons:
+    - title: "\uD68C\uC804\uC73C\uB85C \uC77D\uB294 \uAC01"
+      explanation: "\uC77C\uBC18\uAC01\uC740 \uD68C\uC804 \uBC29\uD5A5\uACFC \uD68C\uC804\uB7C9\uC744
+        \uB098\uD0C0\uB0B8\uB2E4. \uBC18\uC2DC\uACC4 \uBC29\uD5A5\uC740 \uC591\uC218,
+        \uC2DC\uACC4 \uBC29\uD5A5\uC740 \uC74C\uC218\uC774\uBA70 \uD55C \uBC14\uD034\uB294
+        360\xB0\uB2E4."
+      example: "450\xB0\uB294 \uD55C \uBC14\uD034\uB97C \uB3C8 \uB4A4 90\xB0 \uB354
+        \uD68C\uC804\uD55C \uAC01\uC774\uB2E4. \uB05D\uB098\uB294 \uBC29\uD5A5\uC740
+        90\xB0\uC640 \uAC19\uB2E4."
+      question: {fileID: 11400000, guid: e142a146f6a2e794fbb9a642de0a9a3f, type: 2}
+    - title: "\uC6D0 \uC704\uC758 \uB450 \uC88C\uD45C"
+      explanation: "\uBC18\uC9C0\uB984 1\uC778 \uC6D0\uC5D0\uC11C \uC591\uC758 x\uCD95\uC73C\uB85C\uBD80\uD130
+        \uAC01 \u03B8\uB9CC\uD07C \uD68C\uC804\uD55C \uC810\uC758 \uC88C\uD45C\uB294
+        (cos \u03B8, sin \u03B8)\uB2E4."
+      example: "90\xB0\uC758 \uC810\uC740 (0, 1)\uC774\uBBC0\uB85C cos 90\xB0=0,
+        sin 90\xB0=1\uC774\uB2E4."
+      question: {fileID: 11400000, guid: 79b523566e2ec1f4ab79dd2ba6647098, type: 2}
+    huntTarget: 3
+    enemyHealth: 88
+    enemyDamage: 11
+    wrongAnswerDamage: 5
+    killHeal: 4
+    attackWindup: 1.1
+    respawnDelay: 2
+    questionInterval: 6
+    landscape: {r: 0.18, g: 0.14, b: 0.24, a: 1}
+    creature: {r: 0.63, g: 0.39, b: 0.75, a: 1}
+  - locationName: "\uC7AC\uC559\uC758 \uBE44\uD0C8"
+    chapterIntroduction: "\uC7AC\uC559\uC73C\uB85C \uBCC0\uD55C \uAE38\uC5D0\uB294
+      \uC548\uC804\uD55C \uB9C8\uC744\uC774 \uC5C6\uB2E4.\n\uBC18\uBCF5\uB418\uB294
+      \uD798\uACFC \uD68C\uC804, \uBCC0\uD654\uC758 \uADDC\uCE59\uC744 \uC775\uD788\uBA70
+      \uC55E\uC73C\uB85C \uB098\uC544\uAC00\uC790."
+    lessons:
+    - title: "\uC77C\uC815\uD558\uAC8C \uB354\uD558\uB294 \uD750\uB984"
+      explanation: "\uC218\uC5F4\uC740 \uC218\uB97C \uC21C\uC11C\uB300\uB85C \uB098\uC5F4\uD55C
+        \uAC83\uC774\uB2E4. \uC774\uC6C3\uD55C \uD56D\uC758 \uCC28\uAC00 \uC77C\uC815\uD558\uBA74
+        \uB4F1\uCC28\uC218\uC5F4\uC774\uB2E4."
+      example: "2, 5, 8, 11, \u2026\uC740 \uB9E4\uBC88 3\uC744 \uB354\uD558\uB294
+        \uB4F1\uCC28\uC218\uC5F4\uC774\uB2E4."
+      question: {fileID: 11400000, guid: 9b66f2892d0b173468ab13c6b610213c, type: 2}
+    - title: "\uC77C\uC815\uD558\uAC8C \uACF1\uD558\uB294 \uD750\uB984"
+      explanation: "\uC774\uC6C3\uD55C \uD56D \uC0AC\uC774\uC5D0 \uACF1\uD558\uB294
+        \uBE44\uC728\uC774 \uC77C\uC815\uD558\uBA74 \uB4F1\uBE44\uC218\uC5F4\uC774\uB2E4.
+        \uB367\uC148\uC758 \uADDC\uCE59\uACFC \uACF1\uC148\uC758 \uADDC\uCE59\uC744
+        \uAD6C\uBCC4\uD558\uC790."
+      example: "3, 6, 12, 24, \u2026\uB294 \uB9E4\uBC88 2\uB97C \uACF1\uD558\uB294
+        \uB4F1\uBE44\uC218\uC5F4\uC774\uB2E4."
+      question: {fileID: 11400000, guid: de0978ee56b11944abb175fefc9b8bca, type: 2}
+    - title: "\uAD6C\uAC04\uC5D0\uC11C \uC5BC\uB9C8\uB098 \uBCC0\uD588\uB098"
+      explanation: "\uD3C9\uADE0\uBCC0\uD654\uC728\uC740 \uD568\uC218\uAC12\uC758
+        \uBCC0\uD654\uB7C9\uC744 \uC785\uB825\uAC12\uC758 \uBCC0\uD654\uB7C9\uC73C\uB85C
+        \uB098\uB208 \uAC83\uC774\uB2E4. \uADF8\uB798\uD504\uC758 \uB450 \uC810\uC744
+        \uC787\uB294 \uC9C1\uC120\uC758 \uAE30\uC6B8\uAE30\uC640 \uAC19\uB2E4."
+      example: "f(x)=x\xB2\uC5D0\uC11C x\uAC00 1\uC5D0\uC11C 3\uC73C\uB85C \uBC14\uB00C\uBA74
+        \uD3C9\uADE0\uBCC0\uD654\uC728\uC740 (9\u22121)/(3\u22121)=4\uC774\uB2E4."
+      question: {fileID: 11400000, guid: 810e574f7a3125c40825928e23dd9468, type: 2}
+    huntTarget: 3
+    enemyHealth: 88
+    enemyDamage: 11
+    wrongAnswerDamage: 5
+    killHeal: 4
+    attackWindup: 1.1
+    respawnDelay: 2
+    questionInterval: 6
+    landscape: {r: 0.18, g: 0.14, b: 0.24, a: 1}
+    creature: {r: 0.63, g: 0.39, b: 0.75, a: 1}

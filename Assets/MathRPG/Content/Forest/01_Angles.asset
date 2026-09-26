@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 01_Angles
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: triangle-angle-sum
+  title: "\uC138 \uAF2D\uC9D3\uC810\uC758 \uBE5B"
+  steps:
+  - phase: "\uC870\uC900"
+    prompt: "\uC0BC\uAC01\uD615 \uC548\uCABD\uC758 \uC138 \uAC01\uC744 \uBAA8\uB450
+      \uBAA8\uC73C\uBA74 \uBA87 \uB3C4\uC77C\uAE4C?"
+    choices:
+    - "90\xB0"
+    - "180\xB0"
+    - "270\xB0"
+    - "360\xB0"
+    correctIndex: 1
+    hint: "\uC138 \uB0B4\uAC01\uC744 \uB098\uB780\uD788 \uBAA8\uC73C\uBA74 \uC77C\uC9C1\uC120\uC758
+      \uAC01, 180\xB0\uAC00 \uB3FC."
+    diagram:
+      showPair: 0
+      leftTop: "A \xB7 50\xB0"
+      leftBottomLeft: "B \xB7 60\xB0"
+      leftBottomRight: "C \xB7 ?"
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []
+  - phase: "\uCC28\uC9D5"
+    prompt: "A\uB294 50\xB0, B\uB294 60\xB0. \uB0A8\uC740 C\uC758 \uAC01\uC740?"
+    choices:
+    - "70\xB0"
+    - "110\xB0"
+    - "60\xB0"
+    - "50\xB0"
+    correctIndex: 0
+    hint: "\uC804\uCCB4 180\xB0\uC5D0\uC11C \uC54C\uACE0 \uC788\uB294 50\xB0\uC640
+      60\xB0\uB97C \uBE7C\uBD10. 180 - 110 = 70\uC774\uC57C."
+    diagram:
+      showPair: 0
+      leftTop: "A \xB7 50\xB0"
+      leftBottomLeft: "B \xB7 60\xB0"
+      leftBottomRight: "C \xB7 ?"
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []

@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 01_Roots
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: square-roots
+  title: "\uC81C\uACF1\uC758 \uC548\uCABD"
+  steps:
+  - phase: "\uC870\uC900"
+    prompt: "\uC81C\uACF1\uD574\uC11C 9\uAC00 \uB418\uB294 \uC218\uB294 3\uACFC -3\uC774\uB2E4.\n\u221A9\uB294
+      \uADF8\uC911 \uC74C\uC774 \uC544\uB2CC \uAC12\uC744 \uB73B\uD55C\uB2E4. \u221A9\uB294?"
+    choices:
+    - -3
+    - 3
+    - 9
+    - "\xB13"
+    correctIndex: 1
+    hint: "9\uC758 \uC81C\uACF1\uADFC\uC740 \xB13\uC774\uC9C0\uB9CC, \uAE30\uD638
+      \u221A9\uB294 \uC74C\uC774 \uC544\uB2CC \uC81C\uACF1\uADFC 3 \uD558\uB098\uB97C
+      \uB098\uD0C0\uB0B4."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []
+  - phase: "\uCC28\uC9D5"
+    prompt: "\uC774\uC81C x\xB2 = 9\uB97C \uB9CC\uC871\uD558\uB294 x\uB97C \uBAA8\uB450
+      \uACE0\uB974\uBA74?"
+    choices:
+    - "3\uB9CC"
+    - "-3\uB9CC"
+    - "3\uACFC -3"
+    - "9\uC640 -9"
+    correctIndex: 2
+    hint: "3\xB2\uB3C4 9\uC774\uACE0 (-3)\xB2\uB3C4 9\uC57C. \u221A9\uC758 \uAC12\uACFC
+      \uBC29\uC815\uC2DD x\xB2=9\uC758 \uBAA8\uB4E0 \uD574\uB97C \uAD6C\uBD84\uD574\uBD10."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []

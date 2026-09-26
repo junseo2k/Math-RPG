@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7dee12cab0fe3a45b6f9961bb4c3fd6, type: 3}
+  m_Name: 06_Exponent
+  m_EditorClassIdentifier: MathRPG.Runtime::MathRPG.QuestionDefinition
+  conceptId: hunting-06_Exponent
+  title: "\uBC18\uBCF5\uB418\uB294 \uACF1"
+  steps:
+  - type: 0
+    calculation:
+      function: 0
+      blocks: []
+      operandCount: 2
+      acceptedPaths: []
+      expectedResults: []
+      tolerance: 0.000001
+    phase: "\uD750\uB984 \uC77D\uAE30"
+    prompt: "b\xB3 \xD7 b\u2074\uB97C \uD558\uB098\uC758 \uAC70\uB4ED\uC81C\uACF1\uC73C\uB85C
+      \uC4F0\uBA74?"
+    choices:
+    - "b\xB9\xB2"
+    - "2b\u2077"
+    - "b\u2077"
+    - b
+    correctIndex: 2
+    hint: "\uC9C0\uC218\uB97C \uACF1\uD558\uC9C0 \uB9D0\uACE0, b\uAC00 \uBAA8\uB450
+      \uBA87 \uAC1C\uC778\uC9C0 \uC138\uC5B4\uBD10."
+    diagram:
+      showPair: 0
+      leftTop: 
+      leftBottomLeft: 
+      leftBottomRight: 
+      leftSideLeft: 
+      leftSideRight: 
+      leftBase: 
+      rightTop: 
+      rightBottomLeft: 
+      rightBottomRight: 
+      rightSideLeft: 
+      rightSideRight: 
+      rightBase: 
+    geometry:
+      figures: []
