@@ -26,7 +26,8 @@
 | 역행 보스(지면 파동 역재생, 2단계 위치 되감기) | ✅ 완료 | `Enemy/ReversalBoss.cs`, `GroundWave.cs` | 임시 그래픽 |
 | 시험판 UI(능력 카드, HUD, 결과 화면) | ✅ 완료 | `UI/GameUI.cs`, `AbilitySelectUI.cs`, `HUD.cs`, `ResultUI.cs` | 임시 그래픽, NotoSansKR(`Assets/Resources/Fonts`) |
 | 사망·재탄생 연출, 시간 시각화(하늘색·시계·+1시간) | ✅ 완료 | `UI/RebirthOverlay.cs`, `Core/SkyColor.cs`, `UI/HUD.cs` | 화면 연출만(소리 없음), 임시 도형 |
-| 아트·사운드 자산 | ❌ 미구현 | | 사양: `ArtSpecification.md`, `SoundSpecification.md` |
+| 자산 교체 장치(그림·BGM·효과음) | ✅ 완료 | `Core/AssetLibrary.cs`, `Core/SoundPlayer.cs`, `Editor/PixelArtImporter.cs` | 스트립 애니메이션(`Core/SpriteAnimator.cs`), 덕킹 포함 |
+| 아트·사운드 자산 | ❌ 미제작 | | 제작 시트: `AssetProductionSheet.md`. AI 도구 미정 |
 | GRU 예지 보스 | ⏸ 보류 | | `ForesightAI.md` 0장 |
 
 (파일 경로는 `Assets/Scripts/` 기준)
@@ -53,4 +54,6 @@
 
 ## 3. 다음 작업
 
-**P4-⑨**: 아트·사운드 자산 제작·교체. 먼저 AI 생성 도구와 이용 조건 결정 필요(사용자). 남은 아트 [제안] 수치(해상도·크기·권능 모티브) 승인 필요. (P4-⑧ 완료)
+**P4-⑨**: 자산 제작(사용자, `AssetProductionSheet.md` 기준) → `Assets/Resources/Art`·`Audio`에 넣으면 자동 적용. 제작 전 필요: AI 도구·이용 조건 결정.
+
+그 다음: **P5 GRU 재개** 조건 중 남은 것 — 예지 보스 기획(planner), 장기 기억용 저장 기능 설계, 데이터 수집 목표량 결정(`ForesightAI.md` 0-1).

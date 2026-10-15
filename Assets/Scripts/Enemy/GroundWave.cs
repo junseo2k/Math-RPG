@@ -55,6 +55,7 @@ public class GroundWave : MonoBehaviour
     IEnumerator Reverse()
     {
         paused = true;
+        SoundPlayer.Play("sfx_rev_reverse");
         yield return Spiral(transform.position, wallPause, transform.parent);
         returning = true;
         hitThisPass = false;
@@ -81,7 +82,7 @@ public class GroundWave : MonoBehaviour
         sr.transform.SetParent(parent);
         sr.transform.position = pos;
         sr.transform.localScale = Vector3.one * 1.2f;
-        sr.sprite = RoomManager.Square;
+        sr.sprite = AssetLibrary.SpriteUnitsOr("fx_rev_spiral", 1f, RoomManager.Square);
         sr.color = SpiralColor;
         sr.sortingOrder = 3;
 

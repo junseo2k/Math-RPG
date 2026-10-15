@@ -24,19 +24,30 @@ public class PlayerAttack : MonoBehaviour
 
     public void ClearBonus() => bonus = 0;
 
-    void Awake() => controller = GetComponent<PlayerController>();
+    SpriteAnimator anim;
+
+    void Awake()
+    {
+        controller = GetComponent<PlayerController>();
+        anim = GetComponent<SpriteAnimator>();
+    }
 
     void Update()
     {
         var kb = Keyboard.current;
         if (kb == null || !controller.CanAct || !kb.aKey.wasPressedThisFrame || Time.time < readyAt) return;
         readyAt = Time.time + interval;
+        SoundPlayer.Play("sfx_sword_swing", 3);
+        if (anim) anim.PlayOnce("attack");
         int total = damage + (HasBonus ? bonus : 0);
         bonus = 0;
 
         Vector2 center = (Vector2)transform.position + new Vector2(controller.Facing * (transform.localScale.x + range.x) * 0.5f, 0f);
         foreach (var hit in Physics2D.OverlapBoxAll(center, range, 0f))
             if (hit.gameObject != gameObject && hit.TryGetComponent(out Health target))
+            {
                 target.TakeDamage(total);
+                SoundPlayer.Play("sfx_sword_hit", 3);
+            }
     }
 }

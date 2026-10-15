@@ -23,6 +23,7 @@ public class DeferralBoss : MonoBehaviour
     static readonly Color ProjectileColor = new(1f, 0.75f, 0.3f);
 
     Health health;
+    SpriteAnimator anim;
     GameFlow flow;
     PlayerController player;
     DeferredDamage deferred;
@@ -35,6 +36,7 @@ public class DeferralBoss : MonoBehaviour
         health.Init(maxHp, 0f);
         health.Damaged += OnHit;
         health.Died += OnDied;
+        anim = GetComponent<SpriteAnimator>();
     }
 
     void Start()
@@ -55,6 +57,7 @@ public class DeferralBoss : MonoBehaviour
             dir = -dir;
         }
         transform.position = new Vector3(x, pos.y, pos.z);
+        if (anim && player) anim.Face(player.transform.position.x >= x ? 1 : -1);
 
         if (Time.time >= nextFire && player && !player.Health.IsDead)
         {
@@ -65,6 +68,8 @@ public class DeferralBoss : MonoBehaviour
 
     void Fire()
     {
+        SoundPlayer.Play("sfx_def_fire");
+        if (anim) anim.PlayOnce("cast");
         Vector2 from = transform.position;
         Vector2 aim = (Vector2)player.transform.position - from;
         Vector2 direction = aim.sqrMagnitude > 0.001f ? aim.normalized : Vector2.right;
@@ -74,7 +79,7 @@ public class DeferralBoss : MonoBehaviour
         go.transform.position = from;
         go.transform.localScale = Vector3.one * projectileSize;
         var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = RoomManager.Square;
+        sr.sprite = AssetLibrary.SpriteUnitsOr("fx_def_projectile", 1f, RoomManager.Square);
         sr.color = ProjectileColor;
         sr.sortingOrder = 2;
         go.AddComponent<DeferredProjectile>().Init(direction, projectileSpeed, directDamage, maxDistance, trail);

@@ -27,6 +27,7 @@ public class AbilitySelectUI : MonoBehaviour
     RunState builtFor;
     readonly List<Card> cards = new();
     bool selecting;
+    GameObject lastHighlighted;
 
     void Start()
     {
@@ -71,7 +72,8 @@ public class AbilitySelectUI : MonoBehaviour
 
     Card MakeCard(StartAbilityDef def, int index, float x)
     {
-        var bg = GameUI.MakeImage(content, $"Card_{def.id}", GameUI.PanelColor);
+        var cardArt = AssetLibrary.LoadSprite("ui_card");
+        var bg = GameUI.MakeImage(content, $"Card_{def.id}", cardArt ? Color.white : GameUI.PanelColor, cardArt);
         var rect = GameUI.Place(bg.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(x, -20f), cardSize);
         var outline = bg.gameObject.AddComponent<Outline>();
         outline.effectDistance = new Vector2(6f, 6f);
@@ -83,9 +85,11 @@ public class AbilitySelectUI : MonoBehaviour
 
         // 종류: 액티브 = 마름모(검 끝), 패시브 = 원. 모양 + 글자로 구분
         bool active = def.kind == AbilityKind.Active;
-        var icon = GameUI.MakeImage(bg.transform, "Icon", GameUI.Gold, active ? RoomManager.Square : AccumulationBoss.CircleSprite());
+        var iconArt = AssetLibrary.LoadSprite(active ? "ui_icon_active" : "ui_icon_passive");
+        var icon = GameUI.MakeImage(bg.transform, "Icon", iconArt ? Color.white : GameUI.Gold,
+            iconArt ? iconArt : active ? RoomManager.Square : AccumulationBoss.CircleSprite());
         GameUI.Place(icon.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -70f), new Vector2(90f, 90f));
-        if (active) icon.rectTransform.localRotation = Quaternion.Euler(0f, 0f, 45f);
+        if (active && !iconArt) icon.rectTransform.localRotation = Quaternion.Euler(0f, 0f, 45f);
 
         var kind = GameUI.MakeText(bg.transform, active ? "액티브" : "패시브", 28f, GameUI.Gold);
         GameUI.Place(kind.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -190f), new Vector2(360f, 40f));
@@ -98,7 +102,8 @@ public class AbilitySelectUI : MonoBehaviour
 
         if (def.temporary)
         {
-            var badge = GameUI.MakeImage(bg.transform, "TempBadge", new Color(0.55f, 0.2f, 0.2f));
+            var badgeArt = AssetLibrary.LoadSprite("ui_badge_temp");
+            var badge = GameUI.MakeImage(bg.transform, "TempBadge", badgeArt ? Color.white : new Color(0.55f, 0.2f, 0.2f), badgeArt);
             GameUI.Place(badge.rectTransform, new Vector2(1f, 1f), new Vector2(-12f, -12f), new Vector2(100f, 40f));
             var badgeText = GameUI.MakeText(badge.transform, "[임시]", 24f, Color.white);
             GameUI.Fill(badgeText.rectTransform);
@@ -120,6 +125,11 @@ public class AbilitySelectUI : MonoBehaviour
             if (hovered) es.SetSelectedGameObject(card.button.gameObject);
         }
         var selected = es.currentSelectedGameObject;
+        if (selected != lastHighlighted)
+        {
+            if (lastHighlighted) SoundPlayer.Play("sfx_ui_hover");
+            lastHighlighted = selected;
+        }
         foreach (var card in cards)
         {
             bool on = selected == card.button.gameObject;
@@ -132,6 +142,7 @@ public class AbilitySelectUI : MonoBehaviour
     IEnumerator Select(int index)
     {
         selecting = true;
+        SoundPlayer.Play(flow.Choices[index].kind == AbilityKind.Active ? "sfx_ui_select_active" : "sfx_ui_select_passive");
         for (int i = 0; i < cards.Count; i++)
         {
             bool chosen = i == index;

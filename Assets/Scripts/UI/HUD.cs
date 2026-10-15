@@ -70,10 +70,12 @@ public class HUD : MonoBehaviour
         GameUI.Place(timeText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -20f), new Vector2(600f, 56f));
 
         // 천문 시계(임시 도형): 원 + 바늘
-        var face = GameUI.MakeImage(content, "ClockFace", GameUI.Dim, AccumulationBoss.CircleSprite());
+        var faceArt = AssetLibrary.LoadSprite("ui_clock_face");
+        var face = GameUI.MakeImage(content, "ClockFace", faceArt ? Color.white : GameUI.Dim, faceArt ? faceArt : AccumulationBoss.CircleSprite());
         GameUI.Place(face.rectTransform, new Vector2(0.5f, 1f), new Vector2(-260f, -48f), new Vector2(56f, 56f));
         face.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-        clockHand = GameUI.MakeImage(face.transform, "Hand", GameUI.Gold).rectTransform;
+        var handArt = AssetLibrary.LoadSprite("ui_clock_hand");
+        clockHand = GameUI.MakeImage(face.transform, "Hand", handArt ? Color.white : GameUI.Gold, handArt).rectTransform;
         clockHand.anchorMin = clockHand.anchorMax = new Vector2(0.5f, 0.5f);
         clockHand.pivot = new Vector2(0.5f, 0f);
         clockHand.anchoredPosition = Vector2.zero;
@@ -88,11 +90,12 @@ public class HUD : MonoBehaviour
         {
             bool boss = flow.IsBossStageAt(i);
             float size = boss ? slotBoss : slotSmall;
-            var slot = GameUI.MakeImage(content, $"Slot{i}", SlotUpcoming, RoomManager.Square);
+            var slotArt = AssetLibrary.LoadSprite(boss ? "ui_stage_boss" : "ui_stage_room");
+            var slot = GameUI.MakeImage(content, $"Slot{i}", SlotUpcoming, slotArt ? slotArt : RoomManager.Square);
             GameUI.Place(slot.rectTransform, new Vector2(0.5f, 1f), new Vector2(-width / 2f + (i - 1) * slotGap, -100f), new Vector2(size, size));
             slot.rectTransform.pivot = new Vector2(0.5f, 0.5f);
             // 보스 방 = 마름모(모양으로 구분)
-            if (boss) slot.rectTransform.localRotation = Quaternion.Euler(0f, 0f, 45f);
+            if (boss && !slotArt) slot.rectTransform.localRotation = Quaternion.Euler(0f, 0f, 45f);
             slots.Add(slot);
         }
     }
@@ -149,7 +152,11 @@ public class HUD : MonoBehaviour
             handFrom = advanced ? clockHand.localEulerAngles.z : target;
             handTo = target;
             turnStart = Time.time;
-            if (advanced) plusStart = Time.time;
+            if (advanced)
+            {
+                plusStart = Time.time;
+                SoundPlayer.Play("sfx_clock_advance");
+            }
             shownElapsed = elapsed;
         }
         float k = clockTurn > 0f ? Mathf.Clamp01((Time.time - turnStart) / clockTurn) : 1f;
@@ -170,13 +177,21 @@ public class HUD : MonoBehaviour
         {
             int i = hpIcons.Count;
             var icon = GameUI.MakeImage(content, $"Hp{i}", GameUI.Gold, AccumulationBoss.CircleSprite());
+            icon.preserveAspect = true;
             GameUI.Place(icon.rectTransform, new Vector2(0f, 1f), new Vector2(40f + i * (hpIconSize + hpIconGap), -30f), Vector2.one * hpIconSize);
             hpIcons.Add(icon);
         }
         for (int i = 0; i < hpIcons.Count; i++)
         {
             hpIcons[i].gameObject.SetActive(i < health.MaxHp);
-            hpIcons[i].color = i < health.Hp ? GameUI.Gold : HpEmpty;
+            bool full = i < health.Hp;
+            var art = AssetLibrary.LoadSprite(full ? "ui_hp_full" : "ui_hp_empty");
+            if (art)
+            {
+                hpIcons[i].sprite = art;
+                hpIcons[i].color = Color.white;
+            }
+            else hpIcons[i].color = full ? GameUI.Gold : HpEmpty;
         }
     }
 }

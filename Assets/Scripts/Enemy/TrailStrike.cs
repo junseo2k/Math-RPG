@@ -22,6 +22,7 @@ public class TrailStrike : MonoBehaviour
     float angle;
     float startTime;
     bool hitDone;
+    bool warned;
     SpriteRenderer[] dots;
     SpriteRenderer bar;
 
@@ -39,19 +40,19 @@ public class TrailStrike : MonoBehaviour
         dots = new SpriteRenderer[count];
         for (int i = 0; i < count; i++)
         {
-            dots[i] = Part("Dot", new Vector2(-length / 2f + (i + 0.5f) * length / count, 0f), new Vector2(0.15f, 0.15f), DotColor);
+            dots[i] = Part("Dot", "fx_def_trail_dot", new Vector2(-length / 2f + (i + 0.5f) * length / count, 0f), new Vector2(0.15f, 0.15f), DotColor);
         }
-        bar = Part("Strike", Vector2.zero, new Vector2(length, settings.width), StrikeColor);
+        bar = Part("Strike", "fx_def_trail_strike", Vector2.zero, new Vector2(length, settings.width), StrikeColor);
         bar.enabled = false;
     }
 
-    SpriteRenderer Part(string name, Vector2 localPos, Vector2 size, Color color)
+    SpriteRenderer Part(string name, string art, Vector2 localPos, Vector2 size, Color color)
     {
         var sr = new GameObject(name).AddComponent<SpriteRenderer>();
         sr.transform.SetParent(transform, false);
         sr.transform.localPosition = localPos;
         sr.transform.localScale = size;
-        sr.sprite = RoomManager.Square;
+        sr.sprite = AssetLibrary.SpriteUnitsOr(art, 1f, RoomManager.Square);
         sr.color = color;
         return sr;
     }
@@ -63,6 +64,11 @@ public class TrailStrike : MonoBehaviour
 
         if (t < settings.delay)
         {
+            if (!warned)
+            {
+                warned = true;
+                SoundPlayer.Play("sfx_def_trail_warn");
+            }
             bool on = Mathf.FloorToInt(t / 0.075f) % 2 == 0;
             foreach (var d in dots) d.color = on ? Color.white : DotColor;
             return;
@@ -73,6 +79,7 @@ public class TrailStrike : MonoBehaviour
             if (!bar.enabled)
             {
                 bar.enabled = true;
+                SoundPlayer.Play("sfx_def_trail_strike");
                 foreach (var d in dots) d.enabled = false;
             }
             if (!hitDone) CheckHit();

@@ -28,6 +28,7 @@ public class AccumulationBoss : MonoBehaviour
     static Sprite circleSprite;
 
     Health health;
+    SpriteAnimator anim;
     SpriteRenderer body;
     BoxCollider2D box;
     Color baseColor;
@@ -42,6 +43,7 @@ public class AccumulationBoss : MonoBehaviour
         body = GetComponent<SpriteRenderer>();
         box = GetComponent<BoxCollider2D>();
         baseColor = body.color;
+        anim = GetComponent<SpriteAnimator>();
     }
 
     void Start()
@@ -70,18 +72,29 @@ public class AccumulationBoss : MonoBehaviour
                 while (Time.time >= nextStack && Stacks < maxStacks)
                 {
                     Stacks++;
+                    SoundPlayer.Play("sfx_acc_stack");
                     nextStack += stackInterval;
                 }
                 yield return null;
             }
 
+            SoundPlayer.Play("sfx_acc_warning");
+            if (anim) anim.SetLoop("warning");
             yield return Blink(releaseWarning);
             Shockwave();
+            SoundPlayer.Play("sfx_acc_release");
+            if (anim)
+            {
+                anim.PlayOnce("release");
+                anim.SetLoop("exhausted");
+            }
 
             Stacks = 0;
             body.color = baseColor * 0.5f;
+            SoundPlayer.Play("sfx_acc_exhaust");
             yield return new WaitForSeconds(exhaustTime);
             body.color = baseColor;
+            if (anim) anim.SetLoop("idle");
         }
     }
 
@@ -90,9 +103,17 @@ public class AccumulationBoss : MonoBehaviour
         if (!player) yield break;
 
         body.color = new Color(1f, 0.6f, 0.1f);
+        SoundPlayer.Play("sfx_acc_windup");
+        if (anim) anim.SetLoop("windup");
         yield return new WaitForSeconds(chargeWindup);
 
         float dir = Mathf.Sign(player.transform.position.x - transform.position.x);
+        SoundPlayer.Play("sfx_acc_charge");
+        if (anim)
+        {
+            anim.Face((int)dir);
+            anim.SetLoop("charge");
+        }
         float traveled = 0f;
         bool hit = false;
         while (traveled < chargeDistance)
@@ -111,6 +132,7 @@ public class AccumulationBoss : MonoBehaviour
             yield return null;
         }
         body.color = baseColor;
+        if (anim) anim.SetLoop("idle");
     }
 
     IEnumerator Blink(float duration)
@@ -133,7 +155,7 @@ public class AccumulationBoss : MonoBehaviour
                 target.Health.TakeDamage(shockwaveDamage);
 
         var view = new GameObject("Shockwave").AddComponent<SpriteRenderer>();
-        view.sprite = CircleSprite();
+        view.sprite = AssetLibrary.SpriteUnitsOr("fx_shockwave_ring", 2f, CircleSprite());
         view.color = new Color(1f, 1f, 1f, 0.35f);
         view.sortingOrder = -1;
         view.transform.position = transform.position;
