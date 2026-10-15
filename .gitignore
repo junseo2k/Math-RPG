@@ -28,3 +28,6 @@
 *.aab
 *.unitypackage
 crashlytics-build.properties
+
+# ML 원본 데이터
+ML/data/

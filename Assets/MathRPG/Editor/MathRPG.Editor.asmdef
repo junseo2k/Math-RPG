@@ -1,7 +1,0 @@
-{
-  "name": "MathRPG.Editor",
-  "rootNamespace": "MathRPG.Editor",
-  "references": ["MathRPG.Runtime"],
-  "includePlatforms": ["Editor"],
-  "autoReferenced": true
-}
