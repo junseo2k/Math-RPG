@@ -60,6 +60,7 @@ public class RebirthOverlay : MonoBehaviour
         dayText.gameObject.SetActive(false);
 
         sun.gameObject.SetActive(true);
+        SoundPlayer.Play("sfx_rebirth");
         SetAlpha(view, 1f);
         yield return Tween(sunrise, t =>
         {

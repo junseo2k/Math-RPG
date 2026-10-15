@@ -40,7 +40,11 @@ public class DeferredDamage : MonoBehaviour
         if (flow) flow.RunReset -= Clear;
     }
 
-    public void Add(int amount) => pending.Add(new Pending { amount = amount, applyAt = Time.time + deferTime });
+    public void Add(int amount)
+    {
+        pending.Add(new Pending { amount = amount, applyAt = Time.time + deferTime });
+        SoundPlayer.Play("sfx_def_deferred");
+    }
 
     // 먼저 들어온 것부터 줄인다
     public void Reduce(int amount)
@@ -66,6 +70,7 @@ public class DeferredDamage : MonoBehaviour
             int amount = pending[i].amount;
             pending.RemoveAt(i);
             health.ApplyDirect(amount);
+            SoundPlayer.Play("sfx_def_apply");
         }
     }
 

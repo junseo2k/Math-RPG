@@ -36,6 +36,7 @@ public class ReversalBoss : MonoBehaviour
     static readonly Color GhostColor = new(1f, 0.8f, 0.3f, 0.35f);
 
     Health health;
+    SpriteAnimator anim;
     SpriteRenderer body;
     Color baseColor;
     GameFlow flow;
@@ -53,6 +54,7 @@ public class ReversalBoss : MonoBehaviour
         health.Died += OnDied;
         body = GetComponent<SpriteRenderer>();
         baseColor = body.color;
+        anim = GetComponent<SpriteAnimator>();
     }
 
     void Start()
@@ -71,7 +73,13 @@ public class ReversalBoss : MonoBehaviour
 
         var pos = transform.position;
         float dx = player.transform.position.x - pos.x;
-        if (Mathf.Abs(dx) <= keepDistance) return;
+        bool walking = Mathf.Abs(dx) > keepDistance;
+        if (anim)
+        {
+            anim.Face(dx >= 0f ? 1 : -1);
+            anim.SetLoop(walking ? "walk" : "idle");
+        }
+        if (!walking) return;
         float x = Mathf.Clamp(pos.x + Mathf.Sign(dx) * walkSpeed * Time.deltaTime, -moveLimitX, moveLimitX);
         transform.position = new Vector3(x, pos.y, pos.z);
     }
@@ -86,10 +94,13 @@ public class ReversalBoss : MonoBehaviour
 
             windingUp = true;
             body.color = WindupColor;
+            SoundPlayer.Play("sfx_rev_windup");
+            if (anim) anim.PlayOnce("slam");
             yield return new WaitForSeconds(waveWindup);
             body.color = baseColor;
             windingUp = false;
             SpawnWave(player.transform.position.x >= transform.position.x ? 1 : -1);
+            SoundPlayer.Play("sfx_rev_wave");
         }
     }
 
@@ -103,7 +114,7 @@ public class ReversalBoss : MonoBehaviour
             floorTop + waveHeight * 0.5f, 0f);
         go.transform.localScale = new Vector3(waveWidth, waveHeight, 1f);
         var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = RoomManager.Square;
+        sr.sprite = AssetLibrary.SpriteUnitsOr("fx_rev_wave", 1f, RoomManager.Square);
         sr.color = WaveColor;
         sr.sortingOrder = 2;
         go.AddComponent<GroundWave>().Init(dir, waveSpeed, returnSpeed, wallPause, waveDamage, transform);
@@ -113,6 +124,8 @@ public class ReversalBoss : MonoBehaviour
     {
         phase2 = true;
         transitioning = true;
+        SoundPlayer.Play("sfx_rev_phase2");
+        if (anim) anim.PlayOnce("phase2");
         yield return GroundWave.Spiral(transform.position, phaseTransition, transform.parent);
         transitioning = false;
         StartCoroutine(RewindLoop());
@@ -131,14 +144,17 @@ public class ReversalBoss : MonoBehaviour
             ghost.transform.SetParent(transform.parent);
             ghost.transform.position = target;
             ghost.transform.localScale = player.transform.localScale;
-            ghost.sprite = RoomManager.Square;
+            // 잔상 = 플레이어 모습 그대로(임시 도형이든 그림이든)
+            ghost.sprite = player.GetComponent<SpriteRenderer>().sprite;
             ghost.color = GhostColor;
             ghost.sortingOrder = 2;
+            SoundPlayer.Play("sfx_rev_rewind_warn");
 
             yield return new WaitForSeconds(rewindWarning);
             if (ghost) Destroy(ghost.gameObject);
             if (!player || player.Health.IsDead) continue;
             player.transform.position = target;
+            SoundPlayer.Play("sfx_rev_rewind");
             playerBody.linearVelocity = Vector2.zero;
         }
     }

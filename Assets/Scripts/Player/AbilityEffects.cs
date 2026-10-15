@@ -82,12 +82,13 @@ public class AbilityEffects : MonoBehaviour
             if (hit.TryGetComponent(out IFreezable target))
                 target.Freeze(freezeDuration);
         ShowField();
+        SoundPlayer.Play("sfx_freeze");
     }
 
     void ShowField()
     {
         var view = new GameObject("FreezeField").AddComponent<SpriteRenderer>();
-        view.sprite = AccumulationBoss.CircleSprite();
+        view.sprite = AssetLibrary.SpriteUnitsOr("fx_freeze_field", 2f, AccumulationBoss.CircleSprite());
         view.color = new Color(0.4f, 0.7f, 1f, 0.3f);
         view.sortingOrder = -1;
         view.transform.position = transform.position;

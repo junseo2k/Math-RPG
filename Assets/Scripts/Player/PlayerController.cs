@@ -25,12 +25,14 @@ public class PlayerController : MonoBehaviour
     public event Action Dashed;
 
     Rigidbody2D body;
+    SpriteAnimator anim;
     GameFlow flow;
     ContactFilter2D groundFilter;
     Vector3 spawnPoint;
     bool dashing;
     float dashEnd;
     float dashReadyAt;
+    bool wasGrounded;
 
     void Awake()
     {
@@ -40,6 +42,12 @@ public class PlayerController : MonoBehaviour
         Health = GetComponent<Health>();
         Health.Init(maxHp, hitInvincibleTime);
         Health.Died += OnDied;
+        Health.Damaged += _ =>
+        {
+            SoundPlayer.Play("sfx_player_hurt");
+            if (anim && !Health.IsDead) anim.PlayOnce("hurt");
+        };
+        anim = GetComponent<SpriteAnimator>();
         groundFilter.SetNormalAngle(45f, 135f);
         spawnPoint = transform.position;
     }
@@ -53,6 +61,15 @@ public class PlayerController : MonoBehaviour
     void OnDestroy()
     {
         if (flow) flow.RunReset -= Respawn;
+    }
+
+    // 애니메이션 상태: 대시 > 공중 > 달리기 > 대기
+    void LateUpdate()
+    {
+        if (!anim || Health.IsDead) return;
+        anim.Face(Facing);
+        bool grounded = body.IsTouching(groundFilter);
+        anim.SetLoop(dashing ? "dash" : !grounded ? "jump" : Mathf.Abs(body.linearVelocity.x) > 0.1f ? "run" : "idle");
     }
 
     void Update()
@@ -75,14 +92,20 @@ public class PlayerController : MonoBehaviour
         body.linearVelocity = new Vector2(x * moveSpeed * MoveSpeedMultiplier, body.linearVelocity.y);
 
         bool grounded = body.IsTouching(groundFilter);
+        if (grounded && !wasGrounded) SoundPlayer.Play("sfx_land");
+        wasGrounded = grounded;
         if (grounded && kb.spaceKey.wasPressedThisFrame)
+        {
             body.linearVelocity = new Vector2(body.linearVelocity.x, jumpSpeed);
+            SoundPlayer.Play("sfx_jump");
+        }
         if (grounded && kb.shiftKey.wasPressedThisFrame && Time.time >= dashReadyAt)
             StartDash();
     }
 
     void StartDash()
     {
+        SoundPlayer.Play("sfx_dash");
         dashing = true;
         dashEnd = Time.time + dashTime;
         dashReadyAt = dashEnd + dashCooldown * DashCooldownMultiplier;
@@ -102,6 +125,8 @@ public class PlayerController : MonoBehaviour
 
     void OnDied()
     {
+        SoundPlayer.Play("sfx_player_death");
+        if (anim) anim.PlayHold("death");
         if (flow) flow.PlayerDied();
     }
 
@@ -112,5 +137,6 @@ public class PlayerController : MonoBehaviour
         body.linearVelocity = Vector2.zero;
         dashReadyAt = 0f;
         Health.ResetHealth();
+        if (anim) anim.Release();
     }
 }

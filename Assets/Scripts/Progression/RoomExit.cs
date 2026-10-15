@@ -24,6 +24,14 @@ public class RoomExit : MonoBehaviour
     public void SetOpen(bool open)
     {
         IsOpen = open;
+        var art = AssetLibrary.LoadSprite(open ? "obj_exit_open" : "obj_exit_locked");
+        if (art)
+        {
+            view.sprite = art;
+            view.drawMode = SpriteDrawMode.Simple;
+            view.color = Color.white;
+            return;
+        }
         view.color = open ? OpenColor : LockedColor;
     }
 

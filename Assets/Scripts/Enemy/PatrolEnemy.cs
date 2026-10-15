@@ -31,6 +31,7 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
     Color baseColor;
     Color currentColor;
     Health health;
+    SpriteAnimator anim;
     PlayerController player;
     int dir = 1;
     bool attacking;
@@ -53,6 +54,7 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
         baseColor = view ? view.color : Color.white;
         currentColor = baseColor;
         health = GetComponent<Health>();
+        anim = GetComponent<SpriteAnimator>();
         health.Init(maxHp, 0f);
         health.Damaged += OnDamaged;
         health.Died += Remove;
@@ -111,6 +113,13 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
         body.linearVelocity = new Vector2(dir * speed, body.linearVelocity.y);
     }
 
+    void LateUpdate()
+    {
+        if (!anim) return;
+        anim.Face(dir);
+        if (!attacking) anim.SetLoop(Mathf.Abs(body.linearVelocity.x) > 0.1f ? "walk" : "idle");
+    }
+
     // 앞이 벽이거나 발판 끝이면 true
     bool Blocked()
     {
@@ -134,6 +143,8 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
     {
         attacking = true;
         SetColor(WindupColor);
+        if (anim) anim.SetLoop("windup");
+        SoundPlayer.Play("sfx_enemy_windup");
         yield return WaitUnfrozen(windup);
 
         Vector2 center = (Vector2)transform.position + new Vector2(dir * (box.bounds.extents.x + attackRange * 0.5f), 0f);
@@ -142,6 +153,12 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
             if (hit.TryGetComponent(out PlayerController target))
                 target.Health.TakeDamage(slashDamage);
         ShowSlash(center, size);
+        if (anim)
+        {
+            anim.PlayOnce("slash");
+            anim.SetLoop("idle");
+        }
+        SoundPlayer.Play("sfx_enemy_slash");
 
         SetColor(baseColor);
         yield return WaitUnfrozen(recover);
@@ -178,6 +195,8 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
     // 예비 동작·공격 중에는 경직으로 취소되지 않음
     void OnDamaged(int _)
     {
+        SoundPlayer.Play("sfx_enemy_hurt");
+        if (anim && !attacking) anim.PlayOnce("hurt");
         if (!attacking) stunUntil = Time.time + hitStun;
         if (view && !attacking && !Frozen) StartCoroutine(Flash());
     }

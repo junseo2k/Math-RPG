@@ -17,7 +17,7 @@ public class RoomManager : MonoBehaviour
     static Sprite square;
     public static Sprite Square => square
         ? square
-        : square = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 4, 4), new Vector2(0.5f, 0.5f), 4);
+        : square = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 4, 4), new Vector2(0.5f, 0.5f), 4, 0, SpriteMeshType.FullRect);
 
     static readonly Color GroundColor = Color.gray;
     static readonly Color EnemyColor = new(0.55f, 0.6f, 0.85f);
@@ -112,13 +112,13 @@ public class RoomManager : MonoBehaviour
         switch (flow.BossIndex)
         {
             case 0:
-                SpawnBoss<AccumulationBoss>("시간 축적", new Color(0.85f, 0.3f, 0.3f));
+                SpawnBoss<AccumulationBoss>("시간 축적", "boss_accumulation", new Color(0.85f, 0.3f, 0.3f));
                 break;
             case 1:
-                SpawnBoss<DeferralBoss>("시간 유예", new Color(0.85f, 0.6f, 0.25f));
+                SpawnBoss<DeferralBoss>("시간 유예", "boss_deferral", new Color(0.85f, 0.6f, 0.25f));
                 break;
             case 2:
-                SpawnBoss<ReversalBoss>("시간 역행", new Color(0.3f, 0.7f, 0.75f));
+                SpawnBoss<ReversalBoss>("시간 역행", "boss_reversal", new Color(0.3f, 0.7f, 0.75f));
                 break;
             default:
                 // 1장 보스는 3명. 그 밖의 설정에서는 출구만 열어 둠
@@ -128,10 +128,12 @@ public class RoomManager : MonoBehaviour
         }
     }
 
-    void SpawnBoss<T>(string displayName, Color color) where T : Component
+    void SpawnBoss<T>(string displayName, string art, Color color) where T : Component
     {
         var boss = Block(typeof(T).Name, new Vector2(6f, 1f), new Vector2(2f, 2f), color);
         boss.GetComponent<BoxCollider2D>().isTrigger = true;
+        AssetLibrary.ApplyCharacter(boss.GetComponent<SpriteRenderer>(), art + "_idle");
+        boss.AddComponent<SpriteAnimator>().BaseName = art;
         boss.AddComponent<T>();
         CurrentBoss = boss.GetComponent<Health>();
         CurrentBossName = displayName;
@@ -157,10 +159,10 @@ public class RoomManager : MonoBehaviour
         exit = null;
 
         float half = layout.Length / 2f;
-        Block("Floor", new Vector2(0f, -0.5f), new Vector2(layout.Length + 2f, 1f), GroundColor);
-        Block("WallL", new Vector2(-half - 0.5f, 5f), new Vector2(1f, 12f), GroundColor);
-        Block("WallR", new Vector2(half + 0.5f, 5f), new Vector2(1f, 12f), GroundColor);
-        foreach (var (center, size) in layout.Blocks) Block("Ground", center, size, GroundColor);
+        Terrain("Floor", new Vector2(0f, -0.5f), new Vector2(layout.Length + 2f, 1f));
+        Terrain("WallL", new Vector2(-half - 0.5f, 5f), new Vector2(1f, 12f));
+        Terrain("WallR", new Vector2(half + 0.5f, 5f), new Vector2(1f, 12f));
+        foreach (var (center, size) in layout.Blocks) Terrain("Ground", center, size);
 
         player.transform.position = new Vector2(layout.EntranceX, 0.5f);
         playerBody.linearVelocity = Vector2.zero;
@@ -174,6 +176,8 @@ public class RoomManager : MonoBehaviour
     void SpawnEnemy(Vector2 pos)
     {
         var go = Block("PatrolEnemy", pos, Vector2.one, EnemyColor);
+        AssetLibrary.ApplyCharacter(go.GetComponent<SpriteRenderer>(), "enemy_sentinel_idle");
+        go.AddComponent<SpriteAnimator>().BaseName = "enemy_sentinel";
         var enemy = go.AddComponent<PatrolEnemy>();
         enemy.Removed += OnEnemyRemoved;
 
@@ -194,7 +198,7 @@ public class RoomManager : MonoBehaviour
 
     RoomExit CreateExit(RoomLayout layout)
     {
-        var go = Block("Exit", new Vector2(layout.ExitX, 1f), new Vector2(1f, 2f), Color.white);
+        var go = Sized("Exit", new Vector2(layout.ExitX, 1f), new Vector2(1f, 2f), RoomManager.Square, Color.white);
         return go.AddComponent<RoomExit>();
     }
 
@@ -206,6 +210,8 @@ public class RoomManager : MonoBehaviour
         sr.sprite = Square;
         sr.color = new Color(1f, 0.8f, 0.3f);
         sr.sortingOrder = 1;
+        AssetLibrary.ApplyCharacter(sr, "chr_player_idle");
+        go.AddComponent<SpriteAnimator>().BaseName = "chr_player";
         go.AddComponent<BoxCollider2D>();
         var controller = go.AddComponent<PlayerController>();
         go.AddComponent<PlayerAttack>();
@@ -224,6 +230,27 @@ public class RoomManager : MonoBehaviour
         sr.sprite = Square;
         sr.color = color;
         go.AddComponent<BoxCollider2D>();
+        return go;
+    }
+
+    // 지형: 크기를 스케일이 아니라 충돌·타일 크기로 지정(타일 그림이 늘어나지 않게)
+    void Terrain(string name, Vector2 pos, Vector2 size)
+    {
+        var tile = AssetLibrary.LoadSprite("tile_ground_ch1");
+        Sized(name, pos, size, tile ? tile : Square, tile ? Color.white : GroundColor);
+    }
+
+    GameObject Sized(string name, Vector2 pos, Vector2 size, Sprite sprite, Color color)
+    {
+        var go = new GameObject(name);
+        go.transform.SetParent(room);
+        go.transform.position = pos;
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = sprite;
+        sr.color = color;
+        sr.drawMode = SpriteDrawMode.Tiled;
+        sr.size = size;
+        go.AddComponent<BoxCollider2D>().size = size;
         return go;
     }
 
