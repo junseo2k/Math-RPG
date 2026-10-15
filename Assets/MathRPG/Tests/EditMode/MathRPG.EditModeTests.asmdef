@@ -1,7 +1,0 @@
-{
-  "name": "MathRPG.EditModeTests",
-  "references": ["MathRPG.Runtime"],
-  "includePlatforms": ["Editor"],
-  "optionalUnityReferences": ["TestAssemblies"],
-  "autoReferenced": false
-}

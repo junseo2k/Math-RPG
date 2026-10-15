@@ -1,6 +1,0 @@
-{
-  "name": "MathRPG.Runtime",
-  "rootNamespace": "MathRPG",
-  "references": ["Unity.InputSystem", "UnityEngine.UI", "Unity.TextMeshPro"],
-  "autoReferenced": true
-}

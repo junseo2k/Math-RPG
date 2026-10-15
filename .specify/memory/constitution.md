@@ -1,50 +1,131 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version change: (template placeholder, unversioned) → 1.0.0
+- Bump rationale: MINOR/MAJOR N/A — first concrete ratification of the scaffold.
+- Modified principles:
+  - [PRINCIPLE_1_NAME] → I. 변경 범위와 승인 게이트
+  - [PRINCIPLE_2_NAME] → II. 모호한 요청은 되묻는다
+  - [PRINCIPLE_3_NAME] → III. Unity 표준과 인스펙터 노출 (NON-NEGOTIABLE)
+  - [PRINCIPLE_4_NAME] → IV. 난이도는 누적·연계로 쌓는다
+  - [PRINCIPLE_5_NAME] → V. 최소 diff 출력
+- Added sections:
+  - 기술 제약 및 파일 접근 범위 (was [SECTION_2_NAME])
+  - 개발 워크플로 (was [SECTION_3_NAME])
+- Removed sections: none
+- Source: AGENTS.md 5장(작업 진행 원칙), 7장(난이도 설계 철학), 4장(파일 접근 범위)
+- Follow-up TODOs: none
+- This report is scratch material for amendment review; remove before committing.
+-->
+
+# 수학 전투 로그라이크 Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. 변경 범위와 승인 게이트
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+변경 규모는 숫자로 판정하며, 주관적 판단으로 우회할 수 없습니다.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+- 단일 파일 내부 변경이고 기존 함수 시그니처를 바꾸지 않으면 승인 없이 진행합니다(MUST).
+- 2개 이상 파일에 걸치거나 기존 동작을 바꾸는 변경은 먼저 제안해야 합니다(MUST). 제안은
+  **파일명 + 한 줄 요약**만 포함하며, 실제 코드는 승인 후에 작성합니다.
+- 오타 및 단순 버그 수정은 즉시 진행합니다.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+근거: 승인 비용이 변경 위험에 비례하게 만들어, 작은 작업은 막지 않고 파급 범위가 큰 작업만
+멈춰 세웁니다.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### II. 모호한 요청은 되묻는다
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+요청이 모호할 때 의도를 임의로 추론해 구현하는 것은 금지합니다(MUST NOT). 이해한 내용을
+한두 줄로 정리해 확인을 받고, 선택지를 제시할 경우 최대 2개까지만 제시합니다.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+근거: 잘못 추론한 구현은 버린 작업이 되며, 확인 한 줄이 재작업보다 항상 싸다.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### III. Unity 표준과 인스펙터 노출 (NON-NEGOTIABLE)
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- 대상 환경은 **Unity 6 + C#** 이며, 다른 엔진 버전이나 언어를 전제한 코드를 작성하지
+  않습니다(MUST).
+- `MonoBehaviour`, `ScriptableObject`, `[SerializeField]` 등 Unity 표준 패턴을 우선
+  사용합니다(MUST).
+- 밸런스 수치·확률·곡선은 인스펙터에 노출해, 코드 수정 없이 튜닝할 수 있어야 합니다(MUST).
+  하드코딩된 밸런스 상수는 이 원칙 위반으로 간주합니다.
+- 클래스 하나가 여러 책임을 갖지 않게 하고, 시스템 간 연결은 이벤트 또는 인터페이스로
+  느슨하게 유지합니다(MUST).
+
+근거: 튜닝 주체는 기획이고 컴파일은 비용입니다. 수치가 인스펙터에 없으면 밸런싱 한 번마다
+코드 변경과 승인 절차가 따라붙습니다.
+
+### IV. 난이도는 누적·연계로 쌓는다
+
+새 시스템의 난이도 설계는 다음 3단 구조를 따릅니다(MUST).
+
+- **입문**: 사칙연산·간단한 비교. 오답 패널티는 약하게, 재도전을 허용합니다.
+- **성장**: 이전 개념을 계속 재활용하면서, 새 개념(분수·방정식·확률)을 한 번에 하나만
+  얹습니다.
+- **보스**: 누적 개념을 종합합니다. 정답률로 벌하지 않고 시도와 학습을 장려하며, 오답 시
+  힌트 또는 개념 팝업을 제공합니다.
+
+확정된 난이도 구조는 매 작업마다 재점검하지 않습니다.
+
+근거: 수포자도 부담 없이 시작해 자연스럽게 개념을 익히게 만드는 것이 이 게임의 성공
+기준이며, 난이도 곡선은 그 기준이 코드에 드러나는 유일한 지점입니다.
+
+### V. 최소 diff 출력
+
+- 기존 파일 수정 시 전체 재출력은 금지합니다(MUST NOT). 변경된 부분만 diff 또는
+  `// ...생략...` 조각으로 제시합니다.
+- 변경 이유 설명은 코드 아래 1~3줄로 제한합니다(MUST).
+- 전체 파일은 사용자가 명시적으로 요청할 때만 출력합니다(MUST).
+- 서론·요약·다음 단계 제안·검증 리포트는 작성하지 않습니다(MUST NOT). 필요하면 "확인해볼
+  점" 1~2줄로 대체합니다.
+
+근거: 토큰 예산은 유한하며, 재출력된 300줄은 실제 변경된 5줄을 찾기 어렵게 만듭니다.
+
+## 기술 제약 및 파일 접근 범위
+
+- **엔진/언어**: Unity 6, C#.
+- **읽기 금지·수정 금지 파일**: `.unity`, `.prefab`, `.meta`, `.asset` (MUST NOT). 수천 줄
+  YAML이라 비용이 크고, 손으로 편집하면 씬·프리팹이 깨질 수 있습니다. Inspector 연결이
+  필요하면 `오브젝트 / 컴포넌트 / 연결 대상` 3열 표로만 전달하고, 단계별 클릭 설명은 쓰지
+  않습니다.
+- **파일 탐색**: 사용자가 지정한 파일만 읽습니다(MUST). 어떤 파일을 봐야 할지 모르면
+  추측으로 여러 개를 열지 말고 먼저 묻습니다.
+- **폴더 책임 경계**: `Combat/`(전투), `MathQuiz/`(문제·채점), `Player/`(스탯·성장),
+  `Enemy/`(AI·패턴), `Progression/`(런 진행·맵), `UI/`(화면 컨트롤러),
+  `Data/`(ScriptableObject 정의), `Core/`(매니저·이벤트). 한 폴더의 책임을 다른 폴더로
+  넘기지 않습니다.
+- **참고 문서**: `Docs/기획서.md`는 새 시스템 설계 시, `Docs/스토리.md`는 대사·연출·네이밍
+  작업 시, `Docs/통합본.md`는 수정안 요청 시에만 읽습니다. 코드 수정 작업에는 읽지 않으며,
+  전체가 아닌 해당 섹션만 읽습니다. 문서와 코드가 어긋나면 임의로 맞추지 않고 사용자에게
+  알립니다(MUST).
+
+## 개발 워크플로
+
+1. 요청 해석 — 모호하면 원칙 II에 따라 확인부터 받습니다.
+2. 범위 판정 — 원칙 I의 숫자 기준으로 즉시 진행 / 제안 후 승인 대기를 결정합니다.
+3. 구현 — 원칙 III의 Unity 표준을 따르고, 밸런스 수치는 인스펙터로 노출합니다.
+4. 출력 — 원칙 V에 따라 변경 조각과 1~3줄 설명만 제시합니다.
+5. 검증 — 실행 검증은 사용자의 몫입니다. 테스트 시나리오 시뮬레이션이나 검증 리포트를
+   작성하지 않습니다.
+
+절약을 이유로 1단계(모호함 확인)와 2단계(승인 판정)를 생략하는 것은 금지합니다(MUST NOT).
+짧게 하되 반드시 거칩니다.
+
+`AGENTS.md`는 이 Constitution의 런타임 요약본입니다. 내용이 충돌하면 이 문서가 우선하며,
+`AGENTS.md`를 이 문서에 맞춰 수정합니다.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+- 이 Constitution은 다른 모든 관행·습관보다 우선합니다. 원칙과 충돌하는 요청이 오면 충돌
+  지점을 한 줄로 알린 뒤 사용자의 결정을 따릅니다.
+- **개정 절차**: 변경 제안은 대상 원칙, 변경 후 문구, 변경 이유를 함께 제시합니다. 사용자
+  승인 후에만 이 파일을 수정하며, Sync Impact Report를 문서 상단에 첨부합니다.
+- **버전 정책** (semantic versioning):
+  - MAJOR — 원칙 제거 또는 하위 호환되지 않는 재정의
+  - MINOR — 원칙·섹션 추가 또는 지침의 실질적 확장
+  - PATCH — 표현 정리, 오타 수정, 의미를 바꾸지 않는 다듬기
+- **준수 검토**: 작업 단위가 끝날 때 원칙 I(승인 게이트), III(인스펙터 노출), V(최소 diff)
+  위반이 있었는지 확인합니다. 복잡도를 추가했다면 그 근거를 남깁니다.
+- `AGENTS.md`의 "현재 상태" 섹션은 사용자가 직접 갱신하며, 에이전트는 그 내용을 신뢰하고
+  구현 여부를 확인하려 파일을 뒤지지 않습니다.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-09-26
