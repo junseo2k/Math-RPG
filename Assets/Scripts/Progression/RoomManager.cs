@@ -172,6 +172,7 @@ public class RoomManager : MonoBehaviour, IRewindable
         AssetLibrary.ApplyCharacter(boss.GetComponent<SpriteRenderer>(), art + "_idle");
         boss.AddComponent<SpriteAnimator>().BaseName = art;
         boss.AddComponent<T>();
+        boss.AddComponent<HitFlash>();
         CurrentBoss = boss.GetComponent<Health>();
         CurrentBossName = displayName;
     }
@@ -256,6 +257,7 @@ public class RoomManager : MonoBehaviour, IRewindable
         go.AddComponent<DeferredDamage>();
         go.AddComponent<PotionUser>();
         go.AddComponent<RewardEffects>();
+        go.AddComponent<HitFlash>();
         return controller;
     }
 
