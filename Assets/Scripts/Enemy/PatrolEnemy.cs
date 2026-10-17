@@ -6,14 +6,14 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D), typeof(Health))]
 public class PatrolEnemy : MonoBehaviour, IFreezable
 {
-    [SerializeField] int maxHp = 3;
+    [SerializeField] int maxHp = 40;
     [SerializeField] float patrolSpeed = 2f;
     [SerializeField] float chaseSpeed = 3.5f;
     [SerializeField] float detectRange = 6f;
     [SerializeField] float detectHeight = 1.5f;
     [SerializeField] float attackRange = 1.2f;
     [SerializeField] float windup = 0.5f;
-    [SerializeField] int slashDamage = 1;
+    [SerializeField] int slashDamage = 8;
     [SerializeField] float recover = 1f;
     [SerializeField] float hitStun = 0.2f;
     [SerializeField] float gravityScale = 3f;
@@ -151,7 +151,7 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
         Vector2 size = new(attackRange, box.bounds.size.y);
         foreach (var hit in Physics2D.OverlapBoxAll(center, size, 0f))
             if (hit.TryGetComponent(out PlayerController target))
-                target.Health.TakeDamage(slashDamage);
+                target.Health.TakeHit(slashDamage, transform.position);
         ShowSlash(center, size);
         if (anim)
         {
