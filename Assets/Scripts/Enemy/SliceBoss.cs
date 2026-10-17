@@ -82,14 +82,25 @@ public class SliceBoss : MonoBehaviour, IRewindable
     [SerializeField] float fallLimitX = 9f;
     [SerializeField] float fallStartHeight = 8f;
 
+    // 표시 전용. 판정은 위 수치로만 정해지고, 표시는 같은 계산 결과를 그린다
+    [Header("표시")]
+    [SerializeField] Color telegraphOuterColor = new(1f, 0.25f, 0.2f, 0.15f);
+    [SerializeField] Color telegraphFillColor = new(1f, 0.25f, 0.2f, 0.35f);
+    [SerializeField] Color activeColor = new(1f, 0.15f, 0.1f, 0.65f);
+    [SerializeField] Color fallingColor = new(1f, 0.55f, 0.2f, 0.4f);
+    [SerializeField] Color windupBodyColor = new(1f, 0.6f, 0.4f);
+    [SerializeField] Color activeBodyColor = new(1f, 0.3f, 0.3f);
+    [SerializeField] Color aimColor = new(1f, 0.85f, 0.4f, 0.35f);
+    [SerializeField] float fireFlashTime = 0.1f;
+
     [Header("디버그")]
     [SerializeField] bool showDebug = true;
+    // 실제 판정 검사 위치를 잠깐 표시(표시 범위와 비교용)
+    [SerializeField] bool showHitQueries;
 
-    static readonly Color TelegraphColor = new(1f, 0.3f, 0.2f, 0.25f);
-    static readonly Color ActiveColor = new(1f, 0.2f, 0.1f, 0.6f);
-    static readonly Color WindupColor = new(1f, 0.6f, 0.4f);
     static readonly Color ShotColor = new(1f, 0.85f, 0.4f);
     static readonly Color RockColor = new(0.6f, 0.5f, 0.45f);
+    static readonly Color QueryColor = new(0.2f, 1f, 1f, 0.5f);
 
     public Phase CurrentPhase => s.phase;
     public int DecisionId => s.decisionId;
@@ -111,8 +122,10 @@ public class SliceBoss : MonoBehaviour, IRewindable
     PlayerController player;
     Transform fx;
     SpriteRenderer[] zones;
+    SpriteRenderer[] fills;
     SpriteRenderer[] rocks;
     SpriteRenderer[] shotViews;
+    SpriteRenderer aim;
 
     float HalfHeight => transform.localScale.y * 0.5f;
     float FloorY => s.position.y - HalfHeight;
@@ -143,9 +156,11 @@ public class SliceBoss : MonoBehaviour, IRewindable
 
         fx = new GameObject("SliceBossFx").transform;
         fx.SetParent(transform.parent);
-        zones = MakeViews("Zone", Mathf.Max(fallCount, 1), TelegraphColor, 1);
+        zones = MakeViews("Zone", Mathf.Max(fallCount, 1), telegraphOuterColor, 1);
+        fills = MakeViews("Fill", Mathf.Max(fallCount, 1), telegraphFillColor, 2);
         rocks = MakeViews("Rock", fallCount, RockColor, 3);
         shotViews = MakeViews("Shot", shotCount, ShotColor, 3);
+        aim = MakeViews("Aim", 1, aimColor, 2)[0];
         UpdateViews();
     }
 
@@ -320,6 +335,7 @@ public class SliceBoss : MonoBehaviour, IRewindable
     // 회피 중 겹쳐도 "판정 끝"으로 본다(회피 성공 이벤트가 프레임마다 반복되지 않게)
     bool HitPlayer(Vector2 center, Vector2 size)
     {
+        if (showHitQueries) ShowQuery(center, size);
         foreach (var hit in Physics2D.OverlapBoxAll(center, size, 0f))
             if (hit.TryGetComponent(out PlayerController p))
             {
@@ -331,6 +347,7 @@ public class SliceBoss : MonoBehaviour, IRewindable
 
     bool HitPlayerCircle(Vector2 center, float radius)
     {
+        if (showHitQueries) ShowQuery(center, Vector2.one * radius * 2f);
         foreach (var hit in Physics2D.OverlapCircleAll(center, radius))
             if (hit.TryGetComponent(out PlayerController p))
             {
@@ -369,7 +386,8 @@ public class SliceBoss : MonoBehaviour, IRewindable
         {
             var sr = new GameObject($"{name}{i}").AddComponent<SpriteRenderer>();
             sr.transform.SetParent(fx);
-            sr.sprite = RoomManager.Square;
+            // 이펙트 그림이 생기면 자동 교체, 없으면 1유닛 사각형
+            sr.sprite = AssetLibrary.SpriteUnitsOr($"fx_boss_{name.ToLowerInvariant()}", 1f, RoomManager.Square);
             sr.color = color;
             sr.sortingOrder = order;
             sr.enabled = false;
@@ -383,40 +401,91 @@ public class SliceBoss : MonoBehaviour, IRewindable
         sr.enabled = true;
         sr.color = color;
         sr.transform.position = center;
+        sr.transform.rotation = Quaternion.identity;
         sr.transform.localScale = size;
     }
 
+    // 판정 전: 옅은 바깥 + 판정 순간(hitAt)에 꽉 차는 채움. 판정 중: 진한 실행 색
+    // "반복되는 운명": 다시 겪는 공격은 EarlyWarning초 일찍 실행 색으로 표시
+    void ShowWarning(int i, Vector2 center, Vector2 size, float since, float hitAt, Color? fill = null)
+    {
+        if (since >= hitAt)
+        {
+            Show(zones[i], center, size, activeColor);
+            return;
+        }
+        bool early = s.decisionId == RepeatDecisionId && since >= hitAt - EarlyWarning;
+        Show(zones[i], center, size, telegraphOuterColor);
+        float k = hitAt > 0f ? Mathf.Clamp01(since / hitAt) : 1f;
+        Show(fills[i], center, size * k, early ? activeColor : fill ?? telegraphFillColor);
+    }
+
+    // 탄막: 남은 탄이 있는 동안 발사 방향(= 현재 플레이어 쪽) 조준선. 발사 직후 잠깐 실행 색
+    void ShowAim()
+    {
+        if (s.shotsFired >= s.shots.Length || !player) return;
+        Vector2 to = (Vector2)player.transform.position - s.position;
+        if (to.sqrMagnitude < 0.0001f) return;
+        bool flash = s.phase == Phase.Active && s.shotsFired > 0 &&
+                     s.phaseTime - (s.shotsFired - 1) * shotInterval < fireFlashTime;
+        float length = to.magnitude;
+        aim.enabled = true;
+        aim.color = flash ? activeColor : aimColor;
+        aim.transform.position = s.position + to * 0.5f;
+        aim.transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(to.y, to.x) * Mathf.Rad2Deg);
+        aim.transform.localScale = new Vector2(length, shotRadius * 2f);
+    }
+
+    void ShowQuery(Vector2 center, Vector2 size)
+    {
+        var sr = new GameObject("HitQuery").AddComponent<SpriteRenderer>();
+        sr.sprite = RoomManager.Square;
+        sr.color = QueryColor;
+        sr.sortingOrder = 5;
+        sr.transform.position = center;
+        sr.transform.localScale = size;
+        Destroy(sr.gameObject, 0.06f);
+    }
+
+    // 표시는 전부 State에서 계산 → 역행 Restore 직후·정지 연출 중에도 실제 상태와 일치
     void UpdateViews()
     {
         if (!fx) return;
         foreach (var z in zones) z.enabled = false;
+        foreach (var f in fills) f.enabled = false;
         foreach (var r in rocks) r.enabled = false;
+        aim.enabled = false;
         body.color = baseColor;
         if (anim) anim.Face(s.facing);
 
         bool telegraph = s.phase == Phase.Telegraph;
         if (s.current >= 0 && (telegraph || s.phase == Phase.Active))
         {
-            bool early = telegraph && s.decisionId == RepeatDecisionId && s.phaseTime >= P.telegraph - EarlyWarning;
-            Color zone = telegraph && !early ? TelegraphColor : ActiveColor;
+            body.color = telegraph ? windupBodyColor : activeBodyColor;
+            // 결정 이후 경과 시간
+            float since = telegraph ? s.phaseTime : P.telegraph + s.phaseTime;
             switch (P.pattern)
             {
                 case Pattern.Slash:
-                    Show(zones[0], SlashCenter, slashSize, zone);
+                    // 실행 단계 전체가 판정 구간
+                    ShowWarning(0, SlashCenter, slashSize, since, P.telegraph);
                     break;
                 case Pattern.Charge:
+                    // 예고: 돌진 경로. 실행: 보스 몸이 판정(몸 색 = activeBodyColor)
                     if (!telegraph) break;
                     float end = s.chargeDir * moveLimitX;
-                    Show(zones[0], new Vector2((s.position.x + end) * 0.5f, s.position.y),
-                        new Vector2(Mathf.Abs(end - s.position.x) + transform.localScale.x, transform.localScale.y), zone);
+                    ShowWarning(0, new Vector2((s.position.x + end) * 0.5f, s.position.y),
+                        new Vector2(Mathf.Abs(end - s.position.x) + transform.localScale.x, transform.localScale.y), since, P.telegraph);
                     break;
                 case Pattern.Barrage:
-                    if (telegraph) body.color = WindupColor;
+                    ShowAim();
                     break;
                 case Pattern.Fall:
+                    // 판정은 착지 구간(실행 마지막 fallImpact초)뿐
+                    float impactAt = P.telegraph + P.active - fallImpact;
                     for (int i = 0; i < s.fallX.Length && i < zones.Length; i++)
                     {
-                        Show(zones[i], FallCenter(s.fallX[i]), new Vector2(fallWidth, fallZoneHeight), zone);
+                        ShowWarning(i, FallCenter(s.fallX[i]), new Vector2(fallWidth, fallZoneHeight), since, impactAt, telegraph ? telegraphFillColor : fallingColor);
                         if (telegraph) continue;
                         float k = Mathf.Clamp01(s.phaseTime / Mathf.Max(P.active - fallImpact, 0.01f));
                         Show(rocks[i], new Vector2(s.fallX[i], Mathf.Lerp(FloorY + fallStartHeight, FloorY + 0.5f, k)), new Vector2(fallWidth * 0.8f, 1f), RockColor);

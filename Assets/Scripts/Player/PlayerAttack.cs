@@ -20,6 +20,19 @@ public class PlayerAttack : MonoBehaviour, IRewindable
     [SerializeField, Range(0f, 1f)] float critChance = 0.05f;
     [SerializeField] float critMultiplier = 1.5f;
 
+    public enum RangeDisplay { Off, OnSwing, Always }
+
+    // 표시 전용: 판정과 같은 HitBox()를 그린다
+    [Header("검 범위 표시")]
+    [SerializeField] RangeDisplay rangeDisplay = RangeDisplay.OnSwing;
+    [SerializeField] Color swingColor = new(1f, 1f, 1f, 0.35f);
+    [SerializeField] float swingShowTime = 0.1f;
+    [SerializeField] Color guideColor = new(1f, 1f, 1f, 0.12f);
+
+    SpriteRenderer rangeView;
+    float swingShownUntil;
+    Vector2 swingCenter;
+
     PlayerController controller;
     float readyAt;
     int bonus;
@@ -55,7 +68,11 @@ public class PlayerAttack : MonoBehaviour, IRewindable
         Rewindables.All.Add(this);
     }
 
-    void OnDestroy() => Rewindables.All.Remove(this);
+    void OnDestroy()
+    {
+        Rewindables.All.Remove(this);
+        if (rangeView) Destroy(rangeView.gameObject);
+    }
 
     public object Capture()
     {
@@ -78,6 +95,34 @@ public class PlayerAttack : MonoBehaviour, IRewindable
         bonusUntil = Time.time + s.bonusLeft;
         oneShot.Clear();
         foreach (var (amount, left) in s.oneShot) oneShot.Add((amount, Time.time + left));
+        // 취소된 휘두름 표시는 남기지 않음
+        swingShownUntil = 0f;
+    }
+
+    // 실제 판정 상자. 공격과 표시가 같은 계산을 쓴다
+    public Vector2 HitBoxCenter => (Vector2)transform.position + new Vector2(controller.Facing * (transform.localScale.x + range.x) * 0.5f, 0f);
+    public Vector2 HitBoxSize => range;
+
+    void LateUpdate()
+    {
+        bool swing = rangeDisplay != RangeDisplay.Off && Time.time < swingShownUntil;
+        bool guide = rangeDisplay == RangeDisplay.Always && controller.CanAct;
+        if (!swing && !guide)
+        {
+            if (rangeView) rangeView.enabled = false;
+            return;
+        }
+        if (!rangeView)
+        {
+            rangeView = new GameObject("SwordRange").AddComponent<SpriteRenderer>();
+            rangeView.sprite = AssetLibrary.SpriteUnitsOr("fx_sword_range", 1f, RoomManager.Square);
+            rangeView.sortingOrder = 2;
+        }
+        rangeView.enabled = true;
+        rangeView.color = swing ? swingColor : guideColor;
+        // 휘두름 표시는 판정한 순간의 위치에 고정
+        rangeView.transform.position = swing ? swingCenter : HitBoxCenter;
+        rangeView.transform.localScale = HitBoxSize;
     }
 
     void Update()
@@ -98,7 +143,9 @@ public class PlayerAttack : MonoBehaviour, IRewindable
         float scaled = damage * (1f + DamageBonus + swingBonus) * (LastHitCrit ? critMultiplier : 1f);
         int total = Health.Round(scaled + (HasBonus ? bonus : 0));
 
-        Vector2 center = (Vector2)transform.position + new Vector2(controller.Facing * (transform.localScale.x + range.x) * 0.5f, 0f);
+        Vector2 center = HitBoxCenter;
+        swingCenter = center;
+        swingShownUntil = Time.time + swingShowTime;
         bool landed = false;
         foreach (var hit in Physics2D.OverlapBoxAll(center, range, 0f))
             if (hit.gameObject != gameObject && hit.TryGetComponent(out Health target) && !target.IsDead)
