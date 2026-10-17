@@ -112,7 +112,8 @@ public class RoomManager : MonoBehaviour
         switch (flow.BossIndex)
         {
             case 0:
-                SpawnBoss<AccumulationBoss>("시간 축적", "boss_accumulation", new Color(0.85f, 0.3f, 0.3f));
+                // 시험판 A 보스. 기존 축적 보스는 코드만 남김
+                SpawnBoss<SliceBoss>("시험판 보스", "boss_slice", new Color(0.7f, 0.35f, 0.6f));
                 break;
             case 1:
                 SpawnBoss<DeferralBoss>("시간 유예", "boss_deferral", new Color(0.85f, 0.6f, 0.25f));
