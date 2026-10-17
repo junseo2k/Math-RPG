@@ -56,4 +56,4 @@
 
 **P4-⑨**: 자산 제작(사용자, `AssetProductionSheet.md` 기준) → `Assets/Resources/Art`·`Audio`에 넣으면 자동 적용. 제작 전 필요: AI 도구·이용 조건 결정.
 
-그 다음: **P5 GRU 재개** 조건 중 남은 것 — 예지 보스 기획(planner), 장기 기억용 저장 기능 설계, 데이터 수집 목표량 결정(`ForesightAI.md` 0-1).
+그 다음: **P5 GRU 재개** 조건 중 남은 것 — **4장 구현**(예지 보스 기획은 `Bosses/Foresight.md`로 완료), 장기 기억용 저장 기능 설계, 데이터 수집 목표량 결정(`ForesightAI.md` 0-1).
