@@ -97,6 +97,9 @@ public class SliceBoss : MonoBehaviour, IRewindable
     // 다음 결정에서 뺄 패턴(역행으로 취소된 공격). 스냅샷 밖 정보
     public int CancelledPattern => cancelled;
     public string CancelledPatternName => cancelled >= 0 ? patterns[cancelled].pattern.ToString() : "-";
+    // 특성 "반복되는 운명": 이 결정 번호의 공격은 실행 범위를 EarlyWarning초 일찍 표시
+    public int RepeatDecisionId { get; set; } = -1;
+    public float EarlyWarning { get; set; }
 
     State s;
     int cancelled = -1;
@@ -394,7 +397,8 @@ public class SliceBoss : MonoBehaviour, IRewindable
         bool telegraph = s.phase == Phase.Telegraph;
         if (s.current >= 0 && (telegraph || s.phase == Phase.Active))
         {
-            Color zone = telegraph ? TelegraphColor : ActiveColor;
+            bool early = telegraph && s.decisionId == RepeatDecisionId && s.phaseTime >= P.telegraph - EarlyWarning;
+            Color zone = telegraph && !early ? TelegraphColor : ActiveColor;
             switch (P.pattern)
             {
                 case Pattern.Slash:

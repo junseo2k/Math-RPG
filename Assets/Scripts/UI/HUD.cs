@@ -20,6 +20,8 @@ public class HUD : MonoBehaviour
     GameFlow flow;
     RoomManager rooms;
     PlayerController player;
+    PotionUser potion;
+    RewindSystem rewind;
 
     RectTransform content;
     RectTransform hpFill;
@@ -60,7 +62,7 @@ public class HUD : MonoBehaviour
         GameUI.Fill(hpText.rectTransform);
 
         abilityText = GameUI.MakeText(content, "", 28f, Color.white, TextAlignmentOptions.Left);
-        GameUI.Place(abilityText.rectTransform, new Vector2(0f, 1f), new Vector2(40f, -100f), new Vector2(600f, 40f));
+        GameUI.Place(abilityText.rectTransform, new Vector2(0f, 1f), new Vector2(40f, -100f), new Vector2(900f, 40f));
 
         var dashLabel = GameUI.MakeText(content, "대시", 24f, Color.white, TextAlignmentOptions.Left);
         GameUI.Place(dashLabel.rectTransform, new Vector2(0f, 1f), new Vector2(40f, -145f), new Vector2(80f, 30f));
@@ -126,7 +128,7 @@ public class HUD : MonoBehaviour
         if (!player) player = FindAnyObjectByType<PlayerController>();
 
         UpdateHp();
-        abilityText.text = flow.SelectedAbility != null ? $"능력: {flow.SelectedAbility.displayName}" : "";
+        abilityText.text = InfoText();
         if (player) dashFill.sizeDelta = new Vector2(dashBarSize.x * player.DashReadyRatio, dashBarSize.y);
 
         timeText.text = $"{flow.Persistent.day}일째   {flow.TimeText}";
@@ -172,6 +174,17 @@ public class HUD : MonoBehaviour
         bool showPlus = since < clockTurn;
         plusHour.gameObject.SetActive(showPlus);
         if (showPlus) plusHour.alpha = 1f - since / clockTurn;
+    }
+
+    // 재화·포션·보호막·역행 쿨타임 한 줄 (최종 UI 전 임시)
+    string InfoText()
+    {
+        if (!player) return "";
+        if (!potion) potion = player.GetComponent<PotionUser>();
+        if (!rewind) rewind = FindAnyObjectByType<RewindSystem>();
+        string rewindText = !rewind ? "-" : rewind.CooldownRemaining <= 0f ? "준비" : $"{rewind.CooldownRemaining:0.0}초";
+        string shield = player.Health.Shield > 0 ? $"  보호막 {player.Health.Shield}" : "";
+        return $"{flow.Run.gold}G  기억 조각 {flow.Persistent.memoryShards}  포션[Q] {(potion ? potion.Count : 0)}  역행[S] {rewindText}{shield}";
     }
 
     // HP 100 규모라 칸 대신 바 + 숫자

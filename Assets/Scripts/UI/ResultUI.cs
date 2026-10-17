@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-// 시험판 클리어 결과 화면: 도달 시각, 며칠째, 플레이 시간 + 처음부터 다시 / 종료. 규칙: Docs/VerticalSliceSpec.md F7
+// 시험판 클리어 결과 화면: 도달 시각, 며칠째, 플레이 시간 + 영구 성장으로 / 종료. 규칙: Docs/VerticalSliceSpec.md F7
 public class ResultUI : MonoBehaviour
 {
     GameFlow flow;
@@ -10,7 +10,7 @@ public class ResultUI : MonoBehaviour
     TextMeshProUGUI title;
     TextMeshProUGUI detail;
     GameObject firstButton;
-    GameState lastState;
+    RunState trackedRun;
     float runStartTime;
     bool shown;
 
@@ -30,7 +30,8 @@ public class ResultUI : MonoBehaviour
         detail = GameUI.MakeText(content, "", 36f, new Color(0.85f, 0.85f, 0.9f));
         GameUI.Place(detail.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 20f), new Vector2(1200f, 120f));
 
-        firstButton = GameUI.MakeButton(content, "처음부터 다시", new Vector2(-200f, -160f), new Vector2(340f, 90f), Restart).gameObject;
+        // 시험판 A: 클리어 → 영구 성장 → 다음 순환 (CombatDecisions 12장)
+        firstButton = GameUI.MakeButton(content, "영구 성장으로", new Vector2(-200f, -160f), new Vector2(340f, 90f), ToGrowth).gameObject;
         GameUI.MakeButton(content, "종료", new Vector2(200f, -160f), new Vector2(340f, 90f), Quit);
 
         content.gameObject.SetActive(false);
@@ -39,9 +40,12 @@ public class ResultUI : MonoBehaviour
     void Update()
     {
         if (!flow) return;
-        // 플레이 시간 = 능력 선택(진행 시작) ~ 클리어
-        if (lastState == GameState.AbilitySelect && flow.State == GameState.Playing) runStartTime = Time.time;
-        lastState = flow.State;
+        // 플레이 시간 = 판 시작(RunState 교체) ~ 클리어
+        if (trackedRun != flow.Run)
+        {
+            trackedRun = flow.Run;
+            runStartTime = Time.time;
+        }
 
         bool cleared = flow.State == GameState.Cleared;
         if (cleared && !shown) Show();
@@ -62,7 +66,7 @@ public class ResultUI : MonoBehaviour
         if (EventSystem.current) EventSystem.current.SetSelectedGameObject(firstButton);
     }
 
-    void Restart() => flow.RestartGame();
+    void ToGrowth() => flow.OpenGrowth();
 
     void Quit()
     {

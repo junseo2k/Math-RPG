@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviour, IRewindable
     [SerializeField] bool showDebug = true;
 
     public int Facing { get; private set; } = 1;
+    // 특성·유물·성장 보너스를 더하기 전 최대 HP
+    public int BaseMaxHp => maxHp;
     public Health Health { get; private set; }
     public bool CanAct => flow && flow.State == GameState.Playing && !Health.IsDead && !RewindSystem.IsFrozen;
     public bool IsStunned => Time.time < stunUntil;
@@ -71,6 +73,8 @@ public class PlayerController : MonoBehaviour, IRewindable
         body = GetComponent<Rigidbody2D>();
         body.gravityScale = gravityScale;
         body.freezeRotation = true;
+        // 마찰 0: 공중에서 벽 쪽으로 누르면 마찰로 벽에 붙어 멈추는 문제 방지
+        GetComponent<BoxCollider2D>().sharedMaterial = new PhysicsMaterial2D("PlayerNoFriction") { friction = 0f, bounciness = 0f };
         Health = GetComponent<Health>();
         Health.Init(maxHp, hitInvincibleTime);
         Health.Died += OnDied;
