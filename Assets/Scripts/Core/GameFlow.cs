@@ -21,7 +21,7 @@ public class GameFlow : MonoBehaviour
     [SerializeField] StartAbilityPool abilityPool;
     [SerializeField] int abilityChoiceCount = 3;
     [SerializeField] int roomsPerBoss = 2;
-    [SerializeField] int bossCount = 3;
+    [SerializeField] int bossCount = 1;
     [SerializeField] int startHour = 18;
     [SerializeField] int nightEndHour = 6;
     [SerializeField] int hoursPerBoss = 1;
