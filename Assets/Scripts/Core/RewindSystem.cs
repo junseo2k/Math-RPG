@@ -28,6 +28,22 @@ public class RewindSystem : MonoBehaviour
 
     public float CooldownRemaining => Mathf.Max(readyAt - Time.time, 0f);
     public float RecordedSeconds => frames.Count > 1 ? frames[^1].time - frames[0].time : 0f;
+    // 특성 "시간 절약"
+    public float CooldownMultiplier { get; set; } = 1f;
+
+    // 역행으로 취소된 구간의 정보 (스냅샷 밖에서 따로 기록, CombatDecisions 3장)
+    public struct RewindInfo
+    {
+        public int taken;   // 플레이어가 받은 피해 합
+        public int dealt;   // 적에게 준 피해 합
+        // 플레이어가 적중시킨 휘두름: 복원 지점 기준 시각, 판정 중심·크기, 피해
+        public List<(float offset, Vector2 center, Vector2 size, int damage)> hits;
+        public SliceBoss boss;
+        // 보스가 결정된 공격을 이어가는 중(예고·실행)으로 복원됨
+        public bool bossContinuing;
+    }
+
+    public event System.Action<RewindInfo> Rewound;
 
     struct Frame
     {
@@ -36,6 +52,8 @@ public class RewindSystem : MonoBehaviour
     }
 
     readonly List<Frame> frames = new();
+    readonly List<(float time, bool player, int amount)> damageLog = new();
+    readonly List<(float time, Vector2 center, Vector2 size, int damage)> hitLog = new();
     GameFlow flow;
     RoomManager rooms;
     PlayerController player;
@@ -48,6 +66,8 @@ public class RewindSystem : MonoBehaviour
     {
         flow = FindAnyObjectByType<GameFlow>();
         rooms = FindAnyObjectByType<RoomManager>();
+        Health.AnyDamaged += OnAnyDamaged;
+        PlayerAttack.HitLanded += OnHitLanded;
         if (!flow) return;
         flow.StageChanged += OnStageChanged;
         flow.RunReset += OnRunReset;
@@ -56,20 +76,42 @@ public class RewindSystem : MonoBehaviour
     void OnDestroy()
     {
         if (IsFrozen) EndFreeze();
+        Health.AnyDamaged -= OnAnyDamaged;
+        PlayerAttack.HitLanded -= OnHitLanded;
         if (!flow) return;
         flow.StageChanged -= OnStageChanged;
         flow.RunReset -= OnRunReset;
     }
 
     // 스테이지를 넘어서는 역행은 없음
-    void OnStageChanged(int _) => frames.Clear();
+    void OnStageChanged(int _) => ClearRecords();
 
     void OnRunReset()
     {
-        frames.Clear();
+        ClearRecords();
         readyAt = 0f;
         lastResult = "-";
     }
+
+    void ClearRecords()
+    {
+        frames.Clear();
+        damageLog.Clear();
+        hitLog.Clear();
+    }
+
+    void OnAnyDamaged(Health health, int amount)
+    {
+        if (!flow || flow.State != GameState.Playing || !Player) return;
+        damageLog.Add((Time.time, health == Player.Health, amount));
+    }
+
+    void OnHitLanded(Vector2 center, Vector2 size, int damage)
+    {
+        if (flow && flow.State == GameState.Playing) hitLog.Add((Time.time, center, size, damage));
+    }
+
+    public void ReduceCooldown(float seconds) => readyAt -= seconds;
 
     void FixedUpdate()
     {
@@ -81,6 +123,9 @@ public class RewindSystem : MonoBehaviour
         // 역행 거리 이전 기록은 1개만 남긴다
         float target = Time.time - rewindSeconds;
         while (frames.Count > 1 && frames[1].time <= target) frames.RemoveAt(0);
+        float oldest = frames[0].time;
+        damageLog.RemoveAll(e => e.time < oldest);
+        hitLog.RemoveAll(e => e.time < oldest);
     }
 
     void Update()
@@ -122,6 +167,7 @@ public class RewindSystem : MonoBehaviour
         int index = TargetIndex();
         var boss = FindAnyObjectByType<SliceBoss>();
         int decisionBefore = boss ? boss.DecisionId : 0;
+        int hpBefore = Player.Health.Hp;
 
         if (flow.DiedThisFrame) flow.CancelDeath();
         foreach (var (target, state) in frames[index].entries)
@@ -133,11 +179,45 @@ public class RewindSystem : MonoBehaviour
         frames.RemoveRange(index + 1, frames.Count - index - 1);
 
         // 쿨타임은 복원 대상이 아님
-        readyAt = Time.time + cooldown;
+        readyAt = Time.time + cooldown * CooldownMultiplier;
         Player.Health.GrantInvincible(postRewindInvincible);
-        lastResult = Describe(boss, decisionBefore);
+        int lastHitAgo = LastPlayerDamageAgo(out float ago) ? Mathf.RoundToInt(ago * 100f) : -1;
+        lastResult = $"HP {hpBefore}→{Player.Health.Hp}  복원 지점 {Time.time - frames[index].time:0.00}초 전" +
+                     $"  마지막 피격 {(lastHitAgo < 0 ? "기록 없음" : $"{lastHitAgo / 100f:0.00}초 전")}  {Describe(boss, decisionBefore)}";
         SoundPlayer.Play("sfx_rewind");
         StartFreeze();
+        Rewound?.Invoke(CollectCancelled(frames[index].time, boss));
+    }
+
+    // 디버그: 기록 구간 안에서 플레이어가 마지막으로 맞은 시각
+    bool LastPlayerDamageAgo(out float ago)
+    {
+        ago = 0f;
+        for (int i = damageLog.Count - 1; i >= 0; i--)
+            if (damageLog[i].player)
+            {
+                ago = Time.time - damageLog[i].time;
+                return true;
+            }
+        return false;
+    }
+
+    // 복원 지점 이후의 피해·적중 기록을 모아 넘기고 지운다
+    RewindInfo CollectCancelled(float since, SliceBoss boss)
+    {
+        var info = new RewindInfo { hits = new(), boss = boss };
+        foreach (var (time, player, amount) in damageLog)
+        {
+            if (time <= since) continue;
+            if (player) info.taken += amount;
+            else info.dealt += amount;
+        }
+        foreach (var (time, center, size, damage) in hitLog)
+            if (time > since) info.hits.Add((time - since, center, size, damage));
+        damageLog.RemoveAll(e => e.time > since);
+        hitLog.RemoveAll(e => e.time > since);
+        info.bossContinuing = boss && boss.CurrentPhase is SliceBoss.Phase.Telegraph or SliceBoss.Phase.Active;
+        return info;
     }
 
     // 역행 거리 전 시점의 마지막 기록. 기록이 짧으면 가장 오래된 기록

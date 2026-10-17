@@ -36,44 +36,50 @@ public class AbilitySelectUI : MonoBehaviour
         GameUI.Fill(content);
     }
 
+    // 시험판 A: 시작 능력 대신 스테이지 클리어 특성 보상 선택에 사용 (CombatDecisions 9장)
     void Update()
     {
-        bool show = flow && flow.State == GameState.AbilitySelect;
+        bool show = flow && flow.State == GameState.RewardSelect;
         content.gameObject.SetActive(show || selecting);
         if (!show) return;
 
-        // 새 판(RunState 교체)마다 카드 다시 생성
-        if (builtFor != flow.Run) Build();
+        // 새 제시(판 교체 또는 offerVersion 증가)마다 카드 다시 생성
+        if (builtFor != flow.Run || builtVersion != flow.Run.offerVersion) Build();
         if (!selecting) Highlight();
     }
+
+    int builtVersion = -1;
 
     void Build()
     {
         builtFor = flow.Run;
+        builtVersion = flow.Run.offerVersion;
         cards.Clear();
         foreach (Transform child in content) Destroy(child.gameObject);
 
         var dim = GameUI.MakeImage(content, "Dim", new Color(0f, 0f, 0f, 0.55f));
         GameUI.Fill(dim.rectTransform);
 
-        var title = GameUI.MakeText(content, "시작 능력을 하나 선택하세요", 48f, GameUI.Gold);
+        var title = GameUI.MakeText(content, "특성을 하나 선택하세요", 48f, GameUI.Gold);
         GameUI.Place(title.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 400f), new Vector2(1200f, 80f));
+        var sub = GameUI.MakeText(content, flow.Run.rewardMessage, 30f, Color.white);
+        GameUI.Place(sub.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 340f), new Vector2(1400f, 50f));
 
-        var choices = flow.Choices;
-        float totalWidth = choices.Count * cardSize.x + (choices.Count - 1) * cardGap;
-        for (int i = 0; i < choices.Count; i++)
+        var offers = flow.Offers;
+        float totalWidth = offers.Count * cardSize.x + (offers.Count - 1) * cardGap;
+        for (int i = 0; i < offers.Count; i++)
         {
             float x = -totalWidth / 2f + cardSize.x / 2f + i * (cardSize.x + cardGap);
-            cards.Add(MakeCard(choices[i], i, x));
+            cards.Add(MakeCard(offers[i], i, x));
         }
 
         if (cards.Count > 0 && EventSystem.current) EventSystem.current.SetSelectedGameObject(cards[0].button.gameObject);
     }
 
-    Card MakeCard(StartAbilityDef def, int index, float x)
+    Card MakeCard(RewardOffer def, int index, float x)
     {
         var cardArt = AssetLibrary.LoadSprite("ui_card");
-        var bg = GameUI.MakeImage(content, $"Card_{def.id}", cardArt ? Color.white : GameUI.PanelColor, cardArt);
+        var bg = GameUI.MakeImage(content, $"Card_{def.trait}", cardArt ? Color.white : GameUI.PanelColor, cardArt);
         var rect = GameUI.Place(bg.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(x, -20f), cardSize);
         var outline = bg.gameObject.AddComponent<Outline>();
         outline.effectDistance = new Vector2(6f, 6f);
@@ -83,31 +89,28 @@ public class AbilitySelectUI : MonoBehaviour
         button.transition = Selectable.Transition.None;
         button.onClick.AddListener(() => { if (!selecting) StartCoroutine(Select(index)); });
 
-        // 종류: 액티브 = 마름모(검 끝), 패시브 = 원. 모양 + 글자로 구분
-        bool active = def.kind == AbilityKind.Active;
+        // 종류: 역행 전용 = 마름모, 공용 = 원. 모양 + 글자로 구분
+        bool active = def.rewindOnly;
         var iconArt = AssetLibrary.LoadSprite(active ? "ui_icon_active" : "ui_icon_passive");
         var icon = GameUI.MakeImage(bg.transform, "Icon", iconArt ? Color.white : GameUI.Gold,
             iconArt ? iconArt : active ? RoomManager.Square : AccumulationBoss.CircleSprite());
         GameUI.Place(icon.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -70f), new Vector2(90f, 90f));
         if (active && !iconArt) icon.rectTransform.localRotation = Quaternion.Euler(0f, 0f, 45f);
 
-        var kind = GameUI.MakeText(bg.transform, active ? "액티브" : "패시브", 28f, GameUI.Gold);
+        var kind = GameUI.MakeText(bg.transform, active ? "역행 전용" : "공용", 28f, GameUI.Gold);
         GameUI.Place(kind.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -190f), new Vector2(360f, 40f));
 
-        var title = GameUI.MakeText(bg.transform, def.displayName, 44f, Color.white);
+        var title = GameUI.MakeText(bg.transform, def.title, 44f, Color.white);
         GameUI.Place(title.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -240f), new Vector2(380f, 60f));
 
         var desc = GameUI.MakeText(bg.transform, def.description, 26f, new Color(0.85f, 0.85f, 0.9f), TextAlignmentOptions.Top);
         GameUI.Place(desc.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -320f), new Vector2(360f, 240f));
 
-        if (def.temporary)
-        {
-            var badgeArt = AssetLibrary.LoadSprite("ui_badge_temp");
-            var badge = GameUI.MakeImage(bg.transform, "TempBadge", badgeArt ? Color.white : new Color(0.55f, 0.2f, 0.2f), badgeArt);
-            GameUI.Place(badge.rectTransform, new Vector2(1f, 1f), new Vector2(-12f, -12f), new Vector2(100f, 40f));
-            var badgeText = GameUI.MakeText(badge.transform, "[임시]", 24f, Color.white);
-            GameUI.Fill(badgeText.rectTransform);
-        }
+        // 레벨 변화 표시 (CombatDecisions 9장)
+        var badge = GameUI.MakeImage(bg.transform, "LevelBadge", new Color(0.25f, 0.25f, 0.35f));
+        GameUI.Place(badge.rectTransform, new Vector2(0.5f, 0f), new Vector2(0f, 24f), new Vector2(260f, 44f));
+        var badgeText = GameUI.MakeText(badge.transform, def.badge, 26f, Color.white);
+        GameUI.Fill(badgeText.rectTransform);
 
         return new Card { rect = rect, outline = outline, group = group, button = button };
     }
@@ -142,7 +145,7 @@ public class AbilitySelectUI : MonoBehaviour
     IEnumerator Select(int index)
     {
         selecting = true;
-        SoundPlayer.Play(flow.Choices[index].kind == AbilityKind.Active ? "sfx_ui_select_active" : "sfx_ui_select_passive");
+        SoundPlayer.Play(flow.Offers[index].rewindOnly ? "sfx_ui_select_active" : "sfx_ui_select_passive");
         for (int i = 0; i < cards.Count; i++)
         {
             bool chosen = i == index;
@@ -152,6 +155,6 @@ public class AbilitySelectUI : MonoBehaviour
         }
         yield return new WaitForSeconds(selectDuration);
         selecting = false;
-        flow.SelectAbility(index);
+        flow.ChooseReward(index);
     }
 }

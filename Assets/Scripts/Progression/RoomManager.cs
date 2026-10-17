@@ -40,6 +40,7 @@ public class RoomManager : MonoBehaviour, IRewindable
     CameraFollow follow;
     Transform room;
     RoomExit exit;
+    RoomLayout currentLayout;
     int alive;
     int normalRoomsEntered;
     readonly List<RoomLayout> bag = new();
@@ -125,9 +126,20 @@ public class RoomManager : MonoBehaviour, IRewindable
         for (int i = 0; i < count; i++) SpawnEnemy(spots[i]);
 
         alive = count;
+        currentLayout = layout;
         exit = CreateExit(layout);
         exit.Remaining = alive;
-        if (alive == 0) exit.SetOpen(true);
+        if (alive == 0) OnRoomCleared();
+    }
+
+    // 클리어 확정: 출구 개방, 보스 직전 일반 스테이지면 숨겨진 시간의 통로 개방 (CombatDecisions 11장)
+    void OnRoomCleared()
+    {
+        if (exit) exit.SetOpen(true);
+        if (!flow || flow.IsBossStage || !flow.IsBossStageAt(flow.Stage + 1) || currentLayout == null) return;
+        // 주 경로(입구 → 출구)에서 벗어난 입구 뒤쪽
+        var go = Sized("ShopPassage", new Vector2(currentLayout.EntranceX - 1.2f, 1f), new Vector2(1f, 2f), Square, ShopPassage.HiddenColor);
+        go.AddComponent<ShopPassage>();
     }
 
     void BuildBossRoom()
@@ -218,7 +230,7 @@ public class RoomManager : MonoBehaviour, IRewindable
         alive--;
         if (!exit) return;
         exit.Remaining = alive;
-        if (alive <= 0) exit.SetOpen(true);
+        if (alive <= 0) OnRoomCleared();
     }
 
     RoomExit CreateExit(RoomLayout layout)
@@ -242,6 +254,8 @@ public class RoomManager : MonoBehaviour, IRewindable
         go.AddComponent<PlayerAttack>();
         // 시험판 A: 시작 능력(AbilityEffects) 미사용. S키는 역행
         go.AddComponent<DeferredDamage>();
+        go.AddComponent<PotionUser>();
+        go.AddComponent<RewardEffects>();
         return controller;
     }
 
