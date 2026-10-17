@@ -4,8 +4,21 @@ using UnityEngine.InputSystem;
 
 // 이동·점프·대시 회피·피격 반응. 규칙: Docs/CombatDecisions.md 1장
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D), typeof(Health))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IRewindable
 {
+    public struct Snapshot
+    {
+        public Vector2 position;
+        public Vector2 velocity;
+        public int facing;
+        public bool dashing;
+        public int dashDir;
+        public float dashElapsed;
+        public float dashReadyLeft;
+        public float stunLeft;
+        public float knockbackVelocity;
+    }
+
     [SerializeField] int maxHp = 100;
     [SerializeField] float hitInvincibleTime = 0.8f;
     [SerializeField] float moveSpeed = 6f;
@@ -27,7 +40,7 @@ public class PlayerController : MonoBehaviour
 
     public int Facing { get; private set; } = 1;
     public Health Health { get; private set; }
-    public bool CanAct => flow && flow.State == GameState.Playing && !Health.IsDead;
+    public bool CanAct => flow && flow.State == GameState.Playing && !Health.IsDead && !RewindSystem.IsFrozen;
     public bool IsStunned => Time.time < stunUntil;
     public bool IsDashing => dashing;
     public bool CanAttack => CanAct && !IsStunned;
@@ -70,6 +83,38 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<SpriteAnimator>();
         groundFilter.SetNormalAngle(45f, 135f);
         spawnPoint = transform.position;
+        Rewindables.All.Add(this);
+    }
+
+    public object Capture() => new Snapshot
+    {
+        position = transform.position,
+        velocity = body.linearVelocity,
+        facing = Facing,
+        dashing = dashing,
+        dashDir = dashDir,
+        dashElapsed = dashing ? Time.time - dashStart : 0f,
+        dashReadyLeft = Mathf.Max(dashReadyAt - Time.time, 0f),
+        stunLeft = Mathf.Max(stunUntil - Time.time, 0f),
+        knockbackVelocity = knockbackVelocity,
+    };
+
+    public void Restore(object state)
+    {
+        var s = (Snapshot)state;
+        transform.position = s.position;
+        body.position = s.position;
+        body.linearVelocity = s.velocity;
+        Facing = s.facing;
+        dashing = s.dashing;
+        dashDir = s.dashDir;
+        dashStart = Time.time - s.dashElapsed;
+        body.gravityScale = dashing ? 0f : gravityScale;
+        dashReadyAt = Time.time + s.dashReadyLeft;
+        stunUntil = Time.time + s.stunLeft;
+        knockbackVelocity = s.knockbackVelocity;
+        // 같은 프레임 사망을 취소한 경우 사망 자세 해제
+        if (anim) anim.Release();
     }
 
     void Start()
@@ -80,6 +125,7 @@ public class PlayerController : MonoBehaviour
 
     void OnDestroy()
     {
+        Rewindables.All.Remove(this);
         if (flow) flow.RunReset -= Respawn;
     }
 

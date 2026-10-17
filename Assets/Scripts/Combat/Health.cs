@@ -1,8 +1,16 @@
 using System;
 using UnityEngine;
 
-public class Health : MonoBehaviour
+public class Health : MonoBehaviour, IRewindable
 {
+    struct Snapshot
+    {
+        public int hp;
+        public float invincibleLeft;
+        public bool invincible;
+        public bool dodging;
+    }
+
     [SerializeField] int maxHp = 5;
     [SerializeField] float hitInvincibleTime;
 
@@ -25,7 +33,33 @@ public class Health : MonoBehaviour
 
     float invincibleUntil;
 
-    void Awake() => Hp = maxHp;
+    void Awake()
+    {
+        Hp = maxHp;
+        Rewindables.All.Add(this);
+    }
+
+    void OnDestroy() => Rewindables.All.Remove(this);
+
+    public object Capture() => new Snapshot
+    {
+        hp = Hp,
+        invincibleLeft = Mathf.Max(invincibleUntil - Time.time, 0f),
+        invincible = Invincible,
+        dodging = Dodging,
+    };
+
+    public void Restore(object state)
+    {
+        var s = (Snapshot)state;
+        Hp = s.hp;
+        invincibleUntil = Time.time + s.invincibleLeft;
+        Invincible = s.invincible;
+        Dodging = s.dodging;
+    }
+
+    // 회피가 아닌 무적(역행 직후 등). 회피 성공은 발생하지 않음
+    public void GrantInvincible(float seconds) => invincibleUntil = Mathf.Max(invincibleUntil, Time.time + seconds);
 
     public void Init(int max, float hitInvincible)
     {

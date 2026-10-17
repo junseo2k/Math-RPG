@@ -2,8 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 스테이지마다 방을 코드로 생성한다. 규칙: Docs/NormalRoom.md
-public class RoomManager : MonoBehaviour
+public class RoomManager : MonoBehaviour, IRewindable
 {
+    struct Snapshot
+    {
+        public int alive;
+        public bool exitOpen;
+    }
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void Bootstrap()
     {
@@ -24,6 +30,9 @@ public class RoomManager : MonoBehaviour
 
     public Health CurrentBoss { get; private set; }
     public string CurrentBossName { get; private set; }
+    // 보스 처치·일반 스테이지 클리어 확정. 이후 역행 불가 (CombatDecisions 8장)
+    public bool CombatConfirmed => flow && flow.Stage > 0 &&
+        (flow.IsBossStage ? !CurrentBoss || CurrentBoss.IsDead : alive <= 0);
 
     GameFlow flow;
     PlayerController player;
@@ -50,6 +59,7 @@ public class RoomManager : MonoBehaviour
             if (!follow) follow = cam.gameObject.AddComponent<CameraFollow>();
             follow.Target = player.transform;
         }
+        Rewindables.All.Add(this);
     }
 
     void Start()
@@ -60,11 +70,25 @@ public class RoomManager : MonoBehaviour
             flow.StageChanged += OnStageChanged;
             flow.RunReset += OnRunReset;
         }
-        Build(RoomLayouts.Arena);
+        // 시작 능력 선택이 없어져 GameFlow가 먼저 1스테이지에 들어갔을 수 있음
+        if (flow && flow.Stage > 0) OnStageChanged(flow.Stage);
+        else Build(RoomLayouts.Arena);
+    }
+
+    public object Capture() => new Snapshot { alive = alive, exitOpen = exit && exit.IsOpen };
+
+    public void Restore(object state)
+    {
+        var s = (Snapshot)state;
+        alive = s.alive;
+        if (!exit) return;
+        exit.Remaining = alive;
+        exit.SetOpen(s.exitOpen);
     }
 
     void OnDestroy()
     {
+        Rewindables.All.Remove(this);
         if (!flow) return;
         flow.StageChanged -= OnStageChanged;
         flow.RunReset -= OnRunReset;
@@ -216,7 +240,7 @@ public class RoomManager : MonoBehaviour
         go.AddComponent<BoxCollider2D>();
         var controller = go.AddComponent<PlayerController>();
         go.AddComponent<PlayerAttack>();
-        go.AddComponent<AbilityEffects>();
+        // 시험판 A: 시작 능력(AbilityEffects) 미사용. S키는 역행
         go.AddComponent<DeferredDamage>();
         return controller;
     }

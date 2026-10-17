@@ -6,7 +6,7 @@ using UnityEngine;
 // 역행 대응: 코루틴·Time.time 없이 물리 프레임마다 진행하고, 공격 판정(탄·낙하 지점)도 State에 담는다.
 // 화면 표시는 State에서 매 프레임 다시 그리므로 Restore 후 따로 맞출 필요가 없다.
 [RequireComponent(typeof(Health), typeof(SpriteRenderer), typeof(BoxCollider2D))]
-public class SliceBoss : MonoBehaviour
+public class SliceBoss : MonoBehaviour, IRewindable
 {
     public enum Phase { Idle, Telegraph, Active, Recover }
     public enum Pattern { Slash, Charge, Barrage, Fall }
@@ -96,6 +96,7 @@ public class SliceBoss : MonoBehaviour
     public Pattern? CurrentPattern => s.current >= 0 ? patterns[s.current].pattern : null;
     // 다음 결정에서 뺄 패턴(역행으로 취소된 공격). 스냅샷 밖 정보
     public int CancelledPattern => cancelled;
+    public string CancelledPatternName => cancelled >= 0 ? patterns[cancelled].pattern.ToString() : "-";
 
     State s;
     int cancelled = -1;
@@ -129,6 +130,7 @@ public class SliceBoss : MonoBehaviour
         s.fallX = new float[fallCount];
         s.shots = new Shot[shotCount];
         EnterIdle();
+        Rewindables.All.Add(this);
     }
 
     void Start()
@@ -146,8 +148,12 @@ public class SliceBoss : MonoBehaviour
 
     void OnDestroy()
     {
+        Rewindables.All.Remove(this);
         if (fx) Destroy(fx.gameObject);
     }
+
+    object IRewindable.Capture() => Capture();
+    void IRewindable.Restore(object state) => Restore((State)state);
 
     public State Capture()
     {
@@ -434,8 +440,7 @@ public class SliceBoss : MonoBehaviour
         if (!cam) return;
         Vector3 p = cam.WorldToScreenPoint(transform.position + Vector3.up * (HalfHeight + 0.8f));
         string pattern = CurrentPattern?.ToString() ?? "-";
-        string excluded = cancelled >= 0 ? patterns[cancelled].pattern.ToString() : "-";
         GUI.Label(new Rect(p.x - 150f, Screen.height - p.y - 10f, 300f, 20f),
-            $"{s.phase} {pattern} {s.phaseTime:0.00}s  결정#{s.decisionId}  제외:{excluded}");
+            $"{s.phase} {pattern} {s.phaseTime:0.00}s  결정#{s.decisionId}  제외:{CancelledPatternName}");
     }
 }
