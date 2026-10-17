@@ -6,8 +6,7 @@ using UnityEngine.UI;
 // 전투 HUD. 배치: Docs/ArtSpecification.md 2-2 (1920×1080 기준)
 public class HUD : MonoBehaviour
 {
-    [SerializeField] float hpIconSize = 48f;
-    [SerializeField] float hpIconGap = 8f;
+    [SerializeField] Vector2 hpBarSize = new(400f, 28f);
     [SerializeField] Vector2 dashBarSize = new(200f, 14f);
     [SerializeField] float slotSmall = 22f;
     [SerializeField] float slotBoss = 34f;
@@ -15,7 +14,6 @@ public class HUD : MonoBehaviour
     [SerializeField] Vector2 bossBarSize = new(800f, 24f);
     [SerializeField] float clockTurn = 1f; // 시각 전진 연출 길이
 
-    static readonly Color HpEmpty = new(0.25f, 0.2f, 0.15f);
     static readonly Color SlotCleared = new(1f, 0.82f, 0.35f);
     static readonly Color SlotUpcoming = new(0.3f, 0.3f, 0.35f);
 
@@ -24,7 +22,8 @@ public class HUD : MonoBehaviour
     PlayerController player;
 
     RectTransform content;
-    readonly List<Image> hpIcons = new();
+    RectTransform hpFill;
+    TextMeshProUGUI hpText;
     TextMeshProUGUI abilityText;
     RectTransform dashFill;
     TextMeshProUGUI timeText;
@@ -53,6 +52,13 @@ public class HUD : MonoBehaviour
 
     void BuildTopLeft()
     {
+        var hpBg = GameUI.MakeImage(content, "HpBg", GameUI.Dim);
+        GameUI.Place(hpBg.rectTransform, new Vector2(0f, 1f), new Vector2(40f, -30f), hpBarSize);
+        var fill = GameUI.MakeImage(hpBg.transform, "HpFill", GameUI.Gold);
+        hpFill = GameUI.Place(fill.rectTransform, new Vector2(0f, 0.5f), Vector2.zero, hpBarSize);
+        hpText = GameUI.MakeText(hpBg.transform, "", 24f, Color.white);
+        GameUI.Fill(hpText.rectTransform);
+
         abilityText = GameUI.MakeText(content, "", 28f, Color.white, TextAlignmentOptions.Left);
         GameUI.Place(abilityText.rectTransform, new Vector2(0f, 1f), new Vector2(40f, -100f), new Vector2(600f, 40f));
 
@@ -60,8 +66,8 @@ public class HUD : MonoBehaviour
         GameUI.Place(dashLabel.rectTransform, new Vector2(0f, 1f), new Vector2(40f, -145f), new Vector2(80f, 30f));
         var dashBg = GameUI.MakeImage(content, "DashBg", GameUI.Dim);
         GameUI.Place(dashBg.rectTransform, new Vector2(0f, 1f), new Vector2(110f, -153f), dashBarSize);
-        var fill = GameUI.MakeImage(dashBg.transform, "DashFill", GameUI.Gold);
-        dashFill = GameUI.Place(fill.rectTransform, new Vector2(0f, 0.5f), Vector2.zero, dashBarSize);
+        var dashFillImage = GameUI.MakeImage(dashBg.transform, "DashFill", GameUI.Gold);
+        dashFill = GameUI.Place(dashFillImage.rectTransform, new Vector2(0f, 0.5f), Vector2.zero, dashBarSize);
     }
 
     void BuildTopCenter()
@@ -168,30 +174,12 @@ public class HUD : MonoBehaviour
         if (showPlus) plusHour.alpha = 1f - since / clockTurn;
     }
 
-    // 태양 문장 HP 칸(임시: 원). 남은 칸은 금색, 잃은 칸은 어둡게
+    // HP 100 규모라 칸 대신 바 + 숫자
     void UpdateHp()
     {
         if (!player) return;
         var health = player.Health;
-        while (hpIcons.Count < health.MaxHp)
-        {
-            int i = hpIcons.Count;
-            var icon = GameUI.MakeImage(content, $"Hp{i}", GameUI.Gold, AccumulationBoss.CircleSprite());
-            icon.preserveAspect = true;
-            GameUI.Place(icon.rectTransform, new Vector2(0f, 1f), new Vector2(40f + i * (hpIconSize + hpIconGap), -30f), Vector2.one * hpIconSize);
-            hpIcons.Add(icon);
-        }
-        for (int i = 0; i < hpIcons.Count; i++)
-        {
-            hpIcons[i].gameObject.SetActive(i < health.MaxHp);
-            bool full = i < health.Hp;
-            var art = AssetLibrary.LoadSprite(full ? "ui_hp_full" : "ui_hp_empty");
-            if (art)
-            {
-                hpIcons[i].sprite = art;
-                hpIcons[i].color = Color.white;
-            }
-            else hpIcons[i].color = full ? GameUI.Gold : HpEmpty;
-        }
+        hpFill.sizeDelta = new Vector2(hpBarSize.x * health.Hp / Mathf.Max(health.MaxHp, 1), hpBarSize.y);
+        hpText.text = $"{health.Hp} / {health.MaxHp}";
     }
 }
