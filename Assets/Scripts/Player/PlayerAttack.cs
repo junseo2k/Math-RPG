@@ -2,8 +2,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerController))]
-public class PlayerAttack : MonoBehaviour
+public class PlayerAttack : MonoBehaviour, IRewindable
 {
+    struct Snapshot
+    {
+        public float readyLeft;
+        public int bonus;
+        public float bonusLeft;
+    }
+
     [SerializeField] int damage = 10;
     [SerializeField] float interval = 0.4f;
     [SerializeField] Vector2 range = new(1.5f, 1f);
@@ -35,6 +42,24 @@ public class PlayerAttack : MonoBehaviour
     {
         controller = GetComponent<PlayerController>();
         anim = GetComponent<SpriteAnimator>();
+        Rewindables.All.Add(this);
+    }
+
+    void OnDestroy() => Rewindables.All.Remove(this);
+
+    public object Capture() => new Snapshot
+    {
+        readyLeft = Mathf.Max(readyAt - Time.time, 0f),
+        bonus = bonus,
+        bonusLeft = Mathf.Max(bonusUntil - Time.time, 0f),
+    };
+
+    public void Restore(object state)
+    {
+        var s = (Snapshot)state;
+        readyAt = Time.time + s.readyLeft;
+        bonus = s.bonus;
+        bonusUntil = Time.time + s.bonusLeft;
     }
 
     void Update()

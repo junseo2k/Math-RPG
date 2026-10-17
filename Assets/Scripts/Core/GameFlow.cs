@@ -42,6 +42,7 @@ public class GameFlow : MonoBehaviour
     public int BossIndex => Stage / (roomsPerBoss + 1) - 1;
 
     int NightLength => (nightEndHour - startHour + 24) % 24;
+    int deathFrame = -1;
 
     public event Action<GameState> StateChanged;
     public event Action<int> StageChanged;
@@ -56,11 +57,13 @@ public class GameFlow : MonoBehaviour
 
     void Start() => BeginRun();
 
+    // 시험판 A: 권능은 역행 고정이라 시작 능력 선택 없이 바로 1스테이지
     void BeginRun()
     {
-        Run = new RunState { choices = abilityPool.Draw(abilityChoiceCount) };
+        Run = new RunState();
         RunReset?.Invoke();
-        SetState(GameState.AbilitySelect);
+        EnterStage(1);
+        SetState(GameState.Playing);
     }
 
     public void SelectAbility(int index)
@@ -88,9 +91,21 @@ public class GameFlow : MonoBehaviour
     public void PlayerDied()
     {
         if (State != GameState.Playing) return;
+        deathFrame = Time.frameCount;
         Persistent.deathCount++;
         SetState(GameState.Dead);
         StartCoroutine(Rebirth());
+    }
+
+    // 사망과 같은 프레임의 역행 입력은 역행 우선 (CombatDecisions 8장)
+    public bool DiedThisFrame => State == GameState.Dead && deathFrame == Time.frameCount;
+
+    public void CancelDeath()
+    {
+        if (!DiedThisFrame) return;
+        StopAllCoroutines();
+        Persistent.deathCount--;
+        SetState(GameState.Playing);
     }
 
     void EnterStage(int stage)

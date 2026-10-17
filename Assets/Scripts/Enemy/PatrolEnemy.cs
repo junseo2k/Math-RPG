@@ -3,8 +3,9 @@ using System.Collections;
 using UnityEngine;
 
 // 근접 순찰형 일반 적. 규칙: Docs/NormalRoom.md 2장
+// 역행 대응: 공격은 코루틴 대신 단계·경과 시간으로 진행, 처치 시 파괴 대신 비활성화(역행으로 되살아남)
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D), typeof(Health))]
-public class PatrolEnemy : MonoBehaviour, IFreezable
+public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
 {
     [SerializeField] int maxHp = 40;
     [SerializeField] float patrolSpeed = 2f;
@@ -22,6 +23,22 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
     // 처치 또는 방 밖 낙하 시 1회
     public event Action Removed;
 
+    enum AttackPhase { None, Windup, Recover }
+
+    struct Snapshot
+    {
+        public bool active;
+        public bool removed;
+        public Vector2 position;
+        public Vector2 velocity;
+        public int dir;
+        public AttackPhase attack;
+        public float attackTime;
+        public float stunLeft;
+        public float frozenLeft;
+        public Color color;
+    }
+
     static readonly Color WindupColor = new(1f, 0.6f, 0.1f);
     static readonly Color FrozenColor = new(0.4f, 0.7f, 1f);
 
@@ -34,12 +51,14 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
     SpriteAnimator anim;
     PlayerController player;
     int dir = 1;
-    bool attacking;
+    AttackPhase attack;
+    float attackTime;
     bool removed;
     float stunUntil;
     float frozenUntil;
     bool wasFrozen;
 
+    bool Attacking => attack != AttackPhase.None;
     bool Frozen => Time.time < frozenUntil;
 
     public void Freeze(float seconds) => frozenUntil = Mathf.Max(frozenUntil, Time.time + seconds);
@@ -58,6 +77,41 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
         health.Init(maxHp, 0f);
         health.Damaged += OnDamaged;
         health.Died += Remove;
+        Rewindables.All.Add(this);
+    }
+
+    void OnDestroy() => Rewindables.All.Remove(this);
+
+    public object Capture() => new Snapshot
+    {
+        active = gameObject.activeSelf,
+        removed = removed,
+        position = transform.position,
+        velocity = body.linearVelocity,
+        dir = dir,
+        attack = attack,
+        attackTime = attackTime,
+        stunLeft = Mathf.Max(stunUntil - Time.time, 0f),
+        frozenLeft = Mathf.Max(frozenUntil - Time.time, 0f),
+        color = currentColor,
+    };
+
+    public void Restore(object state)
+    {
+        var s = (Snapshot)state;
+        gameObject.SetActive(s.active);
+        removed = s.removed;
+        transform.position = s.position;
+        body.position = s.position;
+        body.linearVelocity = s.velocity;
+        dir = s.dir;
+        attack = s.attack;
+        attackTime = s.attackTime;
+        stunUntil = Time.time + s.stunLeft;
+        frozenUntil = Time.time + s.frozenLeft;
+        wasFrozen = false;
+        SetColor(s.color);
+        if (view && !Frozen) view.color = currentColor;
     }
 
     void Update()
@@ -79,7 +133,13 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
             wasFrozen = false;
             if (view) view.color = currentColor;
         }
-        if (attacking || Time.time < stunUntil)
+        if (Attacking)
+        {
+            body.linearVelocity = new Vector2(0f, body.linearVelocity.y);
+            TickAttack();
+            return;
+        }
+        if (Time.time < stunUntil)
         {
             body.linearVelocity = new Vector2(0f, body.linearVelocity.y);
             return;
@@ -99,7 +159,7 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
                 float gap = Mathf.Abs(delta.x) - box.bounds.extents.x - player.GetComponent<Collider2D>().bounds.extents.x;
                 if (gap <= attackRange)
                 {
-                    StartCoroutine(Attack());
+                    StartAttack();
                     return;
                 }
             }
@@ -117,7 +177,7 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
     {
         if (!anim) return;
         anim.Face(dir);
-        if (!attacking) anim.SetLoop(Mathf.Abs(body.linearVelocity.x) > 0.1f ? "walk" : "idle");
+        if (!Attacking) anim.SetLoop(Mathf.Abs(body.linearVelocity.x) > 0.1f ? "walk" : "idle");
     }
 
     // 앞이 벽이거나 발판 끝이면 true
@@ -139,14 +199,33 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
         return false;
     }
 
-    IEnumerator Attack()
+    void StartAttack()
     {
-        attacking = true;
+        attack = AttackPhase.Windup;
+        attackTime = 0f;
         SetColor(WindupColor);
         if (anim) anim.SetLoop("windup");
         SoundPlayer.Play("sfx_enemy_windup");
-        yield return WaitUnfrozen(windup);
+    }
 
+    // 정지된 시간은 세지 않는다(Update에서 정지 중이면 여기까지 오지 않음)
+    void TickAttack()
+    {
+        attackTime += Time.deltaTime;
+        if (attack == AttackPhase.Windup && attackTime >= windup)
+        {
+            Slash();
+            attack = AttackPhase.Recover;
+            attackTime = 0f;
+        }
+        else if (attack == AttackPhase.Recover && attackTime >= recover)
+        {
+            attack = AttackPhase.None;
+        }
+    }
+
+    void Slash()
+    {
         Vector2 center = (Vector2)transform.position + new Vector2(dir * (box.bounds.extents.x + attackRange * 0.5f), 0f);
         Vector2 size = new(attackRange, box.bounds.size.y);
         foreach (var hit in Physics2D.OverlapBoxAll(center, size, 0f))
@@ -159,21 +238,7 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
             anim.SetLoop("idle");
         }
         SoundPlayer.Play("sfx_enemy_slash");
-
         SetColor(baseColor);
-        yield return WaitUnfrozen(recover);
-        attacking = false;
-    }
-
-    // 정지된 시간은 세지 않는다(정지장이 예비 동작·후딜을 늦춤)
-    IEnumerator WaitUnfrozen(float seconds)
-    {
-        float t = 0f;
-        while (t < seconds)
-        {
-            if (!Frozen) t += Time.deltaTime;
-            yield return null;
-        }
     }
 
     void SetColor(Color c)
@@ -196,9 +261,9 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
     void OnDamaged(int _)
     {
         SoundPlayer.Play("sfx_enemy_hurt");
-        if (anim && !attacking) anim.PlayOnce("hurt");
-        if (!attacking) stunUntil = Time.time + hitStun;
-        if (view && !attacking && !Frozen) StartCoroutine(Flash());
+        if (anim && !Attacking) anim.PlayOnce("hurt");
+        if (!Attacking) stunUntil = Time.time + hitStun;
+        if (view && !Attacking && !Frozen && gameObject.activeInHierarchy) StartCoroutine(Flash());
     }
 
     IEnumerator Flash()
@@ -213,6 +278,6 @@ public class PatrolEnemy : MonoBehaviour, IFreezable
         if (removed) return;
         removed = true;
         Removed?.Invoke();
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }
