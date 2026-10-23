@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 이름으로 자산을 찾는다. 없으면 null → 호출한 쪽은 임시 도형·무음을 유지한다.
-// 위치·규칙: Docs/AssetProductionSheet.md 1장 (Resources/Art, Resources/Audio)
+// 위치·규칙: Docs/Art/AssetProductionSheet.md 1장 (Resources/Art, Resources/Audio)
 public static class AssetLibrary
 {
     const float PixelsPerUnit = 32f;

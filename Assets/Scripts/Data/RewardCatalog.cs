@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 시험판 A 특성·유물 정의. 규칙: Docs/CombatDecisions.md 10장 (수치는 모두 임시)
+// 시험판 A 특성·유물 정의. 규칙: Docs/SliceA/CombatDecisions.md 10장 (수치는 모두 임시)
 // .asset을 만들지 않고 기본값을 코드에 두며, RunRewards 인스펙터에서 조절한다
-public enum TraitId { LostMoment, ReclaimedStrike, RepeatingFate, PastAfterimage, SharpSlash, ToughBody, TimeSaving, TimeRefund }
-public enum RelicId { HistoryShard, CrackedPocketWatch, IronSpring, BrokenNeedle, MoonShard }
+public enum TraitId
+{
+    LostMoment, ReclaimedStrike, RepeatingFate, PastAfterimage, SharpSlash, ToughBody, TimeSaving, TimeRefund,
+    SolarWind, WideExpansion, LingeringSun, WanderingSun, DelayedRelease,
+}
+public enum RelicId { HistoryShard, CrackedPocketWatch, IronSpring, BrokenNeedle, MoonShard, BrokenSundial, SolarConstellation }
 public enum GrowthStat { MaxHp, Attack, PotionHeal }
 
 [Serializable]
@@ -14,6 +18,10 @@ public class TraitDef
     public TraitId id;
     public string displayName;
     public bool rewindOnly;
+    // 표시만. 추첨 확률은 동일 (SolarCoreSpec M6)
+    public bool rare;
+    // 0 이하는 3으로 취급 (씬에 저장된 기존 정의 호환)
+    public int maxLevel = 3;
     // {0} = 해당 레벨 수치
     public string format;
     public float[] levels = new float[3];
@@ -28,6 +36,8 @@ public class RelicDef
     public float value;
     public float duration;
     public string description;
+    // 보스 보상·상점에 나오지 않음 (디버그로만 획득)
+    public bool excludeFromPool;
 }
 
 [Serializable]
@@ -69,6 +79,12 @@ public static class RewardCatalog
                 format = "권능 쿨타임 -{0:0%}" },
         new() { id = TraitId.TimeRefund, displayName = "시간 환급", levels = new[] { 1f, 1.5f, 2f },
                 format = "권능 사용 후 첫 적중 시\n쿨타임 {0}초 감소" },
+        // 태양핵 전용 (SolarCoreSpec 3장). 단일 레벨. 수치와 설명은 RunRewards.ApplySolarSettings가 SolarCoreSettings에서 채운다
+        new() { id = TraitId.SolarWind, displayName = "태양풍", maxLevel = 1, levels = new[] { 0f } },
+        new() { id = TraitId.WideExpansion, displayName = "광역 확장", maxLevel = 1, levels = new[] { 0f } },
+        new() { id = TraitId.LingeringSun, displayName = "잔존하는 태양", maxLevel = 1, levels = new[] { 0f } },
+        new() { id = TraitId.WanderingSun, displayName = "유랑하는 태양", rare = true, maxLevel = 1, levels = new[] { 0f } },
+        new() { id = TraitId.DelayedRelease, displayName = "지연 방출", rare = true, maxLevel = 1, levels = new[] { 0f } },
     };
 
     public static List<RelicDef> Relics() => new()
@@ -83,6 +99,10 @@ public static class RewardCatalog
                 description = "기본 공격 피해 +15%" },
         new() { id = RelicId.MoonShard, displayName = "달빛의 파편", value = 0.2f, duration = 3f,
                 description = "회피 성공 시 3초간 받는 피해 -20%" },
+        // 태양핵 전용 (SolarCoreSpec 4장). 수치는 SolarCoreSettings, 설명은 RunRewards.ApplySolarSettings가 채운다
+        new() { id = RelicId.BrokenSundial, displayName = "부서진 해시계", rare = true },
+        // 일출 게이지가 없어 풀 제외 (SolarCoreSpec M2)
+        new() { id = RelicId.SolarConstellation, displayName = "태양의 성좌", rare = true, excludeFromPool = true },
     };
 
     public static List<GrowthDef> Growth() => new()

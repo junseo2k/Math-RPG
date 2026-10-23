@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 1장 보스3(최종): 시간 역행. 규칙: Docs/Bosses/03_Reversal.md
-// 1단계: 지면 파동 + 역재생 / 2단계(체력 절반 이하): 위치 되감기 추가. 정지장 대상 아님
+// 1단계: 고리 파동 + 역재생 / 2단계(체력 절반 이하): 위치 되감기 추가. 정지장 대상 아님
 [RequireComponent(typeof(Health), typeof(SpriteRenderer), typeof(BoxCollider2D))]
 public class ReversalBoss : MonoBehaviour
 {
@@ -12,14 +12,16 @@ public class ReversalBoss : MonoBehaviour
     [SerializeField] float phaseTransition = 1f;
     [SerializeField] float walkSpeed = 1f;
     [SerializeField] float keepDistance = 2f;
+    // 방 중심(0,0) 기준 이동 가능 범위
     [SerializeField] float moveLimitX = 8.5f;
+    [SerializeField] float moveLimitY = 5f;
 
-    [Header("지면 파동")]
+    [Header("고리 파동")]
     [SerializeField] float waveInterval = 3.5f;
     [SerializeField] float waveWindup = 0.6f;
     [SerializeField] float waveSpeed = 7f;
-    [SerializeField] float waveHeight = 1f;
-    [SerializeField] float waveWidth = 0.6f;
+    [SerializeField] float waveThickness = 1f;
+    [SerializeField] float waveMaxRadius = 12f;
     [SerializeField] int waveDamage = 1;
 
     [Header("역재생")]
@@ -72,16 +74,16 @@ public class ReversalBoss : MonoBehaviour
         if (windingUp || transitioning || !player) return;
 
         var pos = transform.position;
-        float dx = player.transform.position.x - pos.x;
-        bool walking = Mathf.Abs(dx) > keepDistance;
+        Vector2 delta = player.transform.position - pos;
+        bool walking = delta.magnitude > keepDistance;
         if (anim)
         {
-            anim.Face(dx >= 0f ? 1 : -1);
+            anim.Face(delta.x >= 0f ? 1 : -1);
             anim.SetLoop(walking ? "walk" : "idle");
         }
         if (!walking) return;
-        float x = Mathf.Clamp(pos.x + Mathf.Sign(dx) * walkSpeed * Time.deltaTime, -moveLimitX, moveLimitX);
-        transform.position = new Vector3(x, pos.y, pos.z);
+        Vector2 next = (Vector2)pos + delta.normalized * walkSpeed * Time.deltaTime;
+        transform.position = new Vector3(Mathf.Clamp(next.x, -moveLimitX, moveLimitX), Mathf.Clamp(next.y, -moveLimitY, moveLimitY), pos.z);
     }
 
     IEnumerator WaveLoop()
@@ -99,25 +101,17 @@ public class ReversalBoss : MonoBehaviour
             yield return new WaitForSeconds(waveWindup);
             body.color = baseColor;
             windingUp = false;
-            SpawnWave(player.transform.position.x >= transform.position.x ? 1 : -1);
+            SpawnWave();
             SoundPlayer.Play("sfx_rev_wave");
         }
     }
 
-    void SpawnWave(int dir)
+    void SpawnWave()
     {
-        float floorTop = transform.position.y - transform.localScale.y * 0.5f;
-        var go = new GameObject("GroundWave");
+        var go = new GameObject("RingWave");
         go.transform.SetParent(transform.parent);
-        go.transform.position = new Vector3(
-            transform.position.x + dir * (transform.localScale.x * 0.5f + waveWidth * 0.5f),
-            floorTop + waveHeight * 0.5f, 0f);
-        go.transform.localScale = new Vector3(waveWidth, waveHeight, 1f);
-        var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = AssetLibrary.SpriteUnitsOr("fx_rev_wave", 1f, RoomManager.Square);
-        sr.color = WaveColor;
-        sr.sortingOrder = 2;
-        go.AddComponent<GroundWave>().Init(dir, waveSpeed, returnSpeed, wallPause, waveDamage, transform);
+        go.AddComponent<GroundWave>().Init(transform.localScale.x * 0.5f, waveMaxRadius, waveThickness,
+            waveSpeed, returnSpeed, wallPause, waveDamage, transform, WaveColor);
     }
 
     IEnumerator EnterPhase2()

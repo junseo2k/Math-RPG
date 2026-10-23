@@ -6,7 +6,9 @@ using UnityEngine;
 public class AccumulationBoss : MonoBehaviour
 {
     [SerializeField] int maxHp = 30;
+    // 방 중심(0,0) 기준 이동 가능 범위
     [SerializeField] float moveLimitX = 8.5f;
+    [SerializeField] float moveLimitY = 5f;
 
     [Header("축적·방출")]
     [SerializeField] float stackInterval = 1.5f;
@@ -107,11 +109,11 @@ public class AccumulationBoss : MonoBehaviour
         if (anim) anim.SetLoop("windup");
         yield return new WaitForSeconds(chargeWindup);
 
-        float dir = Mathf.Sign(player.transform.position.x - transform.position.x);
+        Vector2 dir = ((Vector2)(player.transform.position - transform.position)).normalized;
         SoundPlayer.Play("sfx_acc_charge");
         if (anim)
         {
-            anim.Face((int)dir);
+            anim.Face(dir.x < 0f ? -1 : 1);
             anim.SetLoop("charge");
         }
         float traveled = 0f;
@@ -119,10 +121,12 @@ public class AccumulationBoss : MonoBehaviour
         while (traveled < chargeDistance)
         {
             var pos = transform.position;
-            float nextX = Mathf.Clamp(pos.x + dir * chargeSpeed * Time.deltaTime, -moveLimitX, moveLimitX);
-            if (Mathf.Approximately(nextX, pos.x)) break;
-            traveled += Mathf.Abs(nextX - pos.x);
-            transform.position = new Vector3(nextX, pos.y, pos.z);
+            Vector2 next = (Vector2)pos + dir * chargeSpeed * Time.deltaTime;
+            next = new Vector2(Mathf.Clamp(next.x, -moveLimitX, moveLimitX), Mathf.Clamp(next.y, -moveLimitY, moveLimitY));
+            float step = Vector2.Distance(next, pos);
+            if (step < 0.0001f) break;
+            traveled += step;
+            transform.position = new Vector3(next.x, next.y, pos.z);
 
             if (!hit && box.bounds.Intersects(player.GetComponent<Collider2D>().bounds))
             {

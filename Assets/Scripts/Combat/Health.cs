@@ -83,6 +83,8 @@ public class Health : MonoBehaviour, IRewindable
     public void AddShield(int amount) => Shield += Mathf.Max(amount, 0);
     public void ClearShield() => Shield = 0;
     public void AddReduction(float amount, float duration) => reductions.Add((amount, Time.time + duration));
+    // 범위 안에 있는 동안 켜지는 받는 피해 감소%(태양핵). 시간 제한 감소와 합산
+    public float ZoneReduction { get; set; }
 
     public void Heal(int amount)
     {
@@ -133,7 +135,7 @@ public class Health : MonoBehaviour, IRewindable
     // 받는 피해 = 피해 × (1 − 감소% 합) → 보호막 먼저 → HP (CombatDecisions 2장)
     void Apply(int amount)
     {
-        float reduction = 0f;
+        float reduction = ZoneReduction;
         reductions.RemoveAll(r => Time.time >= r.until);
         foreach (var r in reductions) reduction += r.amount;
         if (reduction > 0f) amount = Round(amount * Mathf.Max(1f - reduction, 0f));

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// BGM 전환과 효과음 재생. 파일이 없으면 무음. 규칙: Docs/SoundSpecification.md 2·3장
+// BGM 전환과 효과음 재생. 파일이 없으면 무음. 규칙: Docs/Sound/SoundSpecification.md 2·3장
 public class SoundPlayer : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]

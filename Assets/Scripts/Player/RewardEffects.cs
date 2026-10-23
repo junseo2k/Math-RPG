@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// 특성·유물·영구 성장 효과를 플레이어에 적용. 규칙: Docs/CombatDecisions.md 10·12장
+// 특성·유물·영구 성장 효과를 플레이어에 적용. 규칙: Docs/SliceA/CombatDecisions.md 10·12장
 [RequireComponent(typeof(PlayerController), typeof(PlayerAttack))]
 public class RewardEffects : MonoBehaviour
 {
@@ -12,6 +12,7 @@ public class RewardEffects : MonoBehaviour
     PlayerController controller;
     PlayerAttack attack;
     Health health;
+    SunCoreCaster sunCore;
     GameFlow flow;
     RunRewards rewards;
     RewindSystem rewind;
@@ -24,6 +25,9 @@ public class RewardEffects : MonoBehaviour
         controller = GetComponent<PlayerController>();
         attack = GetComponent<PlayerAttack>();
         health = GetComponent<Health>();
+        // SunCoreCaster 부트스트랩보다 먼저 실행될 수 있어 여기서도 보장
+        sunCore = GetComponent<SunCoreCaster>();
+        if (!sunCore) sunCore = gameObject.AddComponent<SunCoreCaster>();
     }
 
     void Start()
@@ -57,6 +61,7 @@ public class RewardEffects : MonoBehaviour
 
     float T(TraitId id) => rewards ? rewards.TraitValue(id) : 0f;
     bool Has(RelicId id) => rewards && rewards.HasRelic(id);
+    bool HasTrait(TraitId id) => rewards && rewards.Level(id) > 0;
     RelicDef R(RelicId id) => rewards.Relic(id);
     float G(GrowthStat stat) => rewards ? rewards.GrowthValue(stat) : 0f;
 
@@ -67,6 +72,15 @@ public class RewardEffects : MonoBehaviour
         int bonusHp = Mathf.RoundToInt(T(TraitId.ToughBody) + (Has(RelicId.IronSpring) ? R(RelicId.IronSpring).value : 0f) + G(GrowthStat.MaxHp));
         health.SetMaxHp(controller.BaseMaxHp + bonusHp);
         if (rewind) rewind.CooldownMultiplier = 1f - T(TraitId.TimeSaving);
+
+        // 태양핵 수치는 SolarCoreSettings가 가지므로 보유 여부만 전달
+        sunCore.SolarWind = HasTrait(TraitId.SolarWind);
+        sunCore.WideExpansion = HasTrait(TraitId.WideExpansion);
+        sunCore.LingeringSun = HasTrait(TraitId.LingeringSun);
+        sunCore.Wandering = HasTrait(TraitId.WanderingSun);
+        sunCore.DelayedRelease = HasTrait(TraitId.DelayedRelease);
+        sunCore.Sundial = Has(RelicId.BrokenSundial);
+        sunCore.Constellation = Has(RelicId.SolarConstellation);
     }
 
     // 보호막은 스테이지 종료 시 소멸 (CombatDecisions 2장)

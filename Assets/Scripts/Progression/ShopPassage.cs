@@ -54,7 +54,7 @@ public class ShopPassage : MonoBehaviour
         view.color = c;
 
         var kb = Keyboard.current;
-        if (!playerInside || entered || kb == null || !kb.upArrowKey.wasPressedThisFrame || !flow) return;
+        if (!playerInside || entered || kb == null || !kb.eKey.wasPressedThisFrame || !flow) return;
         if (flow.State != GameState.Playing) return;
         entered = true;
         flow.EnterShop();

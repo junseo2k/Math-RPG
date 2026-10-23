@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// 시간이 정지된 상점 (최소 기능, 임시 IMGUI). 규칙: Docs/CombatDecisions.md 11장
+// 시간이 정지된 상점 (최소 기능, 임시 IMGUI). 규칙: Docs/SliceA/CombatDecisions.md 11장
 public class ShopUI : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]

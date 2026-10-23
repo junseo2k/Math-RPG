@@ -32,6 +32,7 @@ public class PlayerAttack : MonoBehaviour, IRewindable
     SpriteRenderer rangeView;
     float swingShownUntil;
     Vector2 swingCenter;
+    float swingAngle;
 
     PlayerController controller;
     float readyAt;
@@ -43,6 +44,8 @@ public class PlayerAttack : MonoBehaviour, IRewindable
     public bool HasBonus => bonus > 0 && Time.time < bonusUntil;
     // 피해 증가% 합(0.08 = +8%). 특성·유물이 더한다
     public float DamageBonus { get; set; }
+    // 범위 버프(태양핵)의 피해 증가%. Recalc가 DamageBonus를 덮어써도 유지된다
+    public float ZoneDamageBonus { get; set; }
     public bool LastHitCrit { get; private set; }
 
     // 적중한 휘두름 1회마다: 판정 중심, 크기, 피해 (역행의 취소된 공격 기록용)
@@ -100,8 +103,10 @@ public class PlayerAttack : MonoBehaviour, IRewindable
     }
 
     // 실제 판정 상자. 공격과 표시가 같은 계산을 쓴다
-    public Vector2 HitBoxCenter => (Vector2)transform.position + new Vector2(controller.Facing * (transform.localScale.x + range.x) * 0.5f, 0f);
+    public Vector2 HitBoxCenter => (Vector2)transform.position + controller.Aim * (transform.localScale.x + range.x) * 0.5f;
     public Vector2 HitBoxSize => range;
+    // 조준 방향으로 돌린 상자 각도(도)
+    public float HitBoxAngle => Mathf.Atan2(controller.Aim.y, controller.Aim.x) * Mathf.Rad2Deg;
 
     void LateUpdate()
     {
@@ -122,13 +127,14 @@ public class PlayerAttack : MonoBehaviour, IRewindable
         rangeView.color = swing ? swingColor : guideColor;
         // 휘두름 표시는 판정한 순간의 위치에 고정
         rangeView.transform.position = swing ? swingCenter : HitBoxCenter;
+        rangeView.transform.rotation = Quaternion.Euler(0f, 0f, swing ? swingAngle : HitBoxAngle);
         rangeView.transform.localScale = HitBoxSize;
     }
 
     void Update()
     {
-        var kb = Keyboard.current;
-        if (kb == null || !controller.CanAttack || !kb.aKey.wasPressedThisFrame || Time.time < readyAt) return;
+        var mouse = Mouse.current;
+        if (mouse == null || !controller.CanAttack || !mouse.leftButton.wasPressedThisFrame || Time.time < readyAt) return;
         readyAt = Time.time + interval;
         SoundPlayer.Play("sfx_sword_swing", 3);
         if (anim) anim.PlayOnce("attack");
@@ -140,14 +146,15 @@ public class PlayerAttack : MonoBehaviour, IRewindable
 
         // 공격력 × (1 + 피해 증가% 합) × 치명타 + 고정 추가 피해 (CombatDecisions 2장)
         LastHitCrit = UnityEngine.Random.value < critChance;
-        float scaled = damage * (1f + DamageBonus + swingBonus) * (LastHitCrit ? critMultiplier : 1f);
+        float scaled = damage * (1f + DamageBonus + ZoneDamageBonus + swingBonus) * (LastHitCrit ? critMultiplier : 1f);
         int total = Health.Round(scaled + (HasBonus ? bonus : 0));
 
         Vector2 center = HitBoxCenter;
         swingCenter = center;
+        swingAngle = HitBoxAngle;
         swingShownUntil = Time.time + swingShowTime;
         bool landed = false;
-        foreach (var hit in Physics2D.OverlapBoxAll(center, range, 0f))
+        foreach (var hit in Physics2D.OverlapBoxAll(center, range, swingAngle))
             if (hit.gameObject != gameObject && hit.TryGetComponent(out Health target) && !target.IsDead)
             {
                 target.TakeHit(total, transform.position);

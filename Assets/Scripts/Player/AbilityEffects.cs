@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// 시험판 임시 시작 능력 효과. 규칙: Docs/StartAbilities_Slice.md
+// 시험판 임시 시작 능력 효과.
 [RequireComponent(typeof(PlayerController), typeof(PlayerAttack))]
 public class AbilityEffects : MonoBehaviour
 {
@@ -74,8 +74,8 @@ public class AbilityEffects : MonoBehaviour
     void Update()
     {
         if (active != "temp_a" || !controller.CanAct) return;
-        var kb = Keyboard.current;
-        if (kb == null || !kb.sKey.wasPressedThisFrame || Time.time < freezeReadyAt) return;
+        var mouse = Mouse.current;
+        if (mouse == null || !mouse.rightButton.wasPressedThisFrame || Time.time < freezeReadyAt) return;
 
         freezeReadyAt = Time.time + freezeCooldown;
         foreach (var hit in Physics2D.OverlapCircleAll(transform.position, freezeRadius))

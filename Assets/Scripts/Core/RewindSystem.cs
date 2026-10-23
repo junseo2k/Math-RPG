@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// 시간 역행: 매 물리 프레임 전장 상태 기록 → S로 역행 거리 전 상태 복원. 규칙: Docs/CombatDecisions.md 3·4·5·8장
+// 시간 역행: 매 물리 프레임 전장 상태 기록 → 역행 키(기본 우클릭)로 역행 거리 전 상태 복원. 규칙: Docs/SliceA/CombatDecisions.md 3·4·5·8장
 // 입력을 다른 스크립트보다 먼저 읽는다(같은 프레임 사망보다 역행 입력 우선)
 [DefaultExecutionOrder(-100)]
 public class RewindSystem : MonoBehaviour
@@ -19,6 +19,9 @@ public class RewindSystem : MonoBehaviour
     [SerializeField] float freezeTime = 0.3f;
     [SerializeField] float postRewindInvincible = 0.2f;
 
+    [Header("조작")]
+    [SerializeField] InputAction rewindKey = new("Rewind", InputActionType.Button, "<Mouse>/rightButton");
+
     [Header("디버그")]
     [SerializeField] bool showDebug = true;
     [SerializeField] bool showGhost; // F10
@@ -27,6 +30,8 @@ public class RewindSystem : MonoBehaviour
     public static bool IsFrozen { get; private set; }
 
     public float CooldownRemaining => Mathf.Max(readyAt - Time.time, 0f);
+    // HUD 표시용 키 이름
+    public string RewindKeyName => rewindKey.GetBindingDisplayString();
     public float RecordedSeconds => frames.Count > 1 ? frames[^1].time - frames[0].time : 0f;
     // 특성 "시간 절약"
     public float CooldownMultiplier { get; set; } = 1f;
@@ -72,6 +77,10 @@ public class RewindSystem : MonoBehaviour
         flow.StageChanged += OnStageChanged;
         flow.RunReset += OnRunReset;
     }
+
+    void OnEnable() => rewindKey.Enable();
+
+    void OnDisable() => rewindKey.Disable();
 
     void OnDestroy()
     {
@@ -140,7 +149,7 @@ public class RewindSystem : MonoBehaviour
             if (Time.unscaledTime >= freezeEnd) EndFreeze();
             return;
         }
-        if (kb != null && kb.sKey.wasPressedThisFrame) TryRewind();
+        if (rewindKey.WasPressedThisFrame()) TryRewind();
     }
 
     bool CanRewind(out string reason)
@@ -285,6 +294,6 @@ public class RewindSystem : MonoBehaviour
         if (!showDebug) return;
         string ready = Time.time >= readyAt ? "준비" : $"{CooldownRemaining:0.0}초";
         GUI.Label(new Rect(10, Screen.height - 105, 700, 20),
-            $"역행[S] {ready}  기록 {RecordedSeconds:0.00}초  잔상[F10] {(showGhost ? "켬" : "끔")}  최근: {lastResult}");
+            $"역행[{RewindKeyName}] {ready}  기록 {RecordedSeconds:0.00}초  잔상[F10] {(showGhost ? "켬" : "끔")}  최근: {lastResult}");
     }
 }

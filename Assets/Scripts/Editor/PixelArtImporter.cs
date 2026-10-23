@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-// Resources/Art에 넣은 PNG를 픽셀아트 설정으로 자동 가져오기. 규칙: Docs/ArtSpecification.md 8장
+// Resources/Art에 넣은 PNG를 픽셀아트 설정으로 자동 가져오기. 규칙: Docs/Art/ArtSpecification.md 8장
 public class PixelArtImporter : AssetPostprocessor
 {
     void OnPreprocessTexture()

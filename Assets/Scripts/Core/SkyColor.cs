@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// 시각에 따른 밤하늘 색(카메라 배경). 규칙: Docs/ArtSpecification.md 3장
+// 시각에 따른 밤하늘 색(카메라 배경). 규칙: Docs/Art/ArtSpecification.md 3장
 [RequireComponent(typeof(Camera))]
 public class SkyColor : MonoBehaviour
 {

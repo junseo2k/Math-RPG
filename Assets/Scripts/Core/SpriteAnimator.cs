@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-// 스트립 애니메이션: Resources/Art/{BaseName}_{상태}.png. 스트립이 없으면 현재 그림을 그대로 둔다.
-// 상태 이름: Docs/AssetProductionSheet.md 3-1
+// 스트립 애니메이션: Resources/Art/{BaseName}_{상태}_{방향}.png를 먼저, 없으면 {BaseName}_{상태}.png(좌우 반전).
+// 스트립이 없으면 현재 그림을 그대로 둔다. 상태 이름: Docs/Art/AssetProductionSheet.md 3-1
 [RequireComponent(typeof(SpriteRenderer))]
 public class SpriteAnimator : MonoBehaviour
 {
@@ -10,9 +11,18 @@ public class SpriteAnimator : MonoBehaviour
     [SerializeField] float fps = 10f;
 
     public string BaseName { get; set; }
+    public float Fps { get => fps; set => fps = value; }
+
+    // 상태별 재생 속도. 지정하지 않은 상태는 fps
+    readonly Dictionary<string, float> stateFps = new();
+    public void SetFps(string stateName, float value) => stateFps[stateName] = value;
+    float CurrentFps => state != null && stateFps.TryGetValue(state, out var f) ? f : fps;
 
     SpriteRenderer view;
     Sprite[] frames;
+    // 방향별 스트립을 쓰는 중이면 좌우 반전 안 함
+    bool directional;
+    string direction;
     string state;
     string loopState = "idle";
     Mode mode;
@@ -43,7 +53,15 @@ public class SpriteAnimator : MonoBehaviour
 
     public void Face(int dir)
     {
-        if (dir != 0) view.flipX = dir < 0;
+        if (dir != 0 && !directional) view.flipX = dir < 0;
+    }
+
+    // 8방향 이름(s, sw, w, nw, n, ne, e, se). 재생 위치는 유지하고 그림만 바꾼다
+    public void SetDirection(string dir)
+    {
+        if (dir == direction) return;
+        direction = dir;
+        if (state != null) LoadFrames();
     }
 
     void Begin(string next, Mode nextMode)
@@ -51,13 +69,30 @@ public class SpriteAnimator : MonoBehaviour
         state = next;
         mode = nextMode;
         startTime = Time.time;
-        frames = string.IsNullOrEmpty(BaseName) ? null
-            : AssetLibrary.LoadFrames($"{BaseName}_{next}", Mathf.Abs(transform.lossyScale.x));
+        LoadFrames();
+    }
+
+    void LoadFrames()
+    {
+        frames = null;
+        if (string.IsNullOrEmpty(BaseName)) return;
+        float scale = Mathf.Abs(transform.lossyScale.x);
+        // 그 상태의 방향 그림이 아직 없으면 같은 방향의 대기 그림으로 대신한다
+        if (direction != null)
+            frames = AssetLibrary.LoadFrames($"{BaseName}_{state}_{direction}", scale)
+                ?? AssetLibrary.LoadFrames($"{BaseName}_idle_{direction}", scale);
+        directional = frames != null;
+        if (directional)
+        {
+            view.flipX = false;
+            return;
+        }
+        frames = AssetLibrary.LoadFrames($"{BaseName}_{state}", scale);
     }
 
     void Update()
     {
-        int index = Mathf.FloorToInt((Time.time - startTime) * fps);
+        int index = Mathf.FloorToInt((Time.time - startTime) * CurrentFps);
         if (frames == null || frames.Length == 0)
         {
             // 스트립 없는 1회 상태는 바로 반복 상태로

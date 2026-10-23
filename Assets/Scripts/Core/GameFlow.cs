@@ -6,7 +6,7 @@ using UnityEngine;
 public enum GameState { AbilitySelect, Playing, Dead, Cleared, RewardSelect, Shop, Growth }
 
 // 한 판 흐름: 스테이지 → 클리어 보상 선택 → 다음 스테이지 / 보스 → 보상 → 결과 → 영구 성장 → 다음 순환
-// 사망 → 영구 성장 → 다음 순환 18:00. 규칙: Docs/VerticalSliceA.md 4·10장
+// 사망 → 영구 성장 → 다음 순환 18:00. 규칙: Docs/SliceA/VerticalSliceA.md 4·10장
 [RequireComponent(typeof(StartAbilityPool), typeof(RunRewards))]
 public class GameFlow : MonoBehaviour
 {

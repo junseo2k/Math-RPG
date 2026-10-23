@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// 영구 성장 1단계 "희미한 기억" (최소 기능, 임시 IMGUI). 규칙: Docs/CombatDecisions.md 12장
+// 영구 성장 1단계 "희미한 기억" (최소 기능, 임시 IMGUI). 규칙: Docs/SliceA/CombatDecisions.md 12장
 public class GrowthUI : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
