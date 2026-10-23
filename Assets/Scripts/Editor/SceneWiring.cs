@@ -33,6 +33,19 @@ static class SceneWiring
         }
         changed |= SetRef(flow, "abilityPool", pool);
 
+        // 역행 키 등 인스펙터 값이 저장되도록 씬에 둔다(없으면 실행 시 코드가 만들어 값이 남지 않음)
+        if (!Object.FindAnyObjectByType<RewindSystem>())
+        {
+            Undo.AddComponent<RewindSystem>(flow.gameObject);
+            changed = true;
+        }
+        // 플레이어 애니메이션 속도 등 인스펙터 값 저장용
+        if (!Object.FindAnyObjectByType<RoomManager>())
+        {
+            Undo.AddComponent<RoomManager>(flow.gameObject);
+            changed = true;
+        }
+
         var ui = flow.GetComponent<FlowDebugUI>();
         if (ui) changed |= SetRef(ui, "flow", flow);
 

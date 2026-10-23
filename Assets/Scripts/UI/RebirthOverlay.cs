@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 사망 → 재탄생 연출. 총 길이 = 재탄생 대기(2초). 규칙: Docs/ArtSpecification.md 5-2
+// 사망 → 재탄생 연출. 총 길이 = 재탄생 대기(2초). 규칙: Docs/Art/ArtSpecification.md 5-2
 // 되감기가 아니라 '다음 날'임을 보여준다(사망 ≠ 시간 역행)
 public class RebirthOverlay : MonoBehaviour
 {
@@ -12,30 +12,41 @@ public class RebirthOverlay : MonoBehaviour
     [SerializeField] float blackout = 0.6f;  // 암전
     [SerializeField] float dayCard = 0.6f;   // "N일째 18:00"
     [SerializeField] float sunrise = 0.4f;   // 태양이 떠오름
+    [SerializeField] float sunFromY = -240f; // 태양 시작·끝 높이(화면 아래 기준)
+    [SerializeField] float sunToY = 120f;
+
+    [Header("화면 요소 (생성 시 자동 연결)")]
+    [SerializeField] Image black;
+    [SerializeField] TextMeshProUGUI dayText;
+    [SerializeField] Image sun;
 
     GameFlow flow;
-    Image black;
-    TextMeshProUGUI dayText;
-    Image sun;
     GameState lastState;
 
     void Start()
     {
         flow = FindAnyObjectByType<GameFlow>();
+        EnsureBuilt();
+        if (!sun.sprite) sun.sprite = AccumulationBoss.CircleSprite();
+        black.color = new Color(0f, 0f, 0f, 0f);
+        dayText.gameObject.SetActive(false);
+        sun.gameObject.SetActive(false);
+    }
 
+    public void EnsureBuilt()
+    {
+        if (black) return;
         black = GameUI.MakeImage(transform, "Black", new Color(0f, 0f, 0f, 0f));
         GameUI.Fill(black.rectTransform);
         black.raycastTarget = false;
 
-        dayText = GameUI.MakeText(transform, "", 64f, GameUI.Gold);
+        dayText = GameUI.MakeText(transform, "N일째   18:00", 64f, GameUI.Gold);
+        dayText.name = "DayText";
         GameUI.Place(dayText.rectTransform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(1200f, 100f));
 
-        sun = GameUI.MakeImage(transform, "Sun", GameUI.Gold, AccumulationBoss.CircleSprite());
+        sun = GameUI.MakeImage(transform, "Sun", GameUI.Gold);
         GameUI.Place(sun.rectTransform, new Vector2(0.5f, 0f), Vector2.zero, new Vector2(240f, 240f));
         sun.raycastTarget = false;
-
-        dayText.gameObject.SetActive(false);
-        sun.gameObject.SetActive(false);
     }
 
     void Update()
@@ -64,7 +75,7 @@ public class RebirthOverlay : MonoBehaviour
         SetAlpha(view, 1f);
         yield return Tween(sunrise, t =>
         {
-            sun.rectTransform.anchoredPosition = new Vector2(0f, Mathf.Lerp(-240f, 120f, t));
+            sun.rectTransform.anchoredPosition = new Vector2(sun.rectTransform.anchoredPosition.x, Mathf.Lerp(sunFromY, sunToY, t));
             black.color = new Color(0f, 0f, 0f, 1f - t);
         });
         sun.gameObject.SetActive(false);

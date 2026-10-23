@@ -18,17 +18,18 @@ public class PlayerRecorder : MonoBehaviour
     [SerializeField] float sampleInterval = 0.05f;
     [SerializeField] bool recording;
 
-    const string Header = "t,x,y,vx,vy,grounded,facing,left,right,jump,attack,dash,has_boss,boss_dx,boss_dy,stage,day,hp";
+    const string Header = "t,x,y,vx,vy,aim_x,aim_y,move_x,move_y,attack,dash,has_boss,boss_dx,boss_dy,stage,day,hp";
 
     GameFlow flow;
     PlayerController player;
     Rigidbody2D body;
-    ContactFilter2D groundFilter;
     StreamWriter writer;
     string runId;
     int sessionIndex;
     float nextSample;
-    bool left, right, jump, attack, dash;
+    // 샘플 구간 동안 눌린 이동 키(-1/0/1)
+    int moveX, moveY;
+    bool attack, dash;
 
     static string Folder =>
 #if UNITY_EDITOR
@@ -39,7 +40,6 @@ public class PlayerRecorder : MonoBehaviour
 
     void Awake()
     {
-        groundFilter.SetNormalAngle(45f, 135f);
         runId = DateTime.Now.ToString("yyyyMMdd_HHmmss");
     }
 
@@ -83,18 +83,19 @@ public class PlayerRecorder : MonoBehaviour
         // 샘플 사이에 눌린 입력도 놓치지 않게 누적
         if (kb != null)
         {
-            left |= kb.leftArrowKey.isPressed;
-            right |= kb.rightArrowKey.isPressed;
-            jump |= kb.spaceKey.wasPressedThisFrame;
-            attack |= kb.aKey.wasPressedThisFrame;
-            dash |= kb.shiftKey.wasPressedThisFrame;
+            if (kb.aKey.isPressed || kb.dKey.isPressed) moveX = kb.dKey.isPressed ? 1 : -1;
+            if (kb.wKey.isPressed || kb.sKey.isPressed) moveY = kb.wKey.isPressed ? 1 : -1;
+            dash |= kb.spaceKey.wasPressedThisFrame;
         }
+        var mouse = Mouse.current;
+        if (mouse != null) attack |= mouse.leftButton.wasPressedThisFrame;
 
         if (Time.time < nextSample) return;
         nextSample = Time.time + sampleInterval;
         if (writer == null) BeginSession();
         WriteRow();
-        left = right = jump = attack = dash = false;
+        moveX = moveY = 0;
+        attack = dash = false;
     }
 
     void BeginSession()
@@ -121,8 +122,7 @@ public class PlayerRecorder : MonoBehaviour
 
         writer.WriteLine(string.Join(",",
             F(Time.time), F(pos.x), F(pos.y), F(vel.x), F(vel.y),
-            B(body.IsTouching(groundFilter)), player.Facing,
-            B(left), B(right), B(jump), B(attack), B(dash),
+            F(player.Aim.x), F(player.Aim.y), moveX, moveY, B(attack), B(dash),
             B(boss), F(rel.x), F(rel.y),
             flow.Stage, flow.Persistent.day, player.Health.Hp));
     }

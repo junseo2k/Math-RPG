@@ -5,7 +5,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
-// 시험판 UI 루트: 캔버스·EventSystem·글꼴과 화면 3종 생성. 배치 기준: Docs/ArtSpecification.md 2장
+// 시험판 UI 루트: 캔버스·EventSystem·글꼴과 화면 4종. 배치 기준: Docs/Art/ArtSpecification.md 2장
+// 씬에 GameUI가 있으면(메뉴 Tools/UI/씬에 UI 생성) 그것을 쓰고, 없으면 실행 시 코드로 만든다.
 public class GameUI : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -17,25 +18,56 @@ public class GameUI : MonoBehaviour
 
     const string FontPath = "Fonts/NotoSansKR-VariableFont_wght SDF";
 
-    public static readonly Color Gold = new(1f, 0.82f, 0.35f);
-    public static readonly Color PanelColor = new(0.08f, 0.07f, 0.12f, 0.9f);
-    public static readonly Color Dim = new(0.25f, 0.25f, 0.3f);
+    static readonly Color DefaultGold = new(1f, 0.82f, 0.35f);
+    static readonly Color DefaultPanel = new(0.08f, 0.07f, 0.12f, 0.9f);
+    static readonly Color DefaultDim = new(0.25f, 0.25f, 0.3f);
 
-    public static TMP_FontAsset Font { get; private set; }
+    // 실행 중 코드가 칠하는 색(강조 테두리 등). 이미 만들어진 요소의 색은 각 요소에서 고친다
+    [SerializeField] Color gold = DefaultGold;
+    [SerializeField] Color panelColor = DefaultPanel;
+    [SerializeField] Color dim = DefaultDim;
+
+    static GameUI instance;
+    static TMP_FontAsset font;
+
+    public static Color Gold => instance ? instance.gold : DefaultGold;
+    public static Color PanelColor => instance ? instance.panelColor : DefaultPanel;
+    public static Color Dim => instance ? instance.dim : DefaultDim;
+
+    public static TMP_FontAsset Font
+    {
+        get
+        {
+            if (font) return font;
+            font = Resources.Load<TMP_FontAsset>(FontPath);
+            if (!font) Debug.LogWarning($"[GameUI] 글꼴을 불러오지 못함: Resources/{FontPath}");
+            return font;
+        }
+    }
 
     void Awake()
     {
-        Font = Resources.Load<TMP_FontAsset>(FontPath);
-        if (!Font) Debug.LogWarning($"[GameUI] 글꼴을 불러오지 못함: Resources/{FontPath}");
+        instance = this;
+        Setup();
+    }
 
-        var canvas = gameObject.AddComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 10;
-        var scaler = gameObject.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920f, 1080f);
-        scaler.matchWidthOrHeight = 0.5f;
-        gameObject.AddComponent<GraphicRaycaster>();
+    // 빠진 것만 채운다. 에디터 메뉴에서도 호출
+    public void Setup()
+    {
+        if (!TryGetComponent<Canvas>(out var canvas))
+        {
+            canvas = gameObject.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = 10;
+        }
+        if (!TryGetComponent<CanvasScaler>(out _))
+        {
+            var scaler = gameObject.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.matchWidthOrHeight = 0.5f;
+        }
+        if (!TryGetComponent<GraphicRaycaster>(out _)) gameObject.AddComponent<GraphicRaycaster>();
 
         if (!FindAnyObjectByType<EventSystem>())
         {
@@ -52,9 +84,19 @@ public class GameUI : MonoBehaviour
 
     void AddScreen<T>(string name) where T : Component
     {
+        if (GetComponentInChildren<T>(true)) return;
         var rt = MakeRect(name, transform);
         Fill(rt);
         rt.gameObject.AddComponent<T>();
+    }
+
+    // 막대 채움: 배경 크기를 따라가도록 비율을 앵커로 표시
+    public static void SetFill(RectTransform fill, float ratio)
+    {
+        fill.anchorMin = Vector2.zero;
+        fill.anchorMax = new Vector2(Mathf.Clamp01(ratio), 1f);
+        fill.offsetMin = Vector2.zero;
+        fill.offsetMax = Vector2.zero;
     }
 
     // ---- 공용 생성 함수 ----
@@ -89,7 +131,8 @@ public class GameUI : MonoBehaviour
     {
         var img = MakeRect(name, parent).gameObject.AddComponent<Image>();
         img.color = color;
-        img.sprite = sprite;
+        // 코드로 만든 스프라이트는 씬에 저장되지 않으므로 에디터에서는 비워 두고 실행 시 채운다
+        img.sprite = Application.isPlaying ? sprite : null;
         return img;
     }
 
@@ -106,7 +149,8 @@ public class GameUI : MonoBehaviour
         return t;
     }
 
-    public static Button MakeButton(Transform parent, string label, Vector2 pos, Vector2 size, Action onClick)
+    // onClick은 생략 가능: 씬에 저장되는 버튼은 실행 시 각 화면이 연결한다
+    public static Button MakeButton(Transform parent, string label, Vector2 pos, Vector2 size, Action onClick = null)
     {
         var img = MakeImage(parent, label, PanelColor);
         Place(img.rectTransform, new Vector2(0.5f, 0.5f), pos, size);
@@ -116,7 +160,7 @@ public class GameUI : MonoBehaviour
         colors.highlightedColor = new Color(1f, 0.95f, 0.8f);
         colors.selectedColor = new Color(1f, 0.95f, 0.8f);
         button.colors = colors;
-        button.onClick.AddListener(() => onClick());
+        if (onClick != null) button.onClick.AddListener(() => onClick());
         var t = MakeText(img.transform, label, 36f, Gold);
         Fill(t.rectTransform);
         return button;

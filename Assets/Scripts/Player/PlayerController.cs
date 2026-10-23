@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// 이동·점프·대시 회피·피격 반응. 규칙: Docs/CombatDecisions.md 1장
+// 탑다운 8방향 이동·마우스 조준·대시 회피·피격 반응. 규칙: Docs/SliceA/CombatDecisions.md 1장
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D), typeof(Health))]
 public class PlayerController : MonoBehaviour, IRewindable
 {
@@ -10,20 +10,18 @@ public class PlayerController : MonoBehaviour, IRewindable
     {
         public Vector2 position;
         public Vector2 velocity;
-        public int facing;
+        public Vector2 aim;
         public bool dashing;
-        public int dashDir;
+        public Vector2 dashDir;
         public float dashElapsed;
         public float dashReadyLeft;
         public float stunLeft;
-        public float knockbackVelocity;
+        public Vector2 knockbackVelocity;
     }
 
     [SerializeField] int maxHp = 100;
     [SerializeField] float hitInvincibleTime = 0.8f;
     [SerializeField] float moveSpeed = 6f;
-    [SerializeField] float jumpHeight = 3f;
-    [SerializeField] float gravityScale = 3f;
 
     [Header("회피")]
     [SerializeField] float dashDistance = 3f;
@@ -38,7 +36,10 @@ public class PlayerController : MonoBehaviour, IRewindable
     [Header("디버그")]
     [SerializeField] bool showDebug = true;
 
-    public int Facing { get; private set; } = 1;
+    // 마우스 커서 쪽 단위 벡터. 공격·소환 방향
+    public Vector2 Aim { get; private set; } = Vector2.right;
+    // 좌우 반전용 (-1/1)
+    public int Facing => Aim.x < 0f ? -1 : 1;
     // 특성·유물·성장 보너스를 더하기 전 최대 HP
     public int BaseMaxHp => maxHp;
     public Health Health { get; private set; }
@@ -47,6 +48,8 @@ public class PlayerController : MonoBehaviour, IRewindable
     public bool IsDashing => dashing;
     public bool CanAttack => CanAct && !IsStunned;
     public float MoveSpeedMultiplier { get; set; } = 1f;
+    // 범위 버프(태양핵)의 이동 속도 증가%. MoveSpeedMultiplier와 따로 둬서 서로 덮어쓰지 않게 한다
+    public float ZoneMoveBonus { get; set; }
     public float DashCooldownMultiplier { get; set; } = 1f;
     // 0 = 방금 사용, 1 = 사용 가능
     public float DashReadyRatio => dashing ? 0f : Mathf.Clamp01(1f - (dashReadyAt - Time.time) / (dashCooldown * DashCooldownMultiplier));
@@ -56,24 +59,22 @@ public class PlayerController : MonoBehaviour, IRewindable
     Rigidbody2D body;
     SpriteAnimator anim;
     GameFlow flow;
-    ContactFilter2D groundFilter;
     Vector3 spawnPoint;
     bool dashing;
-    int dashDir;
+    Vector2 dashDir;
     float dashStart;
     float dashReadyAt;
     float stunUntil;
-    float knockbackVelocity;
-    bool wasGrounded;
-
-    float JumpSpeed => Mathf.Sqrt(2f * Mathf.Abs(Physics2D.gravity.y) * gravityScale * jumpHeight);
+    Vector2 knockbackVelocity;
 
     void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        body.gravityScale = gravityScale;
+        body.gravityScale = 0f;
         body.freezeRotation = true;
-        // 마찰 0: 공중에서 벽 쪽으로 누르면 마찰로 벽에 붙어 멈추는 문제 방지
+        // 물리 틱(50Hz)과 화면 주사율 차이로 카메라가 따라갈 때 덜컥거리지 않게
+        body.interpolation = RigidbodyInterpolation2D.Interpolate;
+        // 마찰 0: 벽에 비스듬히 붙어 이동할 때 마찰로 멈추는 문제 방지
         GetComponent<BoxCollider2D>().sharedMaterial = new PhysicsMaterial2D("PlayerNoFriction") { friction = 0f, bounciness = 0f };
         Health = GetComponent<Health>();
         Health.Init(maxHp, hitInvincibleTime);
@@ -85,7 +86,6 @@ public class PlayerController : MonoBehaviour, IRewindable
         };
         Health.Hit += OnHit;
         anim = GetComponent<SpriteAnimator>();
-        groundFilter.SetNormalAngle(45f, 135f);
         spawnPoint = transform.position;
         Rewindables.All.Add(this);
     }
@@ -94,7 +94,7 @@ public class PlayerController : MonoBehaviour, IRewindable
     {
         position = transform.position,
         velocity = body.linearVelocity,
-        facing = Facing,
+        aim = Aim,
         dashing = dashing,
         dashDir = dashDir,
         dashElapsed = dashing ? Time.time - dashStart : 0f,
@@ -109,11 +109,10 @@ public class PlayerController : MonoBehaviour, IRewindable
         transform.position = s.position;
         body.position = s.position;
         body.linearVelocity = s.velocity;
-        Facing = s.facing;
+        Aim = s.aim;
         dashing = s.dashing;
         dashDir = s.dashDir;
         dashStart = Time.time - s.dashElapsed;
-        body.gravityScale = dashing ? 0f : gravityScale;
         dashReadyAt = Time.time + s.dashReadyLeft;
         stunUntil = Time.time + s.stunLeft;
         knockbackVelocity = s.knockbackVelocity;
@@ -133,13 +132,23 @@ public class PlayerController : MonoBehaviour, IRewindable
         if (flow) flow.RunReset -= Respawn;
     }
 
-    // 애니메이션 상태: 대시 > 공중 > 달리기 > 대기
+    // 동쪽부터 반시계 방향, 45도 간격
+    static readonly string[] Directions = { "e", "ne", "n", "nw", "w", "sw", "s", "se" };
+
+    // 조준 방향을 8방향 그림 이름으로
+    static string DirectionOf(Vector2 v)
+    {
+        int i = Mathf.RoundToInt(Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg / 45f);
+        return Directions[(i % 8 + 8) % 8];
+    }
+
+    // 애니메이션 상태: 대시 > 달리기 > 대기
     void LateUpdate()
     {
         if (!anim || Health.IsDead) return;
         anim.Face(Facing);
-        bool grounded = body.IsTouching(groundFilter);
-        anim.SetLoop(dashing ? "dash" : !grounded ? "jump" : Mathf.Abs(body.linearVelocity.x) > 0.1f ? "run" : "idle");
+        anim.SetDirection(DirectionOf(Aim));
+        anim.SetLoop(dashing ? "dash" : body.linearVelocity.sqrMagnitude > 0.01f ? "run" : "idle");
     }
 
     void Update()
@@ -154,45 +163,46 @@ public class PlayerController : MonoBehaviour, IRewindable
 
         if (IsStunned)
         {
-            body.linearVelocity = new Vector2(knockbackVelocity, body.linearVelocity.y);
+            body.linearVelocity = knockbackVelocity;
             return;
         }
 
         var kb = Keyboard.current;
         if (kb == null || !CanAct)
         {
-            body.linearVelocity = new Vector2(0f, body.linearVelocity.y);
+            body.linearVelocity = Vector2.zero;
             return;
         }
 
-        float x = (kb.rightArrowKey.isPressed ? 1f : 0f) - (kb.leftArrowKey.isPressed ? 1f : 0f);
-        if (x != 0f) Facing = (int)x;
-        body.linearVelocity = new Vector2(x * moveSpeed * MoveSpeedMultiplier, body.linearVelocity.y);
+        UpdateAim();
+        var move = new Vector2(
+            (kb.dKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed ? 1f : 0f),
+            (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f)).normalized;
+        body.linearVelocity = move * moveSpeed * (MoveSpeedMultiplier + ZoneMoveBonus);
 
-        bool grounded = body.IsTouching(groundFilter);
-        if (grounded && !wasGrounded) SoundPlayer.Play("sfx_land");
-        wasGrounded = grounded;
-        if (grounded && kb.spaceKey.wasPressedThisFrame)
-        {
-            body.linearVelocity = new Vector2(body.linearVelocity.x, JumpSpeed);
-            SoundPlayer.Play("sfx_jump");
-        }
-        // 지상·공중 모두 가능, 제한은 쿨타임만
-        if (kb.shiftKey.wasPressedThisFrame && Time.time >= dashReadyAt)
-            StartDash(x != 0f ? (int)x : Facing);
+        // 제한은 쿨타임만. 입력 없으면 조준 방향
+        if (kb.spaceKey.wasPressedThisFrame && Time.time >= dashReadyAt)
+            StartDash(move != Vector2.zero ? move : Aim);
     }
 
-    void StartDash(int dir)
+    void UpdateAim()
+    {
+        var mouse = Mouse.current;
+        var cam = Camera.main;
+        if (mouse == null || !cam) return;
+        Vector2 d = (Vector2)cam.ScreenToWorldPoint(mouse.position.ReadValue()) - body.position;
+        if (d.sqrMagnitude > 0.0001f) Aim = d.normalized;
+    }
+
+    void StartDash(Vector2 dir)
     {
         SoundPlayer.Play("sfx_dash");
         dashing = true;
         dashDir = dir;
-        Facing = dir;
         dashStart = Time.time;
         dashReadyAt = dashStart + dashTime + dashCooldown * DashCooldownMultiplier;
         SetDodgeInvincible(true);
-        body.gravityScale = 0f;
-        body.linearVelocity = new Vector2(dashDir * dashDistance / dashTime, 0f);
+        body.linearVelocity = dashDir * dashDistance / dashTime;
         Dashed?.Invoke();
     }
 
@@ -200,7 +210,6 @@ public class PlayerController : MonoBehaviour, IRewindable
     {
         dashing = false;
         SetDodgeInvincible(false);
-        body.gravityScale = gravityScale;
         body.linearVelocity = Vector2.zero;
     }
 
@@ -214,9 +223,10 @@ public class PlayerController : MonoBehaviour, IRewindable
     void OnHit(Vector2 from)
     {
         if (dashing) EndDash();
-        int away = transform.position.x >= from.x ? 1 : -1;
+        Vector2 away = (Vector2)transform.position - from;
+        away = away.sqrMagnitude > 0.0001f ? away.normalized : -Aim;
         stunUntil = Time.time + hitStun;
-        knockbackVelocity = hitStun > 0f ? away * knockbackDistance / hitStun : 0f;
+        knockbackVelocity = hitStun > 0f ? away * knockbackDistance / hitStun : Vector2.zero;
     }
 
     void OnDied()

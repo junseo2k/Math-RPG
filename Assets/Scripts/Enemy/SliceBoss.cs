@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 시험판 A 보스. 규칙: Docs/CombatDecisions.md 6·7장
+// 시험판 A 보스. 규칙: Docs/SliceA/CombatDecisions.md 6·7장
 // 역행 대응: 코루틴·Time.time 없이 물리 프레임마다 진행하고, 공격 판정(탄·낙하 지점)도 State에 담는다.
 // 화면 표시는 State에서 매 프레임 다시 그리므로 Restore 후 따로 맞출 필요가 없다.
 [RequireComponent(typeof(Health), typeof(SpriteRenderer), typeof(BoxCollider2D))]
@@ -41,8 +41,9 @@ public class SliceBoss : MonoBehaviour, IRewindable
         public int decisionId;
         public int current;   // patterns 인덱스, -1 = 없음
         public int previous;
-        public int chargeDir;
-        public float[] fallX;
+        // 결정 순간 플레이어 쪽 단위 벡터. 내려베기·돌진 방향
+        public Vector2 aimDir;
+        public Vector2[] fallPos;
         public int shotsFired;
         public Shot[] shots;
         public bool hitDone;
@@ -65,7 +66,9 @@ public class SliceBoss : MonoBehaviour, IRewindable
 
     [Header("돌진")]
     [SerializeField] float chargeSpeed = 18f;
+    // 방 중심(0,0) 기준 이동 가능 범위
     [SerializeField] float moveLimitX = 8.5f;
+    [SerializeField] float moveLimitY = 5f;
 
     [Header("탄막")]
     [SerializeField] int shotCount = 3;
@@ -77,9 +80,9 @@ public class SliceBoss : MonoBehaviour, IRewindable
     [Header("낙하 광역")]
     [SerializeField] int fallCount = 3;
     [SerializeField] float fallWidth = 2f;
-    [SerializeField] float fallZoneHeight = 2f;
     [SerializeField] float fallImpact = 0.2f;
     [SerializeField] float fallLimitX = 9f;
+    [SerializeField] float fallLimitY = 5.5f;
     [SerializeField] float fallStartHeight = 8f;
 
     // 표시 전용. 판정은 위 수치로만 정해지고, 표시는 같은 계산 결과를 그린다
@@ -128,7 +131,8 @@ public class SliceBoss : MonoBehaviour, IRewindable
     SpriteRenderer aim;
 
     float HalfHeight => transform.localScale.y * 0.5f;
-    float FloorY => s.position.y - HalfHeight;
+    float AimAngle => Mathf.Atan2(s.aimDir.y, s.aimDir.x) * Mathf.Rad2Deg;
+    Vector2 FallSize => Vector2.one * fallWidth;
     PatternSettings P => patterns[s.current];
 
     void Awake()
@@ -142,8 +146,9 @@ public class SliceBoss : MonoBehaviour, IRewindable
 
         s.position = transform.position;
         s.facing = -1;
+        s.aimDir = Vector2.left;
         s.current = s.previous = -1;
-        s.fallX = new float[fallCount];
+        s.fallPos = new Vector2[fallCount];
         s.shots = new Shot[shotCount];
         EnterIdle();
         Rewindables.All.Add(this);
@@ -176,7 +181,7 @@ public class SliceBoss : MonoBehaviour, IRewindable
     public State Capture()
     {
         var c = s;
-        c.fallX = (float[])s.fallX.Clone();
+        c.fallPos = (Vector2[])s.fallPos.Clone();
         c.shots = (Shot[])s.shots.Clone();
         return c;
     }
@@ -187,7 +192,7 @@ public class SliceBoss : MonoBehaviour, IRewindable
     {
         if (snap.decisionId < s.decisionId && s.current >= 0) cancelled = s.current;
         s = snap;
-        s.fallX = (float[])snap.fallX.Clone();
+        s.fallPos = (Vector2[])snap.fallPos.Clone();
         s.shots = (Shot[])snap.shots.Clone();
         transform.position = s.position;
         UpdateViews();
@@ -267,12 +272,16 @@ public class SliceBoss : MonoBehaviour, IRewindable
         s.hitDone = false;
         s.shotsFired = 0;
         FacePlayer();
-        s.chargeDir = s.facing;
+        Vector2 to = player ? (Vector2)player.transform.position - s.position : Vector2.right * s.facing;
+        s.aimDir = to.sqrMagnitude > 0.0001f ? to.normalized : Vector2.right * s.facing;
 
         // 낙하 지점은 결정 시 확정: 1곳은 플레이어 위치, 나머지는 무작위
-        float px = player ? player.transform.position.x : 0f;
-        for (int i = 0; i < s.fallX.Length; i++)
-            s.fallX[i] = Mathf.Clamp(i == 0 ? px : UnityEngine.Random.Range(-fallLimitX, fallLimitX), -fallLimitX, fallLimitX);
+        Vector2 pp = player ? (Vector2)player.transform.position : Vector2.zero;
+        for (int i = 0; i < s.fallPos.Length; i++)
+        {
+            Vector2 p = i == 0 ? pp : new Vector2(UnityEngine.Random.Range(-fallLimitX, fallLimitX), UnityEngine.Random.Range(-fallLimitY, fallLimitY));
+            s.fallPos[i] = new Vector2(Mathf.Clamp(p.x, -fallLimitX, fallLimitX), Mathf.Clamp(p.y, -fallLimitY, fallLimitY));
+        }
 
         Enter(Phase.Telegraph);
     }
@@ -282,11 +291,11 @@ public class SliceBoss : MonoBehaviour, IRewindable
         switch (P.pattern)
         {
             case Pattern.Slash:
-                if (!s.hitDone) s.hitDone = HitPlayer(SlashCenter, slashSize);
+                if (!s.hitDone) s.hitDone = HitPlayer(SlashCenter, slashSize, AimAngle);
                 break;
 
             case Pattern.Charge:
-                s.position.x = Mathf.Clamp(s.position.x + s.chargeDir * chargeSpeed * Time.fixedDeltaTime, -moveLimitX, moveLimitX);
+                s.position = ClampToRoom(s.position + s.aimDir * chargeSpeed * Time.fixedDeltaTime);
                 if (!s.hitDone) s.hitDone = HitPlayer(s.position, transform.localScale);
                 break;
 
@@ -296,8 +305,8 @@ public class SliceBoss : MonoBehaviour, IRewindable
 
             case Pattern.Fall:
                 if (s.hitDone || s.phaseTime < P.active - fallImpact) break;
-                foreach (float x in s.fallX)
-                    if (HitPlayer(FallCenter(x), new Vector2(fallWidth, fallZoneHeight)))
+                foreach (Vector2 p in s.fallPos)
+                    if (HitPlayer(p, FallSize))
                     {
                         s.hitDone = true;
                         break;
@@ -326,17 +335,17 @@ public class SliceBoss : MonoBehaviour, IRewindable
             if (!shot.alive) continue;
             shot.pos += shot.vel * dt;
             shot.age += dt;
-            if (shot.age >= shotLifetime || Mathf.Abs(shot.pos.x) > moveLimitX + 3f) shot.alive = false;
+            if (shot.age >= shotLifetime || Mathf.Abs(shot.pos.x) > moveLimitX + 3f || Mathf.Abs(shot.pos.y) > moveLimitY + 3f) shot.alive = false;
             else if (HitPlayerCircle(shot.pos, shotRadius)) shot.alive = false;
             s.shots[i] = shot;
         }
     }
 
     // 회피 중 겹쳐도 "판정 끝"으로 본다(회피 성공 이벤트가 프레임마다 반복되지 않게)
-    bool HitPlayer(Vector2 center, Vector2 size)
+    bool HitPlayer(Vector2 center, Vector2 size, float angle = 0f)
     {
         if (showHitQueries) ShowQuery(center, size);
-        foreach (var hit in Physics2D.OverlapBoxAll(center, size, 0f))
+        foreach (var hit in Physics2D.OverlapBoxAll(center, size, angle))
             if (hit.TryGetComponent(out PlayerController p))
             {
                 p.Health.TakeHit(P.damage, s.position);
@@ -369,8 +378,17 @@ public class SliceBoss : MonoBehaviour, IRewindable
         if (player) s.facing = player.transform.position.x >= s.position.x ? 1 : -1;
     }
 
-    Vector2 SlashCenter => new(s.position.x + s.facing * (transform.localScale.x * 0.5f + slashSize.x * 0.5f), FloorY + slashSize.y * 0.5f);
-    Vector2 FallCenter(float x) => new(x, FloorY + fallZoneHeight * 0.5f);
+    Vector2 SlashCenter => s.position + s.aimDir * (transform.localScale.x * 0.5f + slashSize.x * 0.5f);
+    Vector2 ClampToRoom(Vector2 p) => new(Mathf.Clamp(p.x, -moveLimitX, moveLimitX), Mathf.Clamp(p.y, -moveLimitY, moveLimitY));
+
+    // 돌진 방향으로 방 경계에 닿는 지점
+    Vector2 ChargeEnd()
+    {
+        float t = float.PositiveInfinity;
+        if (s.aimDir.x != 0f) t = Mathf.Min(t, ((s.aimDir.x > 0f ? moveLimitX : -moveLimitX) - s.position.x) / s.aimDir.x);
+        if (s.aimDir.y != 0f) t = Mathf.Min(t, ((s.aimDir.y > 0f ? moveLimitY : -moveLimitY) - s.position.y) / s.aimDir.y);
+        return ClampToRoom(s.position + s.aimDir * Mathf.Max(t, 0f));
+    }
 
     void OnDied()
     {
@@ -396,28 +414,28 @@ public class SliceBoss : MonoBehaviour, IRewindable
         return views;
     }
 
-    static void Show(SpriteRenderer sr, Vector2 center, Vector2 size, Color color)
+    static void Show(SpriteRenderer sr, Vector2 center, Vector2 size, Color color, float angle = 0f)
     {
         sr.enabled = true;
         sr.color = color;
         sr.transform.position = center;
-        sr.transform.rotation = Quaternion.identity;
+        sr.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         sr.transform.localScale = size;
     }
 
     // 판정 전: 옅은 바깥 + 판정 순간(hitAt)에 꽉 차는 채움. 판정 중: 진한 실행 색
     // "반복되는 운명": 다시 겪는 공격은 EarlyWarning초 일찍 실행 색으로 표시
-    void ShowWarning(int i, Vector2 center, Vector2 size, float since, float hitAt, Color? fill = null)
+    void ShowWarning(int i, Vector2 center, Vector2 size, float since, float hitAt, Color? fill = null, float angle = 0f)
     {
         if (since >= hitAt)
         {
-            Show(zones[i], center, size, activeColor);
+            Show(zones[i], center, size, activeColor, angle);
             return;
         }
         bool early = s.decisionId == RepeatDecisionId && since >= hitAt - EarlyWarning;
-        Show(zones[i], center, size, telegraphOuterColor);
+        Show(zones[i], center, size, telegraphOuterColor, angle);
         float k = hitAt > 0f ? Mathf.Clamp01(since / hitAt) : 1f;
-        Show(fills[i], center, size * k, early ? activeColor : fill ?? telegraphFillColor);
+        Show(fills[i], center, size * k, early ? activeColor : fill ?? telegraphFillColor, angle);
     }
 
     // 탄막: 남은 탄이 있는 동안 발사 방향(= 현재 플레이어 쪽) 조준선. 발사 직후 잠깐 실행 색
@@ -468,14 +486,14 @@ public class SliceBoss : MonoBehaviour, IRewindable
             {
                 case Pattern.Slash:
                     // 실행 단계 전체가 판정 구간
-                    ShowWarning(0, SlashCenter, slashSize, since, P.telegraph);
+                    ShowWarning(0, SlashCenter, slashSize, since, P.telegraph, angle: AimAngle);
                     break;
                 case Pattern.Charge:
                     // 예고: 돌진 경로. 실행: 보스 몸이 판정(몸 색 = activeBodyColor)
                     if (!telegraph) break;
-                    float end = s.chargeDir * moveLimitX;
-                    ShowWarning(0, new Vector2((s.position.x + end) * 0.5f, s.position.y),
-                        new Vector2(Mathf.Abs(end - s.position.x) + transform.localScale.x, transform.localScale.y), since, P.telegraph);
+                    Vector2 end = ChargeEnd();
+                    ShowWarning(0, (s.position + end) * 0.5f,
+                        new Vector2(Vector2.Distance(s.position, end) + transform.localScale.x, transform.localScale.y), since, P.telegraph, angle: AimAngle);
                     break;
                 case Pattern.Barrage:
                     ShowAim();
@@ -483,12 +501,13 @@ public class SliceBoss : MonoBehaviour, IRewindable
                 case Pattern.Fall:
                     // 판정은 착지 구간(실행 마지막 fallImpact초)뿐
                     float impactAt = P.telegraph + P.active - fallImpact;
-                    for (int i = 0; i < s.fallX.Length && i < zones.Length; i++)
+                    for (int i = 0; i < s.fallPos.Length && i < zones.Length; i++)
                     {
-                        ShowWarning(i, FallCenter(s.fallX[i]), new Vector2(fallWidth, fallZoneHeight), since, impactAt, telegraph ? telegraphFillColor : fallingColor);
+                        ShowWarning(i, s.fallPos[i], FallSize, since, impactAt, telegraph ? telegraphFillColor : fallingColor);
                         if (telegraph) continue;
+                        // 탑다운: 바위가 화면 위쪽에서 착지 지점으로 내려옴
                         float k = Mathf.Clamp01(s.phaseTime / Mathf.Max(P.active - fallImpact, 0.01f));
-                        Show(rocks[i], new Vector2(s.fallX[i], Mathf.Lerp(FloorY + fallStartHeight, FloorY + 0.5f, k)), new Vector2(fallWidth * 0.8f, 1f), RockColor);
+                        Show(rocks[i], s.fallPos[i] + Vector2.up * Mathf.Lerp(fallStartHeight, 0f, k), new Vector2(fallWidth * 0.8f, 1f), RockColor);
                     }
                     break;
             }

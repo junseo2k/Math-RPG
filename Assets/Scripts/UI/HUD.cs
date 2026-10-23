@@ -3,19 +3,38 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 전투 HUD. 배치: Docs/ArtSpecification.md 2-2 (1920×1080 기준)
+// 전투 HUD. 배치: Docs/Art/ArtSpecification.md 2-2 (1920×1080 기준)
+// 씬에 저장된 요소가 있으면 그대로 쓰고, 없으면 실행 시 코드로 만든다
 public class HUD : MonoBehaviour
 {
+    [Header("처음 생성할 때의 크기 (생성 후에는 씬에서 직접 조절)")]
     [SerializeField] Vector2 hpBarSize = new(400f, 28f);
     [SerializeField] Vector2 dashBarSize = new(200f, 14f);
+    [SerializeField] Vector2 bossBarSize = new(800f, 24f);
+
+    [Header("스테이지 칸 (SlotRow 위치를 중심으로 배치)")]
     [SerializeField] float slotSmall = 22f;
     [SerializeField] float slotBoss = 34f;
     [SerializeField] float slotGap = 50f;
-    [SerializeField] Vector2 bossBarSize = new(800f, 24f);
+    [SerializeField] Color slotCleared = new(1f, 0.82f, 0.35f);
+    [SerializeField] Color slotUpcoming = new(0.3f, 0.3f, 0.35f);
+
     [SerializeField] float clockTurn = 1f; // 시각 전진 연출 길이
 
-    static readonly Color SlotCleared = new(1f, 0.82f, 0.35f);
-    static readonly Color SlotUpcoming = new(0.3f, 0.3f, 0.35f);
+    [Header("화면 요소 (생성 시 자동 연결)")]
+    [SerializeField] RectTransform content;
+    [SerializeField] RectTransform hpFill;
+    [SerializeField] TextMeshProUGUI hpText;
+    [SerializeField] TextMeshProUGUI abilityText;
+    [SerializeField] RectTransform dashFill;
+    [SerializeField] TextMeshProUGUI timeText;
+    [SerializeField] Image clockFace;
+    [SerializeField] RectTransform clockHand;
+    [SerializeField] TextMeshProUGUI plusHour;
+    [SerializeField] RectTransform slotRow;
+    [SerializeField] RectTransform bossPanel;
+    [SerializeField] TextMeshProUGUI bossName;
+    [SerializeField] RectTransform bossFill;
 
     GameFlow flow;
     RoomManager rooms;
@@ -23,28 +42,26 @@ public class HUD : MonoBehaviour
     PotionUser potion;
     RewindSystem rewind;
 
-    RectTransform content;
-    RectTransform hpFill;
-    TextMeshProUGUI hpText;
-    TextMeshProUGUI abilityText;
-    RectTransform dashFill;
-    TextMeshProUGUI timeText;
-    RectTransform clockHand;
-    TextMeshProUGUI plusHour;
     int shownElapsed = -1;
     float handFrom;
     float handTo;
     float turnStart;
     float plusStart = -100f;
     readonly List<Image> slots = new();
-    RectTransform bossPanel;
-    TextMeshProUGUI bossName;
-    RectTransform bossFill;
 
     void Start()
     {
         flow = FindAnyObjectByType<GameFlow>();
         rooms = FindAnyObjectByType<RoomManager>();
+        EnsureBuilt();
+        ApplySprites();
+        plusHour.gameObject.SetActive(false);
+        BuildSlots();
+    }
+
+    public void EnsureBuilt()
+    {
+        if (content) return;
         content = GameUI.MakeRect("Content", transform);
         GameUI.Fill(content);
         BuildTopLeft();
@@ -56,56 +73,49 @@ public class HUD : MonoBehaviour
     {
         var hpBg = GameUI.MakeImage(content, "HpBg", GameUI.Dim);
         GameUI.Place(hpBg.rectTransform, new Vector2(0f, 1f), new Vector2(40f, -30f), hpBarSize);
-        var fill = GameUI.MakeImage(hpBg.transform, "HpFill", GameUI.Gold);
-        hpFill = GameUI.Place(fill.rectTransform, new Vector2(0f, 0.5f), Vector2.zero, hpBarSize);
+        hpFill = GameUI.MakeImage(hpBg.transform, "HpFill", GameUI.Gold).rectTransform;
+        GameUI.SetFill(hpFill, 1f);
         hpText = GameUI.MakeText(hpBg.transform, "", 24f, Color.white);
+        hpText.name = "HpText";
         GameUI.Fill(hpText.rectTransform);
 
         abilityText = GameUI.MakeText(content, "", 28f, Color.white, TextAlignmentOptions.Left);
+        abilityText.name = "InfoText";
         GameUI.Place(abilityText.rectTransform, new Vector2(0f, 1f), new Vector2(40f, -100f), new Vector2(900f, 40f));
 
         var dashLabel = GameUI.MakeText(content, "대시", 24f, Color.white, TextAlignmentOptions.Left);
+        dashLabel.name = "DashLabel";
         GameUI.Place(dashLabel.rectTransform, new Vector2(0f, 1f), new Vector2(40f, -145f), new Vector2(80f, 30f));
         var dashBg = GameUI.MakeImage(content, "DashBg", GameUI.Dim);
         GameUI.Place(dashBg.rectTransform, new Vector2(0f, 1f), new Vector2(110f, -153f), dashBarSize);
-        var dashFillImage = GameUI.MakeImage(dashBg.transform, "DashFill", GameUI.Gold);
-        dashFill = GameUI.Place(dashFillImage.rectTransform, new Vector2(0f, 0.5f), Vector2.zero, dashBarSize);
+        dashFill = GameUI.MakeImage(dashBg.transform, "DashFill", GameUI.Gold).rectTransform;
+        GameUI.SetFill(dashFill, 1f);
     }
 
     void BuildTopCenter()
     {
         timeText = GameUI.MakeText(content, "", 40f, Color.white);
+        timeText.name = "TimeText";
         GameUI.Place(timeText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -20f), new Vector2(600f, 56f));
 
-        // 천문 시계(임시 도형): 원 + 바늘
-        var faceArt = AssetLibrary.LoadSprite("ui_clock_face");
-        var face = GameUI.MakeImage(content, "ClockFace", faceArt ? Color.white : GameUI.Dim, faceArt ? faceArt : AccumulationBoss.CircleSprite());
-        GameUI.Place(face.rectTransform, new Vector2(0.5f, 1f), new Vector2(-260f, -48f), new Vector2(56f, 56f));
-        face.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-        var handArt = AssetLibrary.LoadSprite("ui_clock_hand");
-        clockHand = GameUI.MakeImage(face.transform, "Hand", handArt ? Color.white : GameUI.Gold, handArt).rectTransform;
+        // 천문 시계(임시 도형): 원 + 바늘. 그림은 ApplySprites에서
+        bool faceArt = AssetLibrary.LoadSprite("ui_clock_face");
+        clockFace = GameUI.MakeImage(content, "ClockFace", faceArt ? Color.white : GameUI.Dim);
+        GameUI.Place(clockFace.rectTransform, new Vector2(0.5f, 1f), new Vector2(-260f, -48f), new Vector2(56f, 56f));
+        clockFace.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        bool handArt = AssetLibrary.LoadSprite("ui_clock_hand");
+        clockHand = GameUI.MakeImage(clockFace.transform, "Hand", handArt ? Color.white : GameUI.Gold).rectTransform;
         clockHand.anchorMin = clockHand.anchorMax = new Vector2(0.5f, 0.5f);
         clockHand.pivot = new Vector2(0.5f, 0f);
         clockHand.anchoredPosition = Vector2.zero;
         clockHand.sizeDelta = new Vector2(4f, 24f);
 
         plusHour = GameUI.MakeText(content, "+1시간", 28f, GameUI.Gold);
+        plusHour.name = "PlusHour";
         GameUI.Place(plusHour.rectTransform, new Vector2(0.5f, 1f), new Vector2(-260f, -84f), new Vector2(160f, 36f));
-        plusHour.gameObject.SetActive(false);
 
-        float width = (flow ? flow.StageCount - 1 : 0) * slotGap;
-        for (int i = 1; flow && i <= flow.StageCount; i++)
-        {
-            bool boss = flow.IsBossStageAt(i);
-            float size = boss ? slotBoss : slotSmall;
-            var slotArt = AssetLibrary.LoadSprite(boss ? "ui_stage_boss" : "ui_stage_room");
-            var slot = GameUI.MakeImage(content, $"Slot{i}", SlotUpcoming, slotArt ? slotArt : RoomManager.Square);
-            GameUI.Place(slot.rectTransform, new Vector2(0.5f, 1f), new Vector2(-width / 2f + (i - 1) * slotGap, -100f), new Vector2(size, size));
-            slot.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            // 보스 방 = 마름모(모양으로 구분)
-            if (boss && !slotArt) slot.rectTransform.localRotation = Quaternion.Euler(0f, 0f, 45f);
-            slots.Add(slot);
-        }
+        slotRow = GameUI.MakeRect("SlotRow", content);
+        GameUI.Place(slotRow, new Vector2(0.5f, 1f), new Vector2(0f, -100f), Vector2.zero);
     }
 
     void BuildBossBar()
@@ -113,11 +123,41 @@ public class HUD : MonoBehaviour
         bossPanel = GameUI.MakeRect("BossPanel", content);
         GameUI.Place(bossPanel, new Vector2(0.5f, 0f), new Vector2(0f, 50f), new Vector2(bossBarSize.x, 80f));
         bossName = GameUI.MakeText(bossPanel, "", 32f, Color.white);
+        bossName.name = "BossName";
         GameUI.Place(bossName.rectTransform, new Vector2(0.5f, 1f), Vector2.zero, new Vector2(bossBarSize.x, 44f));
         var bg = GameUI.MakeImage(bossPanel, "BossBg", GameUI.Dim);
         GameUI.Place(bg.rectTransform, new Vector2(0.5f, 0f), Vector2.zero, bossBarSize);
-        var fill = GameUI.MakeImage(bg.transform, "BossFill", new Color(0.85f, 0.3f, 0.3f));
-        bossFill = GameUI.Place(fill.rectTransform, new Vector2(0f, 0.5f), Vector2.zero, bossBarSize);
+        bossFill = GameUI.MakeImage(bg.transform, "BossFill", new Color(0.85f, 0.3f, 0.3f)).rectTransform;
+        GameUI.SetFill(bossFill, 1f);
+    }
+
+    // 직접 넣은 스프라이트는 두고, 비어 있으면 그림 또는 임시 도형으로
+    void ApplySprites()
+    {
+        if (!clockFace.sprite)
+        {
+            var art = AssetLibrary.LoadSprite("ui_clock_face");
+            clockFace.sprite = art ? art : AccumulationBoss.CircleSprite();
+        }
+        var hand = clockHand.GetComponent<Image>();
+        if (hand && !hand.sprite) hand.sprite = AssetLibrary.LoadSprite("ui_clock_hand");
+    }
+
+    // 스테이지 수는 실행 중에만 알 수 있어 칸은 매번 만든다
+    void BuildSlots()
+    {
+        float width = (flow ? flow.StageCount - 1 : 0) * slotGap;
+        for (int i = 1; flow && i <= flow.StageCount; i++)
+        {
+            bool boss = flow.IsBossStageAt(i);
+            float size = boss ? slotBoss : slotSmall;
+            var slotArt = AssetLibrary.LoadSprite(boss ? "ui_stage_boss" : "ui_stage_room");
+            var slot = GameUI.MakeImage(slotRow, $"Slot{i}", slotUpcoming, slotArt ? slotArt : RoomManager.Square);
+            GameUI.Place(slot.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(-width / 2f + (i - 1) * slotGap, 0f), new Vector2(size, size));
+            // 보스 방 = 마름모(모양으로 구분)
+            if (boss && !slotArt) slot.rectTransform.localRotation = Quaternion.Euler(0f, 0f, 45f);
+            slots.Add(slot);
+        }
     }
 
     void Update()
@@ -129,14 +169,14 @@ public class HUD : MonoBehaviour
 
         UpdateHp();
         abilityText.text = InfoText();
-        if (player) dashFill.sizeDelta = new Vector2(dashBarSize.x * player.DashReadyRatio, dashBarSize.y);
+        if (player) GameUI.SetFill(dashFill, player.DashReadyRatio);
 
         timeText.text = $"{flow.Persistent.day}일째   {flow.TimeText}";
         UpdateClock();
         for (int i = 0; i < slots.Count; i++)
         {
             int stage = i + 1;
-            slots[i].color = stage < flow.Stage ? SlotCleared : stage == flow.Stage ? Color.white : SlotUpcoming;
+            slots[i].color = stage < flow.Stage ? slotCleared : stage == flow.Stage ? Color.white : slotUpcoming;
         }
 
         var boss = rooms ? rooms.CurrentBoss : null;
@@ -145,7 +185,7 @@ public class HUD : MonoBehaviour
         if (bossAlive)
         {
             bossName.text = rooms.CurrentBossName;
-            bossFill.sizeDelta = new Vector2(bossBarSize.x * boss.Hp / boss.MaxHp, bossBarSize.y);
+            GameUI.SetFill(bossFill, (float)boss.Hp / boss.MaxHp);
         }
     }
 
@@ -183,8 +223,9 @@ public class HUD : MonoBehaviour
         if (!potion) potion = player.GetComponent<PotionUser>();
         if (!rewind) rewind = FindAnyObjectByType<RewindSystem>();
         string rewindText = !rewind ? "-" : rewind.CooldownRemaining <= 0f ? "준비" : $"{rewind.CooldownRemaining:0.0}초";
+        string rewindKey = rewind ? rewind.RewindKeyName : "-";
         string shield = player.Health.Shield > 0 ? $"  보호막 {player.Health.Shield}" : "";
-        return $"{flow.Run.gold}G  기억 조각 {flow.Persistent.memoryShards}  포션[Q] {(potion ? potion.Count : 0)}  역행[S] {rewindText}{shield}";
+        return $"{flow.Run.gold}G  기억 조각 {flow.Persistent.memoryShards}  포션[Q] {(potion ? potion.Count : 0)}  역행[{rewindKey}] {rewindText}{shield}";
     }
 
     // HP 100 규모라 칸 대신 바 + 숫자
@@ -192,7 +233,7 @@ public class HUD : MonoBehaviour
     {
         if (!player) return;
         var health = player.Health;
-        hpFill.sizeDelta = new Vector2(hpBarSize.x * health.Hp / Mathf.Max(health.MaxHp, 1), hpBarSize.y);
+        GameUI.SetFill(hpFill, (float)health.Hp / Mathf.Max(health.MaxHp, 1));
         hpText.text = $"{health.Hp} / {health.MaxHp}";
     }
 }

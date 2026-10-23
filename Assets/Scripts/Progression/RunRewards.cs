@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// 보상·경제 규칙과 수치: 특성 추첨, 유물, G, 상점, 영구 성장. 규칙: Docs/CombatDecisions.md 9~12장
+// 보상·경제 규칙과 수치: 특성 추첨, 유물, G, 상점, 영구 성장. 규칙: Docs/SliceA/CombatDecisions.md 9~12장
 // 상태 자체는 RunState(판)·PersistentState(유지)에 있고, 여기는 규칙과 인스펙터 수치만 가진다
 public class RunRewards : MonoBehaviour
 {
@@ -44,9 +44,50 @@ public class RunRewards : MonoBehaviour
 
     public void NotifyChanged() => Changed?.Invoke();
 
+    static readonly TraitId[] SolarTraits = { TraitId.SolarWind, TraitId.WideExpansion, TraitId.LingeringSun, TraitId.WanderingSun, TraitId.DelayedRelease };
+
+    // 씬에 저장된 목록에는 나중에 추가된 정의가 없을 수 있어 카탈로그에서 보충
+    void Awake()
+    {
+        foreach (var t in RewardCatalog.Traits())
+            if (Trait(t.id) == null) traits.Add(t);
+        foreach (var r in RewardCatalog.Relics())
+            if (Relic(r.id) == null) relics.Add(r);
+        ApplySolarSettings();
+    }
+
+    // 태양핵 특성·유물의 카드 수치와 설명을 SolarCoreSettings 기준으로 채움 (수치 정의는 설정 에셋 한 곳)
+    void ApplySolarSettings()
+    {
+        var s = SolarCoreSettings.Instance;
+        SetTrait(TraitId.SolarWind, s.solarWind.extraMoveSpeedBonus, "태양핵 이동 속도 보너스 +{0:0.#%}p");
+        SetTrait(TraitId.WideExpansion, s.wideExpansion.radiusBonus, "태양핵 효과 반경 +{0:0.#%}");
+        SetTrait(TraitId.LingeringSun, s.lingeringSun.extraLifetime, "태양핵 유지시간 +{0:0.#}초");
+        var w = s.wanderingSun;
+        SetTrait(TraitId.WanderingSun, 1f,
+            $"태양핵이 플레이어를 따라 이동\n반경 {w.radius:0.#}m, 이동 +{w.moveSpeedBonus:0.#%} 공격 +{w.attackBonus:0.#%} 방어 +{w.damageReduction:0.#%}");
+        var d = s.delayedRelease;
+        SetTrait(TraitId.DelayedRelease, 1f, $"태양핵 소멸 시 범위 내 적\n{d.duration:0.#}초간 이동 속도 -{d.slowRatio:0.#%}");
+
+        var sun = s.brokenSundial;
+        if (Relic(RelicId.BrokenSundial) is { } sundial)
+            sundial.description = $"태양핵 소멸 위치에 {sun.duration:0.#}초간 잔광 영역\n(공격·방어 보너스 {sun.efficiency:0.#%})";
+        var c = s.solarConstellation;
+        if (Relic(RelicId.SolarConstellation) is { } constellation)
+            constellation.description = $"태양핵 범위에 진입하면 일출 게이지 {c.chargeAmount:0.#%} 충전\n(태양핵당 {c.maxPerCore}회)";
+    }
+
+    void SetTrait(TraitId id, float value, string format)
+    {
+        if (Trait(id) is not { } def) return;
+        def.levels = new[] { value };
+        def.format = format;
+    }
+
     // ---- 특성 ----
     public TraitDef Trait(TraitId id) => traits.Find(t => t.id == id);
     public int Level(TraitId id) => Run.traits.TryGetValue(id, out int lv) ? lv : 0;
+    static int MaxLevel(TraitDef def) => def.maxLevel > 0 ? def.maxLevel : 3;
 
     public float TraitValue(TraitId id)
     {
@@ -55,12 +96,13 @@ public class RunRewards : MonoBehaviour
         return lv > 0 && def != null ? def.levels[Mathf.Min(lv, def.levels.Length) - 1] : 0f;
     }
 
-    // 중복 없이, Lv.3 제외, 후보별 동일 확률 (CombatDecisions 9장)
+    // 중복 없이, 최대 레벨 제외, 후보별 동일 확률 (CombatDecisions 9장)
     public List<RewardOffer> DrawTraits(bool rewindOnly)
     {
+        ApplySolarSettings(); // 플레이 중 설정 변경도 카드 문구에 반영
         var pool = new List<TraitDef>();
         foreach (var t in traits)
-            if (Level(t.id) < 3 && (!rewindOnly || t.rewindOnly)) pool.Add(t);
+            if (Level(t.id) < MaxLevel(t) && (!rewindOnly || t.rewindOnly)) pool.Add(t);
         Shuffle(pool);
 
         var offers = new List<RewardOffer>();
@@ -74,7 +116,7 @@ public class RunRewards : MonoBehaviour
                 rewindOnly = t.rewindOnly,
                 title = t.displayName,
                 description = string.Format(t.format, t.levels[lv]),
-                badge = lv == 0 ? "신규 Lv.1" : $"Lv.{lv} → Lv.{lv + 1}",
+                badge = (t.rare ? "희귀 · " : "") + (MaxLevel(t) == 1 ? "신규" : lv == 0 ? "신규 Lv.1" : $"Lv.{lv} → Lv.{lv + 1}"),
             });
         }
         return offers;
@@ -82,7 +124,7 @@ public class RunRewards : MonoBehaviour
 
     public void ChooseTrait(TraitId id)
     {
-        Run.traits[id] = Mathf.Min(Level(id) + 1, 3);
+        Run.traits[id] = Mathf.Min(Level(id) + 1, Trait(id) is { } def ? MaxLevel(def) : 3);
         Changed?.Invoke();
     }
 
@@ -96,7 +138,7 @@ public class RunRewards : MonoBehaviour
     {
         var pool = new List<RelicDef>();
         foreach (var r in relics)
-            if (!HasRelic(r.id) && (exclude == null || !exclude.Contains(r.id))) pool.Add(r);
+            if (!r.excludeFromPool && !HasRelic(r.id) && (exclude == null || !exclude.Contains(r.id))) pool.Add(r);
         return pool.Count == 0 ? null : pool[UnityEngine.Random.Range(0, pool.Count)];
     }
 
@@ -110,6 +152,7 @@ public class RunRewards : MonoBehaviour
     // ---- 상점 ----
     public void StockShop()
     {
+        ApplySolarSettings();
         Run.shopStock.Clear();
         for (int i = 0; i < shopRelicCount; i++)
         {
@@ -177,13 +220,24 @@ public class RunRewards : MonoBehaviour
         }
     }
 
-    // 디버그: F11 = G +100, 기억 조각 +10
+    // 디버그: F11 = G +100, 기억 조각 +10 / F12 = 태양핵 특성 5종·유물 2종, Shift+F12 = 유물 2종만
     void Update()
     {
         var kb = Keyboard.current;
-        if (kb == null || !kb.f11Key.wasPressedThisFrame || !flow) return;
-        Run.gold += 100;
-        AddShards(10);
+        if (kb == null || !flow) return;
+        if (kb.f11Key.wasPressedThisFrame)
+        {
+            Run.gold += 100;
+            AddShards(10);
+        }
+        if (kb.f12Key.wasPressedThisFrame)
+        {
+            // Shift+F12 = 유물만 (유랑 없이 성좌 시험용)
+            if (!kb.shiftKey.isPressed)
+                foreach (var id in SolarTraits) ChooseTrait(id);
+            AddRelic(RelicId.BrokenSundial);
+            AddRelic(RelicId.SolarConstellation);
+        }
     }
 
     void OnGUI()

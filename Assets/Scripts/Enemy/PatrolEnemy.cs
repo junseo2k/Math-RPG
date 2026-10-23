@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-// 근접 순찰형 일반 적. 규칙: Docs/NormalRoom.md 2장
+// 근접 순찰형 일반 적. 규칙: Docs/SliceA/NormalRoom.md 2장
 // 역행 대응: 공격은 코루틴 대신 단계·경과 시간으로 진행, 처치 시 파괴 대신 비활성화(역행으로 되살아남)
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D), typeof(Health))]
 public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
@@ -11,16 +11,13 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
     [SerializeField] float patrolSpeed = 2f;
     [SerializeField] float chaseSpeed = 3.5f;
     [SerializeField] float detectRange = 6f;
-    [SerializeField] float detectHeight = 1.5f;
     [SerializeField] float attackRange = 1.2f;
     [SerializeField] float windup = 0.5f;
     [SerializeField] int slashDamage = 8;
     [SerializeField] float recover = 1f;
     [SerializeField] float hitStun = 0.2f;
-    [SerializeField] float gravityScale = 3f;
-    [SerializeField] float fallLimitY = -10f;
 
-    // 처치 또는 방 밖 낙하 시 1회
+    // 처치 시 1회
     public event Action Removed;
 
     enum AttackPhase { None, Windup, Recover }
@@ -31,11 +28,13 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
         public bool removed;
         public Vector2 position;
         public Vector2 velocity;
-        public int dir;
+        public Vector2 dir;
         public AttackPhase attack;
         public float attackTime;
         public float stunLeft;
         public float frozenLeft;
+        public float slowLeft;
+        public float slowRatio;
         public Color color;
     }
 
@@ -50,23 +49,33 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
     Health health;
     SpriteAnimator anim;
     PlayerController player;
-    int dir = 1;
+    // 이동·공격 방향 단위 벡터. 순찰은 좌우 왕복으로 시작
+    Vector2 dir = Vector2.right;
     AttackPhase attack;
     float attackTime;
     bool removed;
     float stunUntil;
     float frozenUntil;
     bool wasFrozen;
+    float slowUntil;
+    float slowRatio;
 
     bool Attacking => attack != AttackPhase.None;
     bool Frozen => Time.time < frozenUntil;
+    float SpeedScale => Time.time < slowUntil ? 1f - slowRatio : 1f;
 
     public void Freeze(float seconds) => frozenUntil = Mathf.Max(frozenUntil, Time.time + seconds);
+
+    public void Slow(float ratio, float seconds)
+    {
+        slowRatio = Mathf.Clamp01(ratio);
+        slowUntil = Mathf.Max(slowUntil, Time.time + seconds);
+    }
 
     void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        body.gravityScale = gravityScale;
+        body.gravityScale = 0f;
         body.freezeRotation = true;
         box = GetComponent<BoxCollider2D>();
         view = GetComponent<SpriteRenderer>();
@@ -93,6 +102,8 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
         attackTime = attackTime,
         stunLeft = Mathf.Max(stunUntil - Time.time, 0f),
         frozenLeft = Mathf.Max(frozenUntil - Time.time, 0f),
+        slowLeft = Mathf.Max(slowUntil - Time.time, 0f),
+        slowRatio = slowRatio,
         color = currentColor,
     };
 
@@ -109,6 +120,8 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
         attackTime = s.attackTime;
         stunUntil = Time.time + s.stunLeft;
         frozenUntil = Time.time + s.frozenLeft;
+        slowUntil = Time.time + s.slowLeft;
+        slowRatio = s.slowRatio;
         wasFrozen = false;
         SetColor(s.color);
         if (view && !Frozen) view.color = currentColor;
@@ -116,14 +129,9 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
 
     void Update()
     {
-        if (transform.position.y < fallLimitY)
-        {
-            Remove();
-            return;
-        }
         if (Frozen)
         {
-            body.linearVelocity = new Vector2(0f, body.linearVelocity.y);
+            body.linearVelocity = Vector2.zero;
             if (view) view.color = FrozenColor;
             wasFrozen = true;
             return;
@@ -135,13 +143,13 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
         }
         if (Attacking)
         {
-            body.linearVelocity = new Vector2(0f, body.linearVelocity.y);
+            body.linearVelocity = Vector2.zero;
             TickAttack();
             return;
         }
         if (Time.time < stunUntil)
         {
-            body.linearVelocity = new Vector2(0f, body.linearVelocity.y);
+            body.linearVelocity = Vector2.zero;
             return;
         }
         if (!player) player = FindAnyObjectByType<PlayerController>();
@@ -151,12 +159,12 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
         if (player && !player.Health.IsDead)
         {
             Vector2 delta = player.transform.position - transform.position;
-            if (Mathf.Abs(delta.x) <= detectRange && Mathf.Abs(delta.y) <= detectHeight)
+            if (delta.magnitude <= detectRange)
             {
                 chasing = true;
                 speed = chaseSpeed;
-                if (delta.x != 0f) dir = delta.x > 0f ? 1 : -1;
-                float gap = Mathf.Abs(delta.x) - box.bounds.extents.x - player.GetComponent<Collider2D>().bounds.extents.x;
+                if (delta != Vector2.zero) dir = delta.normalized;
+                float gap = delta.magnitude - box.bounds.extents.x - player.GetComponent<Collider2D>().bounds.extents.x;
                 if (gap <= attackRange)
                 {
                     StartAttack();
@@ -170,25 +178,22 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
             if (chasing) speed = 0f;
             else dir = -dir;
         }
-        body.linearVelocity = new Vector2(dir * speed, body.linearVelocity.y);
+        body.linearVelocity = dir * speed * SpeedScale;
     }
 
     void LateUpdate()
     {
         if (!anim) return;
-        anim.Face(dir);
-        if (!Attacking) anim.SetLoop(Mathf.Abs(body.linearVelocity.x) > 0.1f ? "walk" : "idle");
+        anim.Face(dir.x < 0f ? -1 : 1);
+        if (!Attacking) anim.SetLoop(body.linearVelocity.sqrMagnitude > 0.01f ? "walk" : "idle");
     }
 
-    // 앞이 벽이거나 발판 끝이면 true
+    // 진행 방향 앞이 벽이면 true
     bool Blocked()
     {
         Vector2 pos = transform.position;
-        Vector2 ext = box.bounds.extents;
-        bool wall = HitsGround(new Vector2(pos.x + dir * (ext.x + 0.02f), pos.y), Vector2.right * dir, 0.15f);
-        bool grounded = Mathf.Abs(body.linearVelocity.y) < 0.01f;
-        bool ledge = grounded && !HitsGround(new Vector2(pos.x + dir * (ext.x + 0.1f), pos.y - ext.y + 0.05f), Vector2.down, 0.3f);
-        return wall || ledge;
+        float ext = box.bounds.extents.x;
+        return HitsGround(pos + dir * (ext + 0.02f), dir, 0.15f);
     }
 
     // 지형(리지드바디 없는 고체 콜라이더)만 감지
@@ -226,12 +231,13 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
 
     void Slash()
     {
-        Vector2 center = (Vector2)transform.position + new Vector2(dir * (box.bounds.extents.x + attackRange * 0.5f), 0f);
+        Vector2 center = (Vector2)transform.position + dir * (box.bounds.extents.x + attackRange * 0.5f);
         Vector2 size = new(attackRange, box.bounds.size.y);
-        foreach (var hit in Physics2D.OverlapBoxAll(center, size, 0f))
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        foreach (var hit in Physics2D.OverlapBoxAll(center, size, angle))
             if (hit.TryGetComponent(out PlayerController target))
                 target.Health.TakeHit(slashDamage, transform.position);
-        ShowSlash(center, size);
+        ShowSlash(center, size, angle);
         if (anim)
         {
             anim.PlayOnce("slash");
@@ -247,12 +253,13 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
         if (view && !Frozen) view.color = c;
     }
 
-    static void ShowSlash(Vector2 center, Vector2 size)
+    static void ShowSlash(Vector2 center, Vector2 size, float angle)
     {
         var slash = new GameObject("Slash").AddComponent<SpriteRenderer>();
         slash.sprite = RoomManager.Square;
         slash.color = new Color(1f, 1f, 1f, 0.5f);
         slash.transform.position = center;
+        slash.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         slash.transform.localScale = size;
         Destroy(slash.gameObject, 0.1f);
     }

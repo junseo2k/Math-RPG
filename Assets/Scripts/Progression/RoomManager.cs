@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// 스테이지마다 방을 코드로 생성한다. 규칙: Docs/NormalRoom.md
+// 스테이지마다 방을 코드로 생성한다. 규칙: Docs/SliceA/NormalRoom.md
 public class RoomManager : MonoBehaviour, IRewindable
 {
     struct Snapshot
@@ -18,7 +18,21 @@ public class RoomManager : MonoBehaviour, IRewindable
     }
 
     [SerializeField] int[] enemiesPerRoom = { 2, 3, 3, 4, 4, 5 };
-    [SerializeField] float safeDistanceFromEntrance = 21f;
+    [SerializeField] float safeDistanceFromEntrance = 10f;
+
+    [System.Serializable]
+    struct AnimSpeed
+    {
+        public string state;
+        public float fps;
+    }
+
+    [Header("플레이어 애니메이션 속도 (초당 프레임)")]
+    [SerializeField] AnimSpeed[] playerAnimSpeeds =
+    {
+        new() { state = "idle", fps = 5f },
+        new() { state = "run", fps = 10f },
+    };
 
     static Sprite square;
     public static Sprite Square => square
@@ -26,6 +40,7 @@ public class RoomManager : MonoBehaviour, IRewindable
         : square = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 4, 4), new Vector2(0.5f, 0.5f), 4, 0, SpriteMeshType.FullRect);
 
     static readonly Color GroundColor = Color.gray;
+    static readonly Color FloorColor = new(0.18f, 0.18f, 0.2f);
     static readonly Color EnemyColor = new(0.55f, 0.6f, 0.85f);
 
     public Health CurrentBoss { get; private set; }
@@ -48,7 +63,7 @@ public class RoomManager : MonoBehaviour, IRewindable
 
     void Awake()
     {
-        player = CreatePlayer(new Vector2(RoomLayouts.Arena.EntranceX, 0.5f));
+        player = CreatePlayer(RoomLayouts.Arena.Entrance);
         playerBody = player.GetComponent<Rigidbody2D>();
 
         var cam = Camera.main;
@@ -118,7 +133,7 @@ public class RoomManager : MonoBehaviour, IRewindable
 
         var spots = new List<Vector2>();
         foreach (var s in layout.Spawns)
-            if (s.x >= layout.EntranceX + safeDistanceFromEntrance) spots.Add(s);
+            if (Vector2.Distance(s, layout.Entrance) >= safeDistanceFromEntrance) spots.Add(s);
         Shuffle(spots);
         count = Mathf.Min(count, spots.Count);
 
@@ -137,8 +152,8 @@ public class RoomManager : MonoBehaviour, IRewindable
     {
         if (exit) exit.SetOpen(true);
         if (!flow || flow.IsBossStage || !flow.IsBossStageAt(flow.Stage + 1) || currentLayout == null) return;
-        // 주 경로(입구 → 출구)에서 벗어난 입구 뒤쪽
-        var go = Sized("ShopPassage", new Vector2(currentLayout.EntranceX - 1.2f, 1f), new Vector2(1f, 2f), Square, ShopPassage.HiddenColor);
+        // 주 경로(입구 → 출구)에서 벗어난 입구 쪽 위 구석
+        var go = Sized("ShopPassage", currentLayout.Entrance + new Vector2(-0.5f, currentLayout.Height / 2f - 1.5f), new Vector2(1f, 2f), Square, ShopPassage.HiddenColor);
         go.AddComponent<ShopPassage>();
     }
 
@@ -167,7 +182,7 @@ public class RoomManager : MonoBehaviour, IRewindable
 
     void SpawnBoss<T>(string displayName, string art, Color color) where T : Component
     {
-        var boss = Block(typeof(T).Name, new Vector2(6f, 1f), new Vector2(2f, 2f), color);
+        var boss = Block(typeof(T).Name, new Vector2(6f, 0f), new Vector2(2f, 2f), color);
         boss.GetComponent<BoxCollider2D>().isTrigger = true;
         AssetLibrary.ApplyCharacter(boss.GetComponent<SpriteRenderer>(), art + "_idle");
         boss.AddComponent<SpriteAnimator>().BaseName = art;
@@ -196,18 +211,23 @@ public class RoomManager : MonoBehaviour, IRewindable
         room = new GameObject($"Room_{layout.Name}").transform;
         exit = null;
 
-        float half = layout.Length / 2f;
-        Terrain("Floor", new Vector2(0f, -0.5f), new Vector2(layout.Length + 2f, 1f));
-        Terrain("WallL", new Vector2(-half - 0.5f, 5f), new Vector2(1f, 12f));
-        Terrain("WallR", new Vector2(half + 0.5f, 5f), new Vector2(1f, 12f));
-        foreach (var (center, size) in layout.Blocks) Terrain("Ground", center, size);
+        float halfW = layout.Length / 2f;
+        float halfH = layout.Height / 2f;
+        Floor(new Vector2(layout.Length, layout.Height));
+        Terrain("WallL", new Vector2(-halfW - 0.5f, 0f), new Vector2(1f, layout.Height + 2f));
+        Terrain("WallR", new Vector2(halfW + 0.5f, 0f), new Vector2(1f, layout.Height + 2f));
+        Terrain("WallT", new Vector2(0f, halfH + 0.5f), new Vector2(layout.Length, 1f));
+        Terrain("WallB", new Vector2(0f, -halfH - 0.5f), new Vector2(layout.Length, 1f));
+        foreach (var (center, size) in layout.Blocks) Terrain("Block", center, size);
 
-        player.transform.position = new Vector2(layout.EntranceX, 0.5f);
+        player.transform.position = layout.Entrance;
         playerBody.linearVelocity = Vector2.zero;
         if (follow)
         {
-            follow.MinX = -half;
-            follow.MaxX = half;
+            follow.MinX = -halfW;
+            follow.MaxX = halfW;
+            follow.MinY = -halfH;
+            follow.MaxY = halfH;
         }
     }
 
@@ -236,7 +256,7 @@ public class RoomManager : MonoBehaviour, IRewindable
 
     RoomExit CreateExit(RoomLayout layout)
     {
-        var go = Sized("Exit", new Vector2(layout.ExitX, 1f), new Vector2(1f, 2f), RoomManager.Square, Color.white);
+        var go = Sized("Exit", layout.ExitPos, new Vector2(1f, 2f), RoomManager.Square, Color.white);
         return go.AddComponent<RoomExit>();
     }
 
@@ -248,12 +268,15 @@ public class RoomManager : MonoBehaviour, IRewindable
         sr.sprite = Square;
         sr.color = new Color(1f, 0.8f, 0.3f);
         sr.sortingOrder = 1;
-        AssetLibrary.ApplyCharacter(sr, "chr_player_idle");
-        go.AddComponent<SpriteAnimator>().BaseName = "chr_player";
-        go.AddComponent<BoxCollider2D>();
+        if (!AssetLibrary.ApplyCharacter(sr, "chr_player_idle_s")) AssetLibrary.ApplyCharacter(sr, "chr_player_idle");
+        var anim = go.AddComponent<SpriteAnimator>();
+        anim.BaseName = "chr_player";
+        foreach (var s in playerAnimSpeeds) anim.SetFps(s.state, s.fps);
+        // 그림(48px, 투명 여백 포함) 크기를 따라가지 않게 기존 판정 1x1 유지
+        go.AddComponent<BoxCollider2D>().size = Vector2.one;
         var controller = go.AddComponent<PlayerController>();
         go.AddComponent<PlayerAttack>();
-        // 시험판 A: 시작 능력(AbilityEffects) 미사용. S키는 역행
+        // 시험판 A: 시작 능력(AbilityEffects) 미사용. 우클릭은 역행
         go.AddComponent<DeferredDamage>();
         go.AddComponent<PotionUser>();
         go.AddComponent<RewardEffects>();
@@ -274,11 +297,20 @@ public class RoomManager : MonoBehaviour, IRewindable
         return go;
     }
 
-    // 지형: 크기를 스케일이 아니라 충돌·타일 크기로 지정(타일 그림이 늘어나지 않게)
+    // 지형(벽·기둥): 크기를 스케일이 아니라 충돌·타일 크기로 지정(타일 그림이 늘어나지 않게)
     void Terrain(string name, Vector2 pos, Vector2 size)
     {
-        var tile = AssetLibrary.LoadSprite("tile_ground_ch1");
+        var tile = AssetLibrary.LoadSprite("tile_wall_ch1");
         Sized(name, pos, size, tile ? tile : Square, tile ? Color.white : GroundColor);
+    }
+
+    // 바닥: 충돌 없음, 모든 것 아래에 그림
+    void Floor(Vector2 size)
+    {
+        var tile = AssetLibrary.LoadSprite("tile_ground_ch1");
+        var go = Sized("Floor", Vector2.zero, size, tile ? tile : Square, tile ? Color.white : FloorColor);
+        Destroy(go.GetComponent<BoxCollider2D>());
+        go.GetComponent<SpriteRenderer>().sortingOrder = -10;
     }
 
     GameObject Sized(string name, Vector2 pos, Vector2 size, Sprite sprite, Color color)

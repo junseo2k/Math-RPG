@@ -1,31 +1,50 @@
 using System.Collections;
 using UnityEngine;
 
-// 역행 보스 지면 파동: 전진 → 벽에서 멈춤(반시계 나선) → 보스 쪽으로 역재생. 규칙: Docs/Bosses/03_Reversal.md
+// 역행 보스 고리 파동: 보스 중심으로 퍼짐 → 최대 반경에서 멈춤(반시계 나선) → 보스 쪽으로 오므라듦. 규칙: Docs/Bosses/03_Reversal.md
+[RequireComponent(typeof(LineRenderer))]
 public class GroundWave : MonoBehaviour
 {
     static readonly Color SpiralColor = new(0.3f, 0.9f, 0.9f, 0.6f);
+    const int Segments = 48;
 
-    int dir;
     float speed;
     float returnSpeed;
     float wallPause;
     int damage;
+    float maxRadius;
+    float thickness;
     Transform owner;
-    float originX;
+    Vector3 origin;
+    LineRenderer line;
+    float radius;
     bool returning;
     bool paused;
     bool hitThisPass;
 
-    public void Init(int dir, float speed, float returnSpeed, float wallPause, int damage, Transform owner)
+    Vector3 Center => owner ? owner.position : origin;
+
+    public void Init(float startRadius, float maxRadius, float thickness, float speed, float returnSpeed, float wallPause, int damage, Transform owner, Color color)
     {
-        this.dir = dir;
+        radius = startRadius;
+        this.maxRadius = maxRadius;
+        this.thickness = thickness;
         this.speed = speed;
         this.returnSpeed = returnSpeed;
         this.wallPause = wallPause;
         this.damage = damage;
         this.owner = owner;
-        originX = transform.position.x;
+        origin = owner.position;
+
+        line = GetComponent<LineRenderer>();
+        line.loop = true;
+        line.useWorldSpace = true;
+        line.positionCount = Segments;
+        line.widthMultiplier = thickness;
+        line.material = new Material(Shader.Find("Sprites/Default"));
+        line.startColor = line.endColor = color;
+        line.sortingOrder = 2;
+        Draw();
     }
 
     void Update()
@@ -35,44 +54,56 @@ public class GroundWave : MonoBehaviour
 
         if (!returning)
         {
-            float step = speed * Time.deltaTime;
-            Vector2 front = new(transform.position.x + dir * transform.localScale.x * 0.5f, transform.position.y);
-            if (PatrolEnemy.HitsGround(front, Vector2.right * dir, step + 0.02f))
+            radius += speed * Time.deltaTime;
+            if (radius >= maxRadius)
             {
+                radius = maxRadius;
                 StartCoroutine(Reverse());
+            }
+        }
+        else
+        {
+            radius -= returnSpeed * Time.deltaTime;
+            if (radius <= 0f)
+            {
+                Destroy(gameObject);
                 return;
             }
-            transform.position += Vector3.right * (dir * step);
-            return;
         }
+        Draw();
+    }
 
-        float target = owner ? owner.position.x : originX;
-        float x = Mathf.MoveTowards(transform.position.x, target, returnSpeed * Time.deltaTime);
-        transform.position = new Vector3(x, transform.position.y, transform.position.z);
-        if (Mathf.Approximately(x, target)) Destroy(gameObject);
+    void Draw()
+    {
+        Vector3 c = Center;
+        for (int i = 0; i < Segments; i++)
+        {
+            float a = i * Mathf.PI * 2f / Segments;
+            line.SetPosition(i, c + new Vector3(Mathf.Cos(a), Mathf.Sin(a)) * radius);
+        }
     }
 
     IEnumerator Reverse()
     {
         paused = true;
         SoundPlayer.Play("sfx_rev_reverse");
-        yield return Spiral(transform.position, wallPause, transform.parent);
+        yield return Spiral(Center, wallPause, transform.parent);
         returning = true;
         hitThisPass = false;
         paused = false;
     }
 
-    // 가는 길·오는 길 각각 1회. 대시 무적 중이면 맞지 않음
+    // 퍼질 때·오므라들 때 각각 1회. 대시 무적 중이면 맞지 않음
     void CheckHit()
     {
         if (hitThisPass) return;
-        foreach (var hit in Physics2D.OverlapBoxAll(transform.position, transform.localScale, 0f))
-        {
-            if (!hit.TryGetComponent(out PlayerController player) || player.Health.Invincible) continue;
-            player.Health.TakeDamage(damage);
-            hitThisPass = true;
-            return;
-        }
+        var player = FindAnyObjectByType<PlayerController>();
+        if (!player || player.Health.Invincible) return;
+        float slack = thickness * 0.5f + player.GetComponent<Collider2D>().bounds.extents.x;
+        float d = Vector2.Distance(player.transform.position, Center);
+        if (Mathf.Abs(d - radius) > slack) return;
+        player.Health.TakeDamage(damage);
+        hitThisPass = true;
     }
 
     // 역행 예고: 반시계로 도는 표식 (최종 아트 전 임시)

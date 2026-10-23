@@ -1,15 +1,19 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-// 시험판 클리어 결과 화면: 도달 시각, 며칠째, 플레이 시간 + 영구 성장으로 / 종료. 규칙: Docs/VerticalSliceSpec.md F7
+// 시험판 클리어 결과 화면: 도달 시각, 며칠째, 플레이 시간 + 영구 성장으로 / 종료. 규칙: Docs/Art/ArtSpecification.md 2-3
 public class ResultUI : MonoBehaviour
 {
+    [Header("화면 요소 (생성 시 자동 연결)")]
+    [SerializeField] RectTransform content;
+    [SerializeField] TextMeshProUGUI title;
+    [SerializeField] TextMeshProUGUI detail;
+    [SerializeField] Button growthButton;
+    [SerializeField] Button quitButton;
+
     GameFlow flow;
-    RectTransform content;
-    TextMeshProUGUI title;
-    TextMeshProUGUI detail;
-    GameObject firstButton;
     RunState trackedRun;
     float runStartTime;
     bool shown;
@@ -17,6 +21,15 @@ public class ResultUI : MonoBehaviour
     void Start()
     {
         flow = FindAnyObjectByType<GameFlow>();
+        EnsureBuilt();
+        growthButton.onClick.AddListener(ToGrowth);
+        quitButton.onClick.AddListener(Quit);
+        content.gameObject.SetActive(false);
+    }
+
+    public void EnsureBuilt()
+    {
+        if (content) return;
         content = GameUI.MakeRect("Content", transform);
         GameUI.Fill(content);
 
@@ -24,17 +37,18 @@ public class ResultUI : MonoBehaviour
         GameUI.Fill(dim.rectTransform);
 
         title = GameUI.MakeText(content, "", 72f, GameUI.Gold);
+        title.name = "Title";
         GameUI.Place(title.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 220f), new Vector2(1200f, 100f));
         var sub = GameUI.MakeText(content, "시험판 클리어", 40f, Color.white);
+        sub.name = "Subtitle";
         GameUI.Place(sub.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 130f), new Vector2(1200f, 60f));
         detail = GameUI.MakeText(content, "", 36f, new Color(0.85f, 0.85f, 0.9f));
+        detail.name = "Detail";
         GameUI.Place(detail.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 20f), new Vector2(1200f, 120f));
 
         // 시험판 A: 클리어 → 영구 성장 → 다음 순환 (CombatDecisions 12장)
-        firstButton = GameUI.MakeButton(content, "영구 성장으로", new Vector2(-200f, -160f), new Vector2(340f, 90f), ToGrowth).gameObject;
-        GameUI.MakeButton(content, "종료", new Vector2(200f, -160f), new Vector2(340f, 90f), Quit);
-
-        content.gameObject.SetActive(false);
+        growthButton = GameUI.MakeButton(content, "영구 성장으로", new Vector2(-200f, -160f), new Vector2(340f, 90f));
+        quitButton = GameUI.MakeButton(content, "종료", new Vector2(200f, -160f), new Vector2(340f, 90f));
     }
 
     void Update()
@@ -63,7 +77,7 @@ public class ResultUI : MonoBehaviour
         title.text = $"{flow.TimeText} 도달";
         detail.text = $"{flow.Persistent.day}일째\n플레이 시간 {seconds / 60:00}:{seconds % 60:00}";
         content.gameObject.SetActive(true);
-        if (EventSystem.current) EventSystem.current.SetSelectedGameObject(firstButton);
+        if (EventSystem.current) EventSystem.current.SetSelectedGameObject(growthButton.gameObject);
     }
 
     void ToGrowth() => flow.OpenGrowth();
