@@ -1,6 +1,6 @@
 # 자산 제작 시트 (시험판 A)
 
-> 상위 문서: `Docs/ArtSpecification.md`, `Docs/SoundSpecification.md`
+> 상위 문서: `Docs/Art/ArtSpecification.md`, `Docs/Sound/SoundSpecification.md`
 > 표기: **[확정]** 사용자 확정 / **[승인]** 2026-10-17 사용자 승인(시험판 A) / **[권장값]** 제안, 미확정 / **[보류]** 시험판 A에서 쓰지 않음
 > AI 생성 도구는 **미정**이다. 프롬프트는 특정 도구에 맞추지 않은 일반 영문이다. 도구가 정해지면 그 형식에 맞게 다듬는다.
 > 생성물은 반드시 보정·편집 체크리스트(아트 7-2, 사운드 8-2)를 거친 뒤 넣는다. 보정 전 파일을 완성 자산으로 보고하지 않는다.
@@ -22,7 +22,7 @@
 ## 2. 공통 프롬프트
 
 ```
-[그림 앞] pixel art, {크기}px frames, horizontal sprite strip of {프레임 수} frames, side view 2D platformer,
+[그림 앞] pixel art, {크기}px frames, horizontal sprite strip of {프레임 수} frames, top-down 3/4 view, {facing down / facing up / facing right},
 medieval dark fantasy, {대상 설명}, {상태},
 [그림 뒤] limited 32-color palette, transparent background, no anti-aliasing, crisp pixels, centered pivot
 
@@ -45,12 +45,12 @@ medieval dark fantasy, {대상 설명}, {상태},
 ### 3-1. 주인공 (48×48, 금색 계열)
 외형 [확정]: fallen sun deity in worn knightly garb, longsword, golden sun emblem, faint halo
 
+- **[2026-10-19]** 탑다운 전환. 아래 각 동작은 `_down`, `_up`, `_side` 3방향으로 그린다 (예: `chr_player_run_side`). 반대쪽 옆은 좌우 반전. 일반 적·보스도 같은 규칙
+
 | 이름 | 사용 위치 | 프레임 | 우선 | 교체 방식 | 공유 요소 |
 |---|---|---|---|---|---|
 | `chr_player_idle` | 대기 | 4 | P0 | 자동 | 기본 몸통·검 (모든 동작의 바탕) |
 | `chr_player_run` | 이동 | 6 | P0 | 자동 | idle 몸통 |
-| `chr_player_jump` | 공중 (상승·낙하 공용) | 2 (상승 1, 하강 1) | P0 | 자동 | — |
-| `chr_player_fall` | 낙하 분리 시 | 2 | P2 | dev ④ | jump 하강 프레임 |
 | `chr_player_dash` | 회피 | 3 | P0 | 자동 | `fx_dash_trail` 잔상 |
 | `chr_player_attack` | 검 공격 | 4 | P0 | 자동 | `fx_sword_arc` |
 | `chr_player_hurt` | 피격 | 2 | P0 | 자동 (빨간 번쩍·깜빡임은 dev ⑤) | — |
@@ -106,8 +106,9 @@ medieval dark fantasy, {대상 설명}, {상태},
 ### 3-6. 배경·타일·오브젝트
 | 이름 | 사용 위치 | 해상도 | 프레임 | 우선 | 교체 방식 | 공유 요소 |
 |---|---|---|---|---|---|---|
-| `tile_ground_ch1` [확정] | 바닥·벽·발판 | 32×32 이음매 없음 | 1 | P0 | 자동 (타일 반복) | 일반·보스 공용 |
-| `bg_ch1_far` [확정] | 원경 (폐허 성당·성벽, 하늘 투명) | 640×360 | 1 | P1 | 연결 여부 미확인 (배경 코드 미열람) | 일반·보스 공용 |
+| `tile_ground_ch1` [확정] | 바닥 | 32×32 이음매 없음 | 1 | P0 | 자동 (타일 반복) | 일반·보스 공용 |
+| `tile_wall_ch1` | 방 테두리 벽·기둥·가림벽 (윗면 + 앞면) | 32×32 이음매 없음 | 1 | P0 | dev | `tile_ground_ch1` 색 맞춤 |
+| `bg_ch1_far` [확정, 탑다운 전환으로 사용 여부 미결] | 원경 (폐허 성당·성벽, 하늘 투명) | 640×360 | 1 | P1 | 연결 여부 미확인 (배경 코드 미열람) | 일반·보스 공용 |
 | `bg_ch1_near` [확정] | 근경 (부서진 기둥·잔해) | 640×360 | 1 | P1 | 연결 여부 미확인 | 일반 스테이지 |
 | `bg_ch1_boss_near` | 보스전 근경 (멈춘 천문 시계탑 잔해) | 640×360 | 1 | P2 | dev | `bg_ch1_far` 공유 |
 | `obj_exit_{locked, open}` [확정] | 출구 | 32×64 | 1 | P1 | 자동 | — |
@@ -197,7 +198,7 @@ medieval dark fantasy, {대상 설명}, {상태},
 | 이름 | 상황 | 소리 설명 | 비고 |
 |---|---|---|---|
 | `sfx_sword_swing` / `sfx_sword_hit` | 검 공격 / 적중 | short metal whoosh / dull blade impact | [확정] |
-| `sfx_jump` / `sfx_land` / `sfx_dash` | 이동 | cloth jump / soft stone landing / quick wind rush | [확정] |
+| `sfx_dash` | 이동 | quick wind rush | [확정] |
 | `sfx_player_hurt` / `sfx_player_death` | 피격 / 사망 | short dull thud / low fading string | [확정] |
 | `sfx_enemy_hurt` | 적 피격 | stone chip crack | [확정] |
 | `sfx_enemy_windup` / `sfx_enemy_slash` | 파수꾼 공격 | stone grinding / heavy blade swing | [확정] |

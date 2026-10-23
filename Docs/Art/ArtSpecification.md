@@ -1,7 +1,7 @@
 # 아트 사양 (Art Specification)
 
-> 상위 문서: `Docs/GameDesign.md`, `Docs/VerticalSliceA.md`, `Docs/CombatDecisions.md`
-> 자산별 제작 정보: `Docs/AssetProductionSheet.md`
+> 상위 문서: `Docs/Design/GameDesign.md`, `Docs/SliceA/VerticalSliceA.md`, `Docs/SliceA/CombatDecisions.md`
+> 자산별 제작 정보: `Docs/Art/AssetProductionSheet.md`
 > 표기: **[확정]** 사용자 확정 / **[승인]** 2026-10-17 사용자 승인(시험판 A) / **[권장값]** 제안, 미확정 / **[보류]** 이전 시험판(보스 3명) 또는 본편용, 시험판 A에서 쓰지 않음 / **[미결]** 미정
 > 이 문서는 확정된 게임 규칙을 시각화할 뿐, 새 규칙을 추가하지 않는다. 판정·수치는 바꾸지 않는다.
 
@@ -12,7 +12,9 @@
 ### 1-1. 확정 [확정]
 - 그림체: **픽셀아트**
 - 제작 수단: **AI 생성 + 보정** (7장 프롬프트·보정 기준 참고)
-- 2D 횡스크롤, 시간 테마. 시각 스타일은 **중세풍**
+- 2D 탑다운(3/4 내려다보기), 시간 테마. 시각 스타일은 **중세풍** (2026-10-19 횡스크롤에서 변경)
+- 캐릭터는 **4방향**(아래·위·옆) 스프라이트로 그리고, 반대쪽 옆은 좌우 반전으로 쓴다. 대각선 조준은 가까운 방향 스프라이트를 쓴다. 이동은 8방향 그대로 (2026-10-21 확정)
+- 캐릭터가 바라보는 방향은 마우스 조준 방향을 따른다(이동 방향과 다를 수 있음 → 뒷걸음 시 run 역재생은 쓰지 않고 그대로 재생)
 - 이집트 신화는 **스토리·서사에만** 쓰고, 시각 요소(배경·UI·캐릭터·이펙트)에는 이집트풍을 넣지 않는다
 - 주인공은 몰락한 태양신 본인이다 (GameDesign 2장)
 
@@ -39,6 +41,21 @@
 - **[확정]** 중세 모티브(채식 필사본 테두리, 스테인드글라스, 고딕 아치, 천문 시계, 모래시계, 태양 문장)는 **배경과 UI 장식**에 쓰고, 전투 정보 판독을 방해하지 않게 한다.
 - **[승인]** 위험 정보는 색만으로 구분하지 않는다. 예고는 **차오르는 채움(움직임) + 윤곽(형태)**, 실행은 **진한 색 + 백열 번쩍**으로 함께 구분한다 (D2).
 - 배경은 채도·명도를 낮춰 캐릭터와 위험 표시보다 한 단계 어둡게 한다 [권장값].
+
+### 1-4. 차별화 기준 [확정] (2026-10-21)
+도트 탑다운 액션 참고작(예: 세피리아)과 닮아 보이지 않게, 아래 기준을 지킨다.
+
+| 구분 | 내용 |
+|---|---|
+| 참고작에서 가져올 것 | 기준 해상도, 캐릭터 크기, 전투 판독성 같은 **기술 기준**만 |
+| 가져오지 않을 것 | 색감, 캐릭터 디자인·비율, UI 모양 |
+| 참고 방식 | 한 작품만 보지 않고 2~3개를 섞어 본다 |
+
+정체성 요소 (그림 실력보다 연출로 분위기를 만든다):
+1. **빛과 어둠**: 영원한 밤이라 전장은 어둡고, 몰락한 태양신 주변만 희미하게 빛난다. 2D 조명(URP 2D Light)으로 처리한다. 위험 표시는 조명과 무관하게 항상 잘 보여야 한다.
+2. **시각에 따른 화면 색감**: 3장 하늘 그라데이션을 하늘만이 아니라 전장 전체 색감(조명 색)에도 적용한다.
+3. **두 색 축**: 1-3의 금색(태양) / 은청색(달) 대비를 모든 자산에서 지킨다.
+4. **시계 모티프**: 적·보스·UI에 시계 바늘, 톱니, 모래시계, 천문 시계 형태를 넣는다 (1-3 중세 모티브와 함께).
 
 ---
 
@@ -104,6 +121,8 @@
 | 하늘 그라데이션 [확정] | 18:00 노을(주황·보라) → 19:00 → 20:00 → 21:00 남색. **시험판 A는 보스 1명이라 18:00 → 19:00 2단계만 쓴다** |
 | 시계 UI [확정] | 중세 천문 시계 모양, 태양 바늘. 1시간 = 바늘 한 칸 |
 | 시각 전진 연출 [확정] | 보스 처치 시 시계 바늘이 돌고 "+1시간", 하늘색 전환 1.0초 |
+| 본편 하늘 흐름 [확정] | 자정(6번째 보스)까지 점점 어두워지고, 자정 이후 점점 밝아져 06:00 새벽 (GameDesign 16-4) |
+| 장 전환 [확정] | 장 마지막 보스(3·6·9·12번째) 처치 시 더 큰 연출. 자정은 종 12번 (GameDesign 16-4) |
 | 06:00 연결 [확정] | 바늘이 06:00을 지나며 18:00으로 이어지는 고리 연출(본편, 시험판 미도달) |
 
 - 규칙: 시간은 보스 처치마다 1시간 전진(확정). 일반 방 클리어로는 시각 변화 없음.
@@ -210,7 +229,7 @@
 ## 6. 자산 목록
 
 ### 6-1. 시험판 A 필수 [승인]
-자산별 이름·해상도·프레임·우선순위·교체 방식은 `Docs/AssetProductionSheet.md` 3장.
+자산별 이름·해상도·프레임·우선순위·교체 방식은 `Docs/Art/AssetProductionSheet.md` 3장.
 
 | 우선순위 | 범위 |
 |---|---|
@@ -243,11 +262,11 @@
 
 ### 7-1. 프롬프트 공통 틀 [확정]
 ```
-pixel art, {크기}px sprite sheet, side view 2D platformer,
+pixel art, {크기}px sprite sheet, top-down 3/4 view, {방향: facing down / facing up / facing right},
 medieval dark fantasy, {대상 설명}, {상태 목록},
 limited palette, transparent background, no anti-aliasing, crisp pixels
 ```
-- 예(주인공): `fallen sun deity in worn knightly garb, longsword, golden sun emblem, faint halo` + `idle, run, jump, attack, dash, hurt, death`
+- 예(주인공): `fallen sun deity in worn knightly garb, longsword, golden sun emblem, faint halo` + `idle, run, attack, dash, hurt, death` (방향마다 1장씩)
 
 ### 7-2. 보정 체크리스트
 - 크기를 정확한 픽셀 격자로 다시 맞춤(흐린 픽셀·안티앨리어싱 제거)
@@ -270,10 +289,10 @@ limited palette, transparent background, no anti-aliasing, crisp pixels
   1. `fx_boss_*`, `fx_sword_range`는 1프레임만 쓰고 판정 크기로 가로·세로를 따로 늘린다 → 늘어나도 픽셀이 깨지지 않게 "타일 반복 그리기(Tiled/Sliced)"로 바꾸는 것을 권장. `fx_boss_shot`은 0.6유닛(약 19px)으로 줄어 픽셀이 고르지 않을 수 있음
   2. 시험판 보스는 공격 애니메이션을 재생하지 않는다(방향 전환만) → 단계·패턴별 `boss_slice_*` 재생 연결
   3. 보스·일반 적은 HP 0에서 바로 사라지거나 비활성화된다 → 사망 애니메이션을 쓰려면 연출 시간 확보 필요
-  4. 플레이어는 공중에서 `jump` 하나만 쓴다 → 낙하 분리 시 `chr_player_fall` 연결
+  4. 플레이어·적 스프라이트를 4방향(`_down`, `_up`, `_side`)으로 고르는 코드 필요 (현재는 좌우 반전만). 방향은 플레이어 = 마우스 조준, 적 = 이동·공격 방향
   5. 역행 연출(5-3), 플레이어 빨간 피격·무적 깜빡임(5-1 D3), 보스 실행 백열 번쩍(4-2 D2), 검 궤적·회피 잔상 연결
   6. 상점 통로(`obj_shop_passage`), 상점·성장 화면(임시 IMGUI → 기존 카드 UI 방식), HUD 아이콘 연결
-- 코드가 이미 자동으로 쓰는 이름(그림만 넣으면 교체): `chr_player_*`, `enemy_sentinel_*`, `boss_slice_idle`, `fx_boss_zone/fill/aim/rock/shot`, `fx_sword_range`, `tile_ground_ch1`, `obj_exit_{locked,open}`, `ui_card`, `ui_icon_{active,passive}`, `ui_clock_{face,hand}`, `ui_stage_{room,boss}`
+- 코드가 이미 자동으로 쓰는 이름(그림만 넣으면 교체): `chr_player_*`, `enemy_sentinel_*`, `boss_slice_idle`, `fx_boss_zone/fill/aim/rock/shot`, `fx_sword_range`, `tile_ground_ch1`(바닥), `obj_exit_{locked,open}`, `ui_card`, `ui_icon_{active,passive}`, `ui_clock_{face,hand}`, `ui_stage_{room,boss}`
 
 **planner에게**
 - 시험판 보스 정체·외형 확정 필요 (D1, VerticalSliceA M-4)
