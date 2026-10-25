@@ -6,11 +6,11 @@ using UnityEngine;
 public class SoundPlayer : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Bootstrap()
+    static void Bootstrap() => GameScene.WhenLoaded(() =>
     {
         if (instance) return;
         new GameObject("SoundPlayer").AddComponent<SoundPlayer>();
-    }
+    });
 
     [SerializeField, Range(0f, 1f)] float masterVolume = 1f;
     [SerializeField, Range(0f, 1f)] float bgmVolume = 0.6f;

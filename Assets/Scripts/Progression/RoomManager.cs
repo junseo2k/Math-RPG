@@ -11,11 +11,11 @@ public class RoomManager : MonoBehaviour, IRewindable
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Bootstrap()
+    static void Bootstrap() => GameScene.WhenLoaded(() =>
     {
         if (FindAnyObjectByType<RoomManager>()) return;
         new GameObject("RoomManager").AddComponent<RoomManager>();
-    }
+    });
 
     [SerializeField] int[] enemiesPerRoom = { 2, 3, 3, 4, 4, 5 };
     [SerializeField] float safeDistanceFromEntrance = 10f;
@@ -163,8 +163,8 @@ public class RoomManager : MonoBehaviour, IRewindable
         switch (flow.BossIndex)
         {
             case 0:
-                // 시험판 A 보스. 기존 축적 보스는 코드만 남김
-                SpawnBoss<SliceBoss>("시험판 보스", "boss_slice", new Color(0.7f, 0.35f, 0.6f));
+                // 시험판 보스(SliceBoss)는 코드만 남김
+                SpawnBoss<AccumulationBoss>("시간 축적", "boss_accumulation", new Color(0.7f, 0.35f, 0.6f));
                 break;
             case 1:
                 SpawnBoss<DeferralBoss>("시간 유예", "boss_deferral", new Color(0.85f, 0.6f, 0.25f));

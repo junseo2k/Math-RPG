@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d32f50b8a9c6cd498027737d6e3d281, type: 3}
+  m_Name: CombatBalance
+  m_EditorClassIdentifier: Assembly-CSharp::CombatBalance
+  player:
+    maxHp: 100
+    hitInvincibleTime: 0.8
+    moveSpeed: 6
+    dashDistance: 3
+    dashTime: 0.25
+    dashInvincibleTime: 0.2
+    dashCooldown: 0.8
+    hitStun: 0.3
+    knockbackDistance: 1
+  sword:
+    damage: 10
+    interval: 0.4
+    range: {x: 1.5, y: 1}
+    critChance: 0.05
+    critMultiplier: 1.5
+  sentinel:
+    maxHp: 40
+    slashDamage: 8
+    patrolSpeed: 2
+    chaseSpeed: 3.5
+    detectRange: 6
+    attackRange: 1.2
+    windup: 0.5
+    recover: 1
+    hitStun: 0.2
+  sliceBoss:
+    maxHp: 400
+    idleRange: {x: 0.8, y: 1.5}
+    excludePrevious: 1
+    excludeCancelled: 1
+    patterns:
+    - pattern: 0
+      weight: 1
+      telegraph: 0.6
+      active: 0.2
+      recover: 0.6
+      damage: 15
+    - pattern: 1
+      weight: 1
+      telegraph: 0.8
+      active: 1
+      recover: 0.6
+      damage: 20
+    - pattern: 2
+      weight: 1
+      telegraph: 0.6
+      active: 1.8
+      recover: 0.6
+      damage: 12
+    - pattern: 3
+      weight: 1
+      telegraph: 1.2
+      active: 1.5
+      recover: 0.6
+      damage: 25
+    slashSize: {x: 3, y: 2}
+    chargeSpeed: 18
+    shotCount: 3
+    shotInterval: 0.6
+    shotSpeed: 8
+    shotRadius: 0.3
+    shotLifetime: 3
+    fallCount: 3
+    fallWidth: 2
+    fallImpact: 0.2
+  deferralBoss:
+    maxHp: 350
+    moveSpeed: 1.5
+    fireInterval: 2
+    projectileSpeed: 8
+    directDamage: 15
+    projectileSize: 0.4
+    maxDistance: 40
+    trail:
+      delay: 2
+      warning: 0.3
+      width: 0.6
+      active: 0.3
+      damage: 15
+    reducePerHit: 15
+  reversalBoss:
+    maxHp: 400
+    phase2Ratio: 0.5
+    phaseTransition: 1
+    walkSpeed: 1
+    keepDistance: 2
+    waveInterval: 3.5
+    waveWindup: 0.6
+    waveSpeed: 7
+    waveThickness: 1
+    waveMaxRadius: 12
+    waveDamage: 20
+    wallPause: 0.5
+    returnSpeed: 7
+    rewindInterval: 8
+    rewindWarning: 1
+    rewindSeconds: 3

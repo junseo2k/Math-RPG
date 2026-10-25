@@ -26,6 +26,8 @@ public class Health : MonoBehaviour, IRewindable
     public bool Invincible { get; set; }
     // 회피 무적 중 맞으면 회피 성공 (Invincible과 함께 켠다)
     public bool Dodging { get; set; }
+    // 회피 무적 + 피격·역행 직후 무적. 표시용
+    public bool IsInvincible => Invincible || Time.time < invincibleUntil;
 
     public event Action<int> Damaged;
     public event Action Died;

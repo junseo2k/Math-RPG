@@ -10,11 +10,11 @@ using UnityEngine.UI;
 public class GameUI : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Bootstrap()
+    static void Bootstrap() => GameScene.WhenLoaded(() =>
     {
         if (FindAnyObjectByType<GameUI>()) return;
         new GameObject("GameUI").AddComponent<GameUI>();
-    }
+    });
 
     const string FontPath = "Fonts/NotoSansKR-VariableFont_wght SDF";
 
@@ -54,28 +54,7 @@ public class GameUI : MonoBehaviour
     // 빠진 것만 채운다. 에디터 메뉴에서도 호출
     public void Setup()
     {
-        if (!TryGetComponent<Canvas>(out var canvas))
-        {
-            canvas = gameObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 10;
-        }
-        if (!TryGetComponent<CanvasScaler>(out _))
-        {
-            var scaler = gameObject.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
-            scaler.matchWidthOrHeight = 0.5f;
-        }
-        if (!TryGetComponent<GraphicRaycaster>(out _)) gameObject.AddComponent<GraphicRaycaster>();
-
-        if (!FindAnyObjectByType<EventSystem>())
-        {
-            var es = new GameObject("EventSystem");
-            es.AddComponent<EventSystem>();
-            es.AddComponent<InputSystemUIInputModule>();
-        }
-
+        AddCanvas(gameObject, 10);
         AddScreen<HUD>("HUD");
         AddScreen<AbilitySelectUI>("AbilitySelect");
         AddScreen<ResultUI>("Result");
@@ -100,6 +79,56 @@ public class GameUI : MonoBehaviour
     }
 
     // ---- 공용 생성 함수 ----
+
+    // 빠진 것만 붙이고, 씬에 EventSystem이 없으면 만든다
+    public static void AddCanvas(GameObject go, int sortingOrder)
+    {
+        if (!go.TryGetComponent<Canvas>(out _))
+        {
+            var canvas = go.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = sortingOrder;
+        }
+        if (!go.TryGetComponent<CanvasScaler>(out _))
+        {
+            var scaler = go.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.matchWidthOrHeight = 0.5f;
+        }
+        if (!go.TryGetComponent<GraphicRaycaster>(out _)) go.AddComponent<GraphicRaycaster>();
+
+        if (!FindAnyObjectByType<EventSystem>())
+        {
+            var es = new GameObject("EventSystem");
+            es.AddComponent<EventSystem>();
+            es.AddComponent<InputSystemUIInputModule>();
+        }
+    }
+
+    // 제목 + 세로 버튼 목록. 메인 메뉴·일시정지 메뉴가 같이 쓴다
+    public static GameObject MakeMenu(Transform parent, string title, params (string label, Action onClick)[] items)
+    {
+        var rt = MakeRect(title, parent);
+        Fill(rt);
+        MakeTitle(rt, title);
+        for (int i = 0; i < items.Length; i++)
+            MakeButton(rt, items[i].label, new Vector2(0f, 80f - i * 120f), new Vector2(420f, 90f), items[i].onClick);
+        return rt.gameObject;
+    }
+
+    public static TextMeshProUGUI MakeTitle(Transform parent, string title)
+    {
+        var t = MakeText(parent, title, 72f, Gold);
+        Place(t.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 260f), new Vector2(1200f, 120f));
+        return t;
+    }
+
+    // panels 중 target 하나만 켠다
+    public static void ShowOnly(GameObject target, params GameObject[] panels)
+    {
+        foreach (var p in panels) p.SetActive(p == target);
+    }
 
     public static RectTransform MakeRect(string name, Transform parent)
     {

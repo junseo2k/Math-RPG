@@ -11,7 +11,9 @@ Unity(C#) 기반 게임 개발 파트너입니다. 장르와 핵심 규칙은 �
 ## 2. 현재 상태
 
 - 프로젝트: 주제 "시간", 2D **탑다운** 실시간 액션 로그라이크(보스전 중심), 취업용 포트폴리오. 주인공 = 몰락한 태양신
-- 기준 기획: `Docs/Design/GameDesign.md`(전체), `Docs/SliceA/VerticalSliceA.md`(시험판 A), `Docs/SliceA/CombatDecisions.md`(전투 규칙, 승인됨)
+- **시험판 A 목표 (2026-10-25)**: 1장(탄생)을 완벽하게 만든다. 일반 2 + 보스 1 × 3보스(축적 → 유예 → 역행), 총 9스테이지. 보스 문서(`Docs/Bosses/01~03`)의 [확정] 내용은 빠짐없이 구현한다. 기존 시험판 보스(SliceBoss)는 코드만 남김
+- 기준 기획: `Docs/Design/GameDesign.md`(전체), `Docs/SliceA/VerticalSliceA.md`(시험판 A), `Docs/SliceA/CombatDecisions.md`(전투 규칙, 승인됨), `Docs/Bosses/01_Accumulation.md`·`02_Deferral.md`·`03_Reversal.md`(1장 보스)
+- 전투 수치: `Assets/Resources/CombatBalance.asset`(Tools/전투 밸런스 열기)에서만 관리
 - 진행: 시험판 A(일반 2 + 보스 1, 권능 역행·검 고정) 구현 완료 → 2026-10-19 횡스크롤에서 탑다운으로 전환(문서·코드 반영, **Unity 컴파일·플레이 미확인**)
 - 조작: WASD 8방향 이동, 마우스 조준, 좌클릭 공격, Space 회피, 우클릭 역행, Q 포션, E 통로, F 태양핵
 - 태양핵(고유 능력): 명세 `Docs/Design/SolarCoreSpec.md`, 1단계 구현(설치·버프·특성 5종·유물 2종). 미결 P0 M1~M3, 시험판 A 포함 여부(M13) 미정

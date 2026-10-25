@@ -10,11 +10,11 @@ public class SunCoreCaster : MonoBehaviour
 {
     // 플레이어에 없으면 플레이 시작 시 자동 부착
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Bootstrap()
+    static void Bootstrap() => GameScene.WhenLoaded(() =>
     {
         foreach (var p in FindObjectsByType<PlayerController>(FindObjectsSortMode.None))
             if (!p.GetComponent<SunCoreCaster>()) p.gameObject.AddComponent<SunCoreCaster>();
-    }
+    });
 
     [SerializeField] bool showDebug = true;
 

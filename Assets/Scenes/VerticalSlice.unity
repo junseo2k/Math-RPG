@@ -3656,6 +3656,7 @@ GameObject:
   - component: {fileID: 1594185360}
   - component: {fileID: 1594185361}
   - component: {fileID: 1594185362}
+  - component: {fileID: 1594185363}
   m_Layer: 0
   m_Name: GameFlow
   m_TagString: Untagged
@@ -3994,8 +3995,8 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: f2fdb611-2f96-489c-8bac-88f727f3cdcb
-      m_Path: <Keyboard>/t
+      m_Id: 67b6e4bd-4faf-4321-9b27-94dc7d6efc72
+      m_Path: <Mouse>/rightButton
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -4004,6 +4005,25 @@ MonoBehaviour:
     m_Flags: 0
   showDebug: 1
   showGhost: 0
+--- !u!114 &1594185363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594185356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa3c4564f147bcc47b3c1642cd8d5cdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoomManager
+  enemiesPerRoom: 020000000300000003000000040000000400000005000000
+  safeDistanceFromEntrance: 10
+  playerAnimSpeeds:
+  - state: idle
+    fps: 5
+  - state: run
+    fps: 10
 --- !u!1 &1617135300
 GameObject:
   m_ObjectHideFlags: 0

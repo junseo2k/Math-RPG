@@ -93,16 +93,16 @@ public class GroundWave : MonoBehaviour
         paused = false;
     }
 
-    // 퍼질 때·오므라들 때 각각 1회. 대시 무적 중이면 맞지 않음
+    // 퍼질 때·오므라들 때 각각 1회. 대시 무적 중에 겹치면 회피 성공으로 그 회차 판정 끝
     void CheckHit()
     {
         if (hitThisPass) return;
         var player = FindAnyObjectByType<PlayerController>();
-        if (!player || player.Health.Invincible) return;
+        if (!player || player.Health.IsDead) return;
         float slack = thickness * 0.5f + player.GetComponent<Collider2D>().bounds.extents.x;
         float d = Vector2.Distance(player.transform.position, Center);
         if (Mathf.Abs(d - radius) > slack) return;
-        player.Health.TakeDamage(damage);
+        player.Health.TakeHit(damage, Center);
         hitThisPass = true;
     }
 
