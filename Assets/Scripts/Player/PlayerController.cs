@@ -19,19 +19,8 @@ public class PlayerController : MonoBehaviour, IRewindable
         public Vector2 knockbackVelocity;
     }
 
-    [SerializeField] int maxHp = 100;
-    [SerializeField] float hitInvincibleTime = 0.8f;
-    [SerializeField] float moveSpeed = 6f;
-
-    [Header("회피")]
-    [SerializeField] float dashDistance = 3f;
-    [SerializeField] float dashTime = 0.25f;
-    [SerializeField] float dashInvincibleTime = 0.2f;
-    [SerializeField] float dashCooldown = 0.8f;
-
-    [Header("피격")]
-    [SerializeField] float hitStun = 0.3f;
-    [SerializeField] float knockbackDistance = 1f;
+    // 수치는 CombatBalance (Tools/전투 밸런스 열기)
+    static CombatBalance.PlayerStats B => CombatBalance.Instance.player;
 
     [Header("디버그")]
     [SerializeField] bool showDebug = true;
@@ -41,9 +30,9 @@ public class PlayerController : MonoBehaviour, IRewindable
     // 좌우 반전용 (-1/1)
     public int Facing => Aim.x < 0f ? -1 : 1;
     // 특성·유물·성장 보너스를 더하기 전 최대 HP
-    public int BaseMaxHp => maxHp;
+    public int BaseMaxHp => B.maxHp;
     public Health Health { get; private set; }
-    public bool CanAct => flow && flow.State == GameState.Playing && !Health.IsDead && !RewindSystem.IsFrozen;
+    public bool CanAct => flow && flow.State == GameState.Playing && !Health.IsDead && !TimeControl.IsStopped;
     public bool IsStunned => Time.time < stunUntil;
     public bool IsDashing => dashing;
     public bool CanAttack => CanAct && !IsStunned;
@@ -52,7 +41,7 @@ public class PlayerController : MonoBehaviour, IRewindable
     public float ZoneMoveBonus { get; set; }
     public float DashCooldownMultiplier { get; set; } = 1f;
     // 0 = 방금 사용, 1 = 사용 가능
-    public float DashReadyRatio => dashing ? 0f : Mathf.Clamp01(1f - (dashReadyAt - Time.time) / (dashCooldown * DashCooldownMultiplier));
+    public float DashReadyRatio => dashing ? 0f : Mathf.Clamp01(1f - (dashReadyAt - Time.time) / (B.dashCooldown * DashCooldownMultiplier));
 
     public event Action Dashed;
 
@@ -77,7 +66,7 @@ public class PlayerController : MonoBehaviour, IRewindable
         // 마찰 0: 벽에 비스듬히 붙어 이동할 때 마찰로 멈추는 문제 방지
         GetComponent<BoxCollider2D>().sharedMaterial = new PhysicsMaterial2D("PlayerNoFriction") { friction = 0f, bounciness = 0f };
         Health = GetComponent<Health>();
-        Health.Init(maxHp, hitInvincibleTime);
+        Health.Init(B.maxHp, B.hitInvincibleTime);
         Health.Died += OnDied;
         Health.Damaged += _ =>
         {
@@ -156,8 +145,8 @@ public class PlayerController : MonoBehaviour, IRewindable
         if (dashing)
         {
             float t = Time.time - dashStart;
-            if (Health.Dodging && t >= dashInvincibleTime) SetDodgeInvincible(false);
-            if (t < dashTime) return;
+            if (Health.Dodging && t >= B.dashInvincibleTime) SetDodgeInvincible(false);
+            if (t < B.dashTime) return;
             EndDash();
         }
 
@@ -178,7 +167,7 @@ public class PlayerController : MonoBehaviour, IRewindable
         var move = new Vector2(
             (kb.dKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed ? 1f : 0f),
             (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f)).normalized;
-        body.linearVelocity = move * moveSpeed * (MoveSpeedMultiplier + ZoneMoveBonus);
+        body.linearVelocity = move * B.moveSpeed * (MoveSpeedMultiplier + ZoneMoveBonus);
 
         // 제한은 쿨타임만. 입력 없으면 조준 방향
         if (kb.spaceKey.wasPressedThisFrame && Time.time >= dashReadyAt)
@@ -200,9 +189,9 @@ public class PlayerController : MonoBehaviour, IRewindable
         dashing = true;
         dashDir = dir;
         dashStart = Time.time;
-        dashReadyAt = dashStart + dashTime + dashCooldown * DashCooldownMultiplier;
+        dashReadyAt = dashStart + B.dashTime + B.dashCooldown * DashCooldownMultiplier;
         SetDodgeInvincible(true);
-        body.linearVelocity = dashDir * dashDistance / dashTime;
+        body.linearVelocity = dashDir * B.dashDistance / B.dashTime;
         Dashed?.Invoke();
     }
 
@@ -225,8 +214,8 @@ public class PlayerController : MonoBehaviour, IRewindable
         if (dashing) EndDash();
         Vector2 away = (Vector2)transform.position - from;
         away = away.sqrMagnitude > 0.0001f ? away.normalized : -Aim;
-        stunUntil = Time.time + hitStun;
-        knockbackVelocity = hitStun > 0f ? away * knockbackDistance / hitStun : Vector2.zero;
+        stunUntil = Time.time + B.hitStun;
+        knockbackVelocity = B.hitStun > 0f ? away * B.knockbackDistance / B.hitStun : Vector2.zero;
     }
 
     void OnDied()

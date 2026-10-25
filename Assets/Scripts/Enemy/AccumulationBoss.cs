@@ -5,27 +5,22 @@ using UnityEngine;
 [RequireComponent(typeof(Health), typeof(SpriteRenderer), typeof(BoxCollider2D))]
 public class AccumulationBoss : MonoBehaviour
 {
-    [SerializeField] int maxHp = 30;
+    // 전투 수치는 CombatBalance (Tools/전투 밸런스 열기)
+    static CombatBalance.AccumulationBossStats B => CombatBalance.Instance.accumulationBoss;
+
     // 방 중심(0,0) 기준 이동 가능 범위
     [SerializeField] float moveLimitX = 8.5f;
     [SerializeField] float moveLimitY = 5f;
 
-    [Header("축적·방출")]
-    [SerializeField] float stackInterval = 1.5f;
-    [SerializeField] int maxStacks = 5;
-    [SerializeField] float releaseWarning = 1f;
-    [SerializeField] float shockwaveRadius = 3.5f;
-    [SerializeField] int shockwaveDamage = 2;
-    [SerializeField] float exhaustTime = 2f;
-
-    [Header("돌진")]
-    [SerializeField] float chargeInterval = 3f;
-    [SerializeField] float chargeWindup = 0.4f;
-    [SerializeField] float chargeSpeed = 12f;
-    [SerializeField] float chargeDistance = 6f;
-    [SerializeField] int chargeDamage = 1;
+    [Header("축적 게이지 (머리 위)")]
+    [SerializeField] float pipSize = 0.3f;
+    [SerializeField] float pipGap = 0.1f;
+    [SerializeField] Color pipFull = new(0.75f, 0.85f, 1f);
+    [SerializeField] Color pipEmpty = new(0.2f, 0.22f, 0.3f, 0.8f);
 
     public int Stacks { get; private set; }
+
+    SpriteRenderer[] pips;
 
     static Sprite circleSprite;
 
@@ -40,7 +35,7 @@ public class AccumulationBoss : MonoBehaviour
     void Awake()
     {
         health = GetComponent<Health>();
-        health.Init(maxHp, 0f);
+        health.Init(B.maxHp, 0f);
         health.Died += OnDied;
         body = GetComponent<SpriteRenderer>();
         box = GetComponent<BoxCollider2D>();
@@ -60,29 +55,29 @@ public class AccumulationBoss : MonoBehaviour
         while (true)
         {
             Stacks = 0;
-            float nextStack = Time.time + stackInterval;
-            float nextCharge = Time.time + chargeInterval;
+            float nextStack = Time.time + B.stackInterval;
+            float nextCharge = Time.time + B.chargeInterval;
 
-            while (Stacks < maxStacks)
+            while (Stacks < B.maxStacks)
             {
                 if (Time.time >= nextCharge)
                 {
                     yield return Charge();
-                    nextCharge = Time.time + chargeInterval;
+                    nextCharge = Time.time + B.chargeInterval;
                 }
                 // 돌진 중에도 축적은 계속된다
-                while (Time.time >= nextStack && Stacks < maxStacks)
+                while (Time.time >= nextStack && Stacks < B.maxStacks)
                 {
                     Stacks++;
                     SoundPlayer.Play("sfx_acc_stack");
-                    nextStack += stackInterval;
+                    nextStack += B.stackInterval;
                 }
                 yield return null;
             }
 
             SoundPlayer.Play("sfx_acc_warning");
             if (anim) anim.SetLoop("warning");
-            yield return Blink(releaseWarning);
+            yield return Blink(B.releaseWarning);
             Shockwave();
             SoundPlayer.Play("sfx_acc_release");
             if (anim)
@@ -94,7 +89,7 @@ public class AccumulationBoss : MonoBehaviour
             Stacks = 0;
             body.color = baseColor * 0.5f;
             SoundPlayer.Play("sfx_acc_exhaust");
-            yield return new WaitForSeconds(exhaustTime);
+            yield return new WaitForSeconds(B.exhaustTime);
             body.color = baseColor;
             if (anim) anim.SetLoop("idle");
         }
@@ -107,7 +102,7 @@ public class AccumulationBoss : MonoBehaviour
         body.color = new Color(1f, 0.6f, 0.1f);
         SoundPlayer.Play("sfx_acc_windup");
         if (anim) anim.SetLoop("windup");
-        yield return new WaitForSeconds(chargeWindup);
+        yield return new WaitForSeconds(B.chargeWindup);
 
         Vector2 dir = ((Vector2)(player.transform.position - transform.position)).normalized;
         SoundPlayer.Play("sfx_acc_charge");
@@ -118,10 +113,10 @@ public class AccumulationBoss : MonoBehaviour
         }
         float traveled = 0f;
         bool hit = false;
-        while (traveled < chargeDistance)
+        while (traveled < B.chargeDistance)
         {
             var pos = transform.position;
-            Vector2 next = (Vector2)pos + dir * chargeSpeed * Time.deltaTime;
+            Vector2 next = (Vector2)pos + dir * B.chargeSpeed * Time.deltaTime;
             next = new Vector2(Mathf.Clamp(next.x, -moveLimitX, moveLimitX), Mathf.Clamp(next.y, -moveLimitY, moveLimitY));
             float step = Vector2.Distance(next, pos);
             if (step < 0.0001f) break;
@@ -130,7 +125,7 @@ public class AccumulationBoss : MonoBehaviour
 
             if (!hit && box.bounds.Intersects(player.GetComponent<Collider2D>().bounds))
             {
-                player.Health.TakeDamage(chargeDamage);
+                player.Health.TakeHit(B.chargeDamage, transform.position);
                 hit = true;
             }
             yield return null;
@@ -154,16 +149,16 @@ public class AccumulationBoss : MonoBehaviour
 
     void Shockwave()
     {
-        foreach (var hit in Physics2D.OverlapCircleAll(transform.position, shockwaveRadius))
+        foreach (var hit in Physics2D.OverlapCircleAll(transform.position, B.shockwaveRadius))
             if (hit.TryGetComponent(out PlayerController target))
-                target.Health.TakeDamage(shockwaveDamage);
+                target.Health.TakeHit(B.shockwaveDamage, transform.position);
 
         var view = new GameObject("Shockwave").AddComponent<SpriteRenderer>();
         view.sprite = AssetLibrary.SpriteUnitsOr("fx_shockwave_ring", 2f, CircleSprite());
         view.color = new Color(1f, 1f, 1f, 0.35f);
         view.sortingOrder = -1;
         view.transform.position = transform.position;
-        view.transform.localScale = Vector3.one * shockwaveRadius;
+        view.transform.localScale = Vector3.one * B.shockwaveRadius;
         Destroy(view.gameObject, 0.2f);
     }
 
@@ -192,12 +187,38 @@ public class AccumulationBoss : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void OnGUI()
+    void OnDestroy()
     {
-        var cam = Camera.main;
-        if (!cam) return;
-        Vector3 s = cam.WorldToScreenPoint(transform.position + Vector3.up * (transform.localScale.y * 0.5f + 0.8f));
-        string gauge = new string('#', Stacks) + new string('-', maxStacks - Stacks);
-        GUI.Label(new Rect(s.x - 60f, Screen.height - s.y - 20f, 120f, 40f), $"축적 [{gauge}]");
+        if (pips == null) return;
+        foreach (var p in pips)
+            if (p) Destroy(p.gameObject);
+    }
+
+    // 칸 수 = 최대 스택. 보스 크기에 늘어나지 않게 보스가 아닌 방 아래에 두고 위치만 따라간다
+    void LateUpdate()
+    {
+        int n = Mathf.Max(B.maxStacks, 1);
+        if (pips == null || pips.Length != n)
+        {
+            OnDestroy();
+            pips = new SpriteRenderer[n];
+            for (int i = 0; i < n; i++)
+            {
+                var sr = new GameObject($"StackPip{i}").AddComponent<SpriteRenderer>();
+                sr.transform.SetParent(transform.parent);
+                sr.sprite = AssetLibrary.SpriteUnitsOr("ui_acc_pip", 1f, RoomManager.Square);
+                sr.sortingOrder = 5;
+                pips[i] = sr;
+            }
+        }
+
+        float width = n * pipSize + (n - 1) * pipGap;
+        Vector3 top = transform.position + Vector3.up * (transform.localScale.y * 0.5f + 0.5f);
+        for (int i = 0; i < n; i++)
+        {
+            pips[i].transform.position = top + Vector3.right * (-width / 2f + pipSize / 2f + i * (pipSize + pipGap));
+            pips[i].transform.localScale = Vector3.one * pipSize;
+            pips[i].color = i < Stacks ? pipFull : pipEmpty;
+        }
     }
 }

@@ -8,11 +8,11 @@ using UnityEngine.InputSystem;
 public class RewindSystem : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Bootstrap()
+    static void Bootstrap() => GameScene.WhenLoaded(() =>
     {
         if (FindAnyObjectByType<RewindSystem>()) return;
         new GameObject("RewindSystem").AddComponent<RewindSystem>();
-    }
+    });
 
     [SerializeField] float rewindSeconds = 2f;
     [SerializeField] float cooldown = 20f;
@@ -149,7 +149,7 @@ public class RewindSystem : MonoBehaviour
             if (Time.unscaledTime >= freezeEnd) EndFreeze();
             return;
         }
-        if (rewindKey.WasPressedThisFrame()) TryRewind();
+        if (rewindKey.WasPressedThisFrame() && !TimeControl.IsStopped) TryRewind();
     }
 
     bool CanRewind(out string reason)
@@ -185,6 +185,7 @@ public class RewindSystem : MonoBehaviour
             if (target is Object o && !o) continue;
             target.Restore(state);
         }
+        RewindSpawned.DestroyAfter(frames[index].time);
         frames.RemoveRange(index + 1, frames.Count - index - 1);
 
         // 쿨타임은 복원 대상이 아님
@@ -258,13 +259,13 @@ public class RewindSystem : MonoBehaviour
     {
         IsFrozen = true;
         freezeEnd = Time.unscaledTime + freezeTime;
-        Time.timeScale = 0f;
+        TimeControl.Stop(this);
     }
 
     void EndFreeze()
     {
         IsFrozen = false;
-        Time.timeScale = 1f;
+        TimeControl.Release(this);
     }
 
     // 디버그: 지금 역행하면 플레이어가 돌아갈 위치

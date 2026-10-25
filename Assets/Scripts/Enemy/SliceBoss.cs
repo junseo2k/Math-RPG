@@ -49,38 +49,14 @@ public class SliceBoss : MonoBehaviour, IRewindable
         public bool hitDone;
     }
 
-    [SerializeField] int maxHp = 2000;
-    [SerializeField] Vector2 idleRange = new(0.8f, 1.5f);
-    [SerializeField] bool excludePrevious = true;
-    [SerializeField] bool excludeCancelled = true;
-    [SerializeField] List<PatternSettings> patterns = new()
-    {
-        new() { pattern = Pattern.Slash, telegraph = 0.6f, active = 0.2f, damage = 15 },
-        new() { pattern = Pattern.Charge, telegraph = 0.8f, active = 1f, damage = 20 },
-        new() { pattern = Pattern.Barrage, telegraph = 0.6f, active = 1.8f, damage = 12 },
-        new() { pattern = Pattern.Fall, telegraph = 1.2f, active = 1.5f, damage = 25 },
-    };
+    // 전투 수치는 CombatBalance (Tools/전투 밸런스 열기). 여기에는 방 크기·표시 값만 남긴다
+    static CombatBalance.SliceBossStats B => CombatBalance.Instance.sliceBoss;
 
-    [Header("내려베기")]
-    [SerializeField] Vector2 slashSize = new(3f, 2f);
-
-    [Header("돌진")]
-    [SerializeField] float chargeSpeed = 18f;
     // 방 중심(0,0) 기준 이동 가능 범위
     [SerializeField] float moveLimitX = 8.5f;
     [SerializeField] float moveLimitY = 5f;
 
-    [Header("탄막")]
-    [SerializeField] int shotCount = 3;
-    [SerializeField] float shotInterval = 0.6f;
-    [SerializeField] float shotSpeed = 8f;
-    [SerializeField] float shotRadius = 0.3f;
-    [SerializeField] float shotLifetime = 3f;
-
     [Header("낙하 광역")]
-    [SerializeField] int fallCount = 3;
-    [SerializeField] float fallWidth = 2f;
-    [SerializeField] float fallImpact = 0.2f;
     [SerializeField] float fallLimitX = 9f;
     [SerializeField] float fallLimitY = 5.5f;
     [SerializeField] float fallStartHeight = 8f;
@@ -107,10 +83,10 @@ public class SliceBoss : MonoBehaviour, IRewindable
 
     public Phase CurrentPhase => s.phase;
     public int DecisionId => s.decisionId;
-    public Pattern? CurrentPattern => s.current >= 0 ? patterns[s.current].pattern : null;
+    public Pattern? CurrentPattern => s.current >= 0 ? B.patterns[s.current].pattern : null;
     // 다음 결정에서 뺄 패턴(역행으로 취소된 공격). 스냅샷 밖 정보
     public int CancelledPattern => cancelled;
-    public string CancelledPatternName => cancelled >= 0 ? patterns[cancelled].pattern.ToString() : "-";
+    public string CancelledPatternName => cancelled >= 0 ? B.patterns[cancelled].pattern.ToString() : "-";
     // 특성 "반복되는 운명": 이 결정 번호의 공격은 실행 범위를 EarlyWarning초 일찍 표시
     public int RepeatDecisionId { get; set; } = -1;
     public float EarlyWarning { get; set; }
@@ -132,13 +108,13 @@ public class SliceBoss : MonoBehaviour, IRewindable
 
     float HalfHeight => transform.localScale.y * 0.5f;
     float AimAngle => Mathf.Atan2(s.aimDir.y, s.aimDir.x) * Mathf.Rad2Deg;
-    Vector2 FallSize => Vector2.one * fallWidth;
-    PatternSettings P => patterns[s.current];
+    Vector2 FallSize => Vector2.one * B.fallWidth;
+    PatternSettings P => B.patterns[s.current];
 
     void Awake()
     {
         health = GetComponent<Health>();
-        health.Init(maxHp, 0f);
+        health.Init(B.maxHp, 0f);
         health.Died += OnDied;
         body = GetComponent<SpriteRenderer>();
         baseColor = body.color;
@@ -148,8 +124,8 @@ public class SliceBoss : MonoBehaviour, IRewindable
         s.facing = -1;
         s.aimDir = Vector2.left;
         s.current = s.previous = -1;
-        s.fallPos = new Vector2[fallCount];
-        s.shots = new Shot[shotCount];
+        s.fallPos = new Vector2[B.fallCount];
+        s.shots = new Shot[B.shotCount];
         EnterIdle();
         Rewindables.All.Add(this);
     }
@@ -161,10 +137,11 @@ public class SliceBoss : MonoBehaviour, IRewindable
 
         fx = new GameObject("SliceBossFx").transform;
         fx.SetParent(transform.parent);
-        zones = MakeViews("Zone", Mathf.Max(fallCount, 1), telegraphOuterColor, 1);
-        fills = MakeViews("Fill", Mathf.Max(fallCount, 1), telegraphFillColor, 2);
-        rocks = MakeViews("Rock", fallCount, RockColor, 3);
-        shotViews = MakeViews("Shot", shotCount, ShotColor, 3);
+        // 개수는 Awake에서 만든 배열 크기를 따른다(플레이 중 수치 변경과 어긋나지 않게)
+        zones = MakeViews("Zone", Mathf.Max(s.fallPos.Length, 1), telegraphOuterColor, 1);
+        fills = MakeViews("Fill", Mathf.Max(s.fallPos.Length, 1), telegraphFillColor, 2);
+        rocks = MakeViews("Rock", s.fallPos.Length, RockColor, 3);
+        shotViews = MakeViews("Shot", s.shots.Length, ShotColor, 3);
         aim = MakeViews("Aim", 1, aimColor, 2)[0];
         UpdateViews();
     }
@@ -238,30 +215,30 @@ public class SliceBoss : MonoBehaviour, IRewindable
     void EnterIdle()
     {
         Enter(Phase.Idle);
-        s.idleLength = UnityEngine.Random.Range(idleRange.x, idleRange.y);
+        s.idleLength = UnityEngine.Random.Range(B.idleRange.x, B.idleRange.y);
     }
 
     // 예고 시작 순간 = 결정 시점 (CombatDecisions 6장)
     void Decide()
     {
         var candidates = new List<int>();
-        for (int i = 0; i < patterns.Count; i++)
+        for (int i = 0; i < B.patterns.Count; i++)
         {
-            if (patterns[i].weight <= 0f) continue;
-            if (excludePrevious && i == s.current) continue;
-            if (excludeCancelled && i == cancelled) continue;
+            if (B.patterns[i].weight <= 0f) continue;
+            if (B.excludePrevious && i == s.current) continue;
+            if (B.excludeCancelled && i == cancelled) continue;
             candidates.Add(i);
         }
         if (candidates.Count == 0)
-            for (int i = 0; i < patterns.Count; i++) candidates.Add(i);
+            for (int i = 0; i < B.patterns.Count; i++) candidates.Add(i);
 
         float total = 0f;
-        foreach (int i in candidates) total += patterns[i].weight;
+        foreach (int i in candidates) total += B.patterns[i].weight;
         float roll = UnityEngine.Random.value * total;
         int pick = candidates[^1];
         foreach (int i in candidates)
         {
-            roll -= patterns[i].weight;
+            roll -= B.patterns[i].weight;
             if (roll < 0f) { pick = i; break; }
         }
 
@@ -291,20 +268,20 @@ public class SliceBoss : MonoBehaviour, IRewindable
         switch (P.pattern)
         {
             case Pattern.Slash:
-                if (!s.hitDone) s.hitDone = HitPlayer(SlashCenter, slashSize, AimAngle);
+                if (!s.hitDone) s.hitDone = HitPlayer(SlashCenter, B.slashSize, AimAngle);
                 break;
 
             case Pattern.Charge:
-                s.position = ClampToRoom(s.position + s.aimDir * chargeSpeed * Time.fixedDeltaTime);
+                s.position = ClampToRoom(s.position + s.aimDir * B.chargeSpeed * Time.fixedDeltaTime);
                 if (!s.hitDone) s.hitDone = HitPlayer(s.position, transform.localScale);
                 break;
 
             case Pattern.Barrage:
-                if (s.shotsFired < s.shots.Length && s.phaseTime >= s.shotsFired * shotInterval) Fire();
+                if (s.shotsFired < s.shots.Length && s.phaseTime >= s.shotsFired * B.shotInterval) Fire();
                 break;
 
             case Pattern.Fall:
-                if (s.hitDone || s.phaseTime < P.active - fallImpact) break;
+                if (s.hitDone || s.phaseTime < P.active - B.fallImpact) break;
                 foreach (Vector2 p in s.fallPos)
                     if (HitPlayer(p, FallSize))
                     {
@@ -321,7 +298,7 @@ public class SliceBoss : MonoBehaviour, IRewindable
         Vector2 target = player ? (Vector2)player.transform.position : s.position + Vector2.right * s.facing;
         Vector2 dir = (target - s.position).normalized;
         if (dir == Vector2.zero) dir = Vector2.right * s.facing;
-        s.shots[s.shotsFired] = new Shot { pos = s.position, vel = dir * shotSpeed, alive = true };
+        s.shots[s.shotsFired] = new Shot { pos = s.position, vel = dir * B.shotSpeed, alive = true };
         s.shotsFired++;
         SoundPlayer.Play("sfx_rev_wave");
     }
@@ -335,8 +312,8 @@ public class SliceBoss : MonoBehaviour, IRewindable
             if (!shot.alive) continue;
             shot.pos += shot.vel * dt;
             shot.age += dt;
-            if (shot.age >= shotLifetime || Mathf.Abs(shot.pos.x) > moveLimitX + 3f || Mathf.Abs(shot.pos.y) > moveLimitY + 3f) shot.alive = false;
-            else if (HitPlayerCircle(shot.pos, shotRadius)) shot.alive = false;
+            if (shot.age >= B.shotLifetime || Mathf.Abs(shot.pos.x) > moveLimitX + 3f || Mathf.Abs(shot.pos.y) > moveLimitY + 3f) shot.alive = false;
+            else if (HitPlayerCircle(shot.pos, B.shotRadius)) shot.alive = false;
             s.shots[i] = shot;
         }
     }
@@ -368,7 +345,7 @@ public class SliceBoss : MonoBehaviour, IRewindable
 
     int DamageOf(Pattern pattern)
     {
-        foreach (var p in patterns)
+        foreach (var p in B.patterns)
             if (p.pattern == pattern) return p.damage;
         return 0;
     }
@@ -378,7 +355,7 @@ public class SliceBoss : MonoBehaviour, IRewindable
         if (player) s.facing = player.transform.position.x >= s.position.x ? 1 : -1;
     }
 
-    Vector2 SlashCenter => s.position + s.aimDir * (transform.localScale.x * 0.5f + slashSize.x * 0.5f);
+    Vector2 SlashCenter => s.position + s.aimDir * (transform.localScale.x * 0.5f + B.slashSize.x * 0.5f);
     Vector2 ClampToRoom(Vector2 p) => new(Mathf.Clamp(p.x, -moveLimitX, moveLimitX), Mathf.Clamp(p.y, -moveLimitY, moveLimitY));
 
     // 돌진 방향으로 방 경계에 닿는 지점
@@ -445,13 +422,13 @@ public class SliceBoss : MonoBehaviour, IRewindable
         Vector2 to = (Vector2)player.transform.position - s.position;
         if (to.sqrMagnitude < 0.0001f) return;
         bool flash = s.phase == Phase.Active && s.shotsFired > 0 &&
-                     s.phaseTime - (s.shotsFired - 1) * shotInterval < fireFlashTime;
+                     s.phaseTime - (s.shotsFired - 1) * B.shotInterval < fireFlashTime;
         float length = to.magnitude;
         aim.enabled = true;
         aim.color = flash ? activeColor : aimColor;
         aim.transform.position = s.position + to * 0.5f;
         aim.transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(to.y, to.x) * Mathf.Rad2Deg);
-        aim.transform.localScale = new Vector2(length, shotRadius * 2f);
+        aim.transform.localScale = new Vector2(length, B.shotRadius * 2f);
     }
 
     void ShowQuery(Vector2 center, Vector2 size)
@@ -486,7 +463,7 @@ public class SliceBoss : MonoBehaviour, IRewindable
             {
                 case Pattern.Slash:
                     // 실행 단계 전체가 판정 구간
-                    ShowWarning(0, SlashCenter, slashSize, since, P.telegraph, angle: AimAngle);
+                    ShowWarning(0, SlashCenter, B.slashSize, since, P.telegraph, angle: AimAngle);
                     break;
                 case Pattern.Charge:
                     // 예고: 돌진 경로. 실행: 보스 몸이 판정(몸 색 = activeBodyColor)
@@ -500,14 +477,14 @@ public class SliceBoss : MonoBehaviour, IRewindable
                     break;
                 case Pattern.Fall:
                     // 판정은 착지 구간(실행 마지막 fallImpact초)뿐
-                    float impactAt = P.telegraph + P.active - fallImpact;
+                    float impactAt = P.telegraph + P.active - B.fallImpact;
                     for (int i = 0; i < s.fallPos.Length && i < zones.Length; i++)
                     {
                         ShowWarning(i, s.fallPos[i], FallSize, since, impactAt, telegraph ? telegraphFillColor : fallingColor);
                         if (telegraph) continue;
                         // 탑다운: 바위가 화면 위쪽에서 착지 지점으로 내려옴
-                        float k = Mathf.Clamp01(s.phaseTime / Mathf.Max(P.active - fallImpact, 0.01f));
-                        Show(rocks[i], s.fallPos[i] + Vector2.up * Mathf.Lerp(fallStartHeight, 0f, k), new Vector2(fallWidth * 0.8f, 1f), RockColor);
+                        float k = Mathf.Clamp01(s.phaseTime / Mathf.Max(P.active - B.fallImpact, 0.01f));
+                        Show(rocks[i], s.fallPos[i] + Vector2.up * Mathf.Lerp(fallStartHeight, 0f, k), new Vector2(B.fallWidth * 0.8f, 1f), RockColor);
                     }
                     break;
             }
@@ -520,7 +497,7 @@ public class SliceBoss : MonoBehaviour, IRewindable
             if (alive)
             {
                 shotViews[i].transform.position = s.shots[i].pos;
-                shotViews[i].transform.localScale = Vector3.one * shotRadius * 2f;
+                shotViews[i].transform.localScale = Vector3.one * B.shotRadius * 2f;
             }
         }
     }

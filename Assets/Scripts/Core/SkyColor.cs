@@ -5,11 +5,11 @@ using UnityEngine;
 public class SkyColor : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Bootstrap()
+    static void Bootstrap() => GameScene.WhenLoaded(() =>
     {
         var cam = Camera.main;
         if (cam && !cam.GetComponent<SkyColor>()) cam.gameObject.AddComponent<SkyColor>();
-    }
+    });
 
     // 18:00 노을 → 19:00 → 20:00 → 21:00 남색 (그 이후는 마지막 색 유지)
     [SerializeField] Color[] hourColors =

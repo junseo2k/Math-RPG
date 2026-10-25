@@ -14,11 +14,8 @@ public class PlayerAttack : MonoBehaviour, IRewindable
         public (float amount, float left)[] oneShot;
     }
 
-    [SerializeField] int damage = 10;
-    [SerializeField] float interval = 0.4f;
-    [SerializeField] Vector2 range = new(1.5f, 1f);
-    [SerializeField, Range(0f, 1f)] float critChance = 0.05f;
-    [SerializeField] float critMultiplier = 1.5f;
+    // 수치는 CombatBalance (Tools/전투 밸런스 열기)
+    static CombatBalance.SwordStats B => CombatBalance.Instance.sword;
 
     public enum RangeDisplay { Off, OnSwing, Always }
 
@@ -103,8 +100,8 @@ public class PlayerAttack : MonoBehaviour, IRewindable
     }
 
     // 실제 판정 상자. 공격과 표시가 같은 계산을 쓴다
-    public Vector2 HitBoxCenter => (Vector2)transform.position + controller.Aim * (transform.localScale.x + range.x) * 0.5f;
-    public Vector2 HitBoxSize => range;
+    public Vector2 HitBoxCenter => (Vector2)transform.position + controller.Aim * (transform.localScale.x + B.range.x) * 0.5f;
+    public Vector2 HitBoxSize => B.range;
     // 조준 방향으로 돌린 상자 각도(도)
     public float HitBoxAngle => Mathf.Atan2(controller.Aim.y, controller.Aim.x) * Mathf.Rad2Deg;
 
@@ -135,7 +132,7 @@ public class PlayerAttack : MonoBehaviour, IRewindable
     {
         var mouse = Mouse.current;
         if (mouse == null || !controller.CanAttack || !mouse.leftButton.wasPressedThisFrame || Time.time < readyAt) return;
-        readyAt = Time.time + interval;
+        readyAt = Time.time + B.interval;
         SoundPlayer.Play("sfx_sword_swing", 3);
         if (anim) anim.PlayOnce("attack");
 
@@ -145,8 +142,8 @@ public class PlayerAttack : MonoBehaviour, IRewindable
         oneShot.Clear();
 
         // 공격력 × (1 + 피해 증가% 합) × 치명타 + 고정 추가 피해 (CombatDecisions 2장)
-        LastHitCrit = UnityEngine.Random.value < critChance;
-        float scaled = damage * (1f + DamageBonus + ZoneDamageBonus + swingBonus) * (LastHitCrit ? critMultiplier : 1f);
+        LastHitCrit = UnityEngine.Random.value < B.critChance;
+        float scaled = B.damage * (1f + DamageBonus + ZoneDamageBonus + swingBonus) * (LastHitCrit ? B.critMultiplier : 1f);
         int total = Health.Round(scaled + (HasBonus ? bonus : 0));
 
         Vector2 center = HitBoxCenter;
@@ -154,7 +151,7 @@ public class PlayerAttack : MonoBehaviour, IRewindable
         swingAngle = HitBoxAngle;
         swingShownUntil = Time.time + swingShowTime;
         bool landed = false;
-        foreach (var hit in Physics2D.OverlapBoxAll(center, range, swingAngle))
+        foreach (var hit in Physics2D.OverlapBoxAll(center, B.range, swingAngle))
             if (hit.gameObject != gameObject && hit.TryGetComponent(out Health target) && !target.IsDead)
             {
                 target.TakeHit(total, transform.position);
@@ -163,6 +160,6 @@ public class PlayerAttack : MonoBehaviour, IRewindable
             }
         if (!landed) return;
         bonus = 0;
-        HitLanded?.Invoke(center, range, total);
+        HitLanded?.Invoke(center, B.range, total);
     }
 }

@@ -7,15 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D), typeof(Health))]
 public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
 {
-    [SerializeField] int maxHp = 40;
-    [SerializeField] float patrolSpeed = 2f;
-    [SerializeField] float chaseSpeed = 3.5f;
-    [SerializeField] float detectRange = 6f;
-    [SerializeField] float attackRange = 1.2f;
-    [SerializeField] float windup = 0.5f;
-    [SerializeField] int slashDamage = 8;
-    [SerializeField] float recover = 1f;
-    [SerializeField] float hitStun = 0.2f;
+    // 수치는 CombatBalance (Tools/전투 밸런스 열기)
+    static CombatBalance.SentinelStats B => CombatBalance.Instance.sentinel;
 
     // 처치 시 1회
     public event Action Removed;
@@ -83,7 +76,7 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
         currentColor = baseColor;
         health = GetComponent<Health>();
         anim = GetComponent<SpriteAnimator>();
-        health.Init(maxHp, 0f);
+        health.Init(B.maxHp, 0f);
         health.Damaged += OnDamaged;
         health.Died += Remove;
         Rewindables.All.Add(this);
@@ -154,18 +147,18 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
         }
         if (!player) player = FindAnyObjectByType<PlayerController>();
 
-        float speed = patrolSpeed;
+        float speed = B.patrolSpeed;
         bool chasing = false;
         if (player && !player.Health.IsDead)
         {
             Vector2 delta = player.transform.position - transform.position;
-            if (delta.magnitude <= detectRange)
+            if (delta.magnitude <= B.detectRange)
             {
                 chasing = true;
-                speed = chaseSpeed;
+                speed = B.chaseSpeed;
                 if (delta != Vector2.zero) dir = delta.normalized;
                 float gap = delta.magnitude - box.bounds.extents.x - player.GetComponent<Collider2D>().bounds.extents.x;
-                if (gap <= attackRange)
+                if (gap <= B.attackRange)
                 {
                     StartAttack();
                     return;
@@ -217,13 +210,13 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
     void TickAttack()
     {
         attackTime += Time.deltaTime;
-        if (attack == AttackPhase.Windup && attackTime >= windup)
+        if (attack == AttackPhase.Windup && attackTime >= B.windup)
         {
             Slash();
             attack = AttackPhase.Recover;
             attackTime = 0f;
         }
-        else if (attack == AttackPhase.Recover && attackTime >= recover)
+        else if (attack == AttackPhase.Recover && attackTime >= B.recover)
         {
             attack = AttackPhase.None;
         }
@@ -231,12 +224,12 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
 
     void Slash()
     {
-        Vector2 center = (Vector2)transform.position + dir * (box.bounds.extents.x + attackRange * 0.5f);
-        Vector2 size = new(attackRange, box.bounds.size.y);
+        Vector2 center = (Vector2)transform.position + dir * (box.bounds.extents.x + B.attackRange * 0.5f);
+        Vector2 size = new(B.attackRange, box.bounds.size.y);
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         foreach (var hit in Physics2D.OverlapBoxAll(center, size, angle))
             if (hit.TryGetComponent(out PlayerController target))
-                target.Health.TakeHit(slashDamage, transform.position);
+                target.Health.TakeHit(B.slashDamage, transform.position);
         ShowSlash(center, size, angle);
         if (anim)
         {
@@ -269,7 +262,7 @@ public class PatrolEnemy : MonoBehaviour, IFreezable, IRewindable
     {
         SoundPlayer.Play("sfx_enemy_hurt");
         if (anim && !Attacking) anim.PlayOnce("hurt");
-        if (!Attacking) stunUntil = Time.time + hitStun;
+        if (!Attacking) stunUntil = Time.time + B.hitStun;
         if (view && !Attacking && !Frozen && gameObject.activeInHierarchy) StartCoroutine(Flash());
     }
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// 피격 깜빡임(플레이어·보스 공용, 표시 전용). 다른 스크립트가 몸 색을 칠한 뒤에 덮어쓰도록 늦게 실행
+// 피격 번쩍임 + 무적 중 깜빡임(플레이어·보스 공용, 표시 전용). 다른 스크립트가 몸 색을 칠한 뒤에 덮어쓰도록 늦게 실행
 // 역행하면 취소된 피격의 깜빡임을 지운다
 [DefaultExecutionOrder(100)]
 [RequireComponent(typeof(SpriteRenderer), typeof(Health))]
@@ -8,6 +8,8 @@ public class HitFlash : MonoBehaviour
 {
     [SerializeField] Color flashColor = Color.white;
     [SerializeField] float flashTime = 0.1f;
+    // 무적인 동안 켜고 끄는 주기(초)
+    [SerializeField] float blinkInterval = 0.08f;
 
     SpriteRenderer view;
     Health health;
@@ -40,6 +42,8 @@ public class HitFlash : MonoBehaviour
 
     void LateUpdate()
     {
+        view.enabled = health.IsDead || !health.IsInvincible || Mathf.FloorToInt(Time.time / blinkInterval) % 2 == 0;
+
         if (Time.time < flashUntil && !health.IsDead)
         {
             if (!overriding)

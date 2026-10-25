@@ -4,11 +4,11 @@ using UnityEngine;
 public class ShopUI : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Bootstrap()
+    static void Bootstrap() => GameScene.WhenLoaded(() =>
     {
         if (FindAnyObjectByType<ShopUI>()) return;
         new GameObject("ShopUI").AddComponent<ShopUI>();
-    }
+    });
 
     GameFlow flow;
     PotionUser potion;

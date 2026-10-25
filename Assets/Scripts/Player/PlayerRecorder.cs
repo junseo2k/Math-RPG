@@ -9,11 +9,11 @@ using UnityEngine.InputSystem;
 public class PlayerRecorder : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Bootstrap()
+    static void Bootstrap() => GameScene.WhenLoaded(() =>
     {
         if (FindAnyObjectByType<PlayerRecorder>()) return;
         new GameObject("PlayerRecorder").AddComponent<PlayerRecorder>();
-    }
+    });
 
     [SerializeField] float sampleInterval = 0.05f;
     [SerializeField] bool recording;

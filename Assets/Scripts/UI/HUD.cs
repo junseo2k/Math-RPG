@@ -24,6 +24,9 @@ public class HUD : MonoBehaviour
     [Header("화면 요소 (생성 시 자동 연결)")]
     [SerializeField] RectTransform content;
     [SerializeField] RectTransform hpFill;
+    // 곧 들어올 유예 피해만큼 파란색. 없으면 실행 시 HpFill 뒤에 만든다
+    [SerializeField] RectTransform hpDeferredFill;
+    [SerializeField] Color deferredColor = new(0.35f, 0.6f, 1f);
     [SerializeField] TextMeshProUGUI hpText;
     [SerializeField] TextMeshProUGUI abilityText;
     [SerializeField] RectTransform dashFill;
@@ -41,6 +44,7 @@ public class HUD : MonoBehaviour
     PlayerController player;
     PotionUser potion;
     RewindSystem rewind;
+    DeferredDamage deferred;
 
     int shownElapsed = -1;
     float handFrom;
@@ -228,12 +232,22 @@ public class HUD : MonoBehaviour
         return $"{flow.Run.gold}G  기억 조각 {flow.Persistent.memoryShards}  포션[Q] {(potion ? potion.Count : 0)}  역행[{rewindKey}] {rewindText}{shield}";
     }
 
-    // HP 100 규모라 칸 대신 바 + 숫자
+    // HP 100 규모라 칸 대신 바 + 숫자. 유예 피해는 HP 끝에서 파란 구간으로 (금색 = 유예 적용 후 남을 HP)
     void UpdateHp()
     {
         if (!player) return;
         var health = player.Health;
-        GameUI.SetFill(hpFill, (float)health.Hp / Mathf.Max(health.MaxHp, 1));
-        hpText.text = $"{health.Hp} / {health.MaxHp}";
+        if (!deferred) deferred = player.GetComponent<DeferredDamage>();
+        if (!hpDeferredFill)
+        {
+            hpDeferredFill = GameUI.MakeImage(hpFill.parent, "HpDeferred", deferredColor).rectTransform;
+            hpDeferredFill.SetSiblingIndex(hpFill.GetSiblingIndex());
+        }
+        int pending = deferred ? Mathf.Min(deferred.Total, health.Hp) : 0;
+        float max = Mathf.Max(health.MaxHp, 1);
+        GameUI.SetFill(hpDeferredFill, health.Hp / max);
+        GameUI.SetFill(hpFill, (health.Hp - pending) / max);
+        string hex = ColorUtility.ToHtmlStringRGB(deferredColor);
+        hpText.text = pending > 0 ? $"{health.Hp} / {health.MaxHp}  <color=#{hex}>-{pending}</color>" : $"{health.Hp} / {health.MaxHp}";
     }
 }

@@ -11,6 +11,7 @@ public class DeferredProjectile : MonoBehaviour
     Vector2 start;
     float traveled;
     bool done;
+    bool dodged;
 
     public void Init(Vector2 dir, float speed, int damage, float maxDistance, TrailSettings trail)
     {
@@ -33,9 +34,14 @@ public class DeferredProjectile : MonoBehaviour
         {
             if (hit.collider.TryGetComponent(out PlayerController player))
             {
-                // 대시 무적 중이면 통과
-                if (player.Health.Invincible) continue;
-                player.Health.TakeDamage(damage);
+                // 대시 무적 중이면 회피 성공 1회 후 통과
+                if (player.Health.Invincible)
+                {
+                    if (!dodged) player.Health.TakeHit(damage, pos);
+                    dodged = true;
+                    continue;
+                }
+                player.Health.TakeHit(damage, pos);
                 Finish(hit.centroid);
                 return;
             }
@@ -58,6 +64,7 @@ public class DeferredProjectile : MonoBehaviour
         if ((end - start).sqrMagnitude > 0.01f)
         {
             var go = new GameObject("TrailStrike");
+            go.AddComponent<RewindSpawned>();
             go.transform.SetParent(transform.parent);
             go.AddComponent<TrailStrike>().Init(start, end, trail);
         }

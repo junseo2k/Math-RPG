@@ -5,20 +5,12 @@ using UnityEngine;
 [RequireComponent(typeof(Health), typeof(SpriteRenderer), typeof(BoxCollider2D))]
 public class DeferralBoss : MonoBehaviour
 {
-    [SerializeField] int maxHp = 35;
-    [SerializeField] float moveSpeed = 1.5f;
+    // 전투 수치는 CombatBalance (Tools/전투 밸런스 열기)
+    static CombatBalance.DeferralBossStats B => CombatBalance.Instance.deferralBoss;
+
+    // 방 중심(0,0) 기준 이동 가능 범위
     [SerializeField] float moveLimitX = 8.5f;
-
-    [Header("투사체")]
-    [SerializeField] float fireInterval = 2f;
-    [SerializeField] float projectileSpeed = 8f;
-    [SerializeField] int directDamage = 1;
-    [SerializeField] float projectileSize = 0.4f;
-    [SerializeField] float maxDistance = 40f;
-
-    [Header("궤적 예약 · 피해 유예")]
-    [SerializeField] TrailSettings trail = new() { delay = 2f, warning = 0.3f, width = 0.6f, active = 0.3f, damage = 1 };
-    [SerializeField] int reducePerHit = 1;
+    [SerializeField] float moveLimitY = 5f;
 
     static readonly Color ProjectileColor = new(1f, 0.75f, 0.3f);
 
@@ -27,13 +19,14 @@ public class DeferralBoss : MonoBehaviour
     GameFlow flow;
     PlayerController player;
     DeferredDamage deferred;
-    int dir = 1;
+    // 방 안을 비스듬히 떠돌다 경계에서 튕긴다
+    Vector2 dir;
     float nextFire;
 
     void Awake()
     {
         health = GetComponent<Health>();
-        health.Init(maxHp, 0f);
+        health.Init(B.maxHp, 0f);
         health.Damaged += OnHit;
         health.Died += OnDied;
         anim = GetComponent<SpriteAnimator>();
@@ -44,24 +37,25 @@ public class DeferralBoss : MonoBehaviour
         flow = FindAnyObjectByType<GameFlow>();
         player = FindAnyObjectByType<PlayerController>();
         if (player) deferred = player.GetComponent<DeferredDamage>();
-        nextFire = Time.time + fireInterval;
+        nextFire = Time.time + B.fireInterval;
+        // 축에 딱 붙지 않는 대각선 방향(30~60도)
+        float angle = Random.Range(30f, 60f) * Mathf.Deg2Rad;
+        dir = new Vector2(Mathf.Cos(angle) * (Random.value < 0.5f ? -1f : 1f), Mathf.Sin(angle) * (Random.value < 0.5f ? -1f : 1f));
     }
 
     void Update()
     {
         var pos = transform.position;
-        float x = pos.x + dir * moveSpeed * Time.deltaTime;
-        if (Mathf.Abs(x) >= moveLimitX)
-        {
-            x = Mathf.Clamp(x, -moveLimitX, moveLimitX);
-            dir = -dir;
-        }
-        transform.position = new Vector3(x, pos.y, pos.z);
-        if (anim && player) anim.Face(player.transform.position.x >= x ? 1 : -1);
+        Vector2 next = (Vector2)pos + dir * B.moveSpeed * Time.deltaTime;
+        if (Mathf.Abs(next.x) >= moveLimitX) dir.x = -Mathf.Sign(next.x) * Mathf.Abs(dir.x);
+        if (Mathf.Abs(next.y) >= moveLimitY) dir.y = -Mathf.Sign(next.y) * Mathf.Abs(dir.y);
+        next = new Vector2(Mathf.Clamp(next.x, -moveLimitX, moveLimitX), Mathf.Clamp(next.y, -moveLimitY, moveLimitY));
+        transform.position = new Vector3(next.x, next.y, pos.z);
+        if (anim && player) anim.Face(player.transform.position.x >= next.x ? 1 : -1);
 
         if (Time.time >= nextFire && player && !player.Health.IsDead)
         {
-            nextFire = Time.time + fireInterval;
+            nextFire = Time.time + B.fireInterval;
             Fire();
         }
     }
@@ -75,19 +69,20 @@ public class DeferralBoss : MonoBehaviour
         Vector2 direction = aim.sqrMagnitude > 0.001f ? aim.normalized : Vector2.right;
 
         var go = new GameObject("DeferredProjectile");
+        go.AddComponent<RewindSpawned>();
         go.transform.SetParent(transform.parent);
         go.transform.position = from;
-        go.transform.localScale = Vector3.one * projectileSize;
+        go.transform.localScale = Vector3.one * B.projectileSize;
         var sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = AssetLibrary.SpriteUnitsOr("fx_def_projectile", 1f, RoomManager.Square);
         sr.color = ProjectileColor;
         sr.sortingOrder = 2;
-        go.AddComponent<DeferredProjectile>().Init(direction, projectileSpeed, directDamage, maxDistance, trail);
+        go.AddComponent<DeferredProjectile>().Init(direction, B.projectileSpeed, B.directDamage, B.maxDistance, B.trail);
     }
 
     void OnHit(int _)
     {
-        if (deferred) deferred.Reduce(reducePerHit);
+        if (deferred) deferred.Reduce(B.reducePerHit);
     }
 
     void OnDied()

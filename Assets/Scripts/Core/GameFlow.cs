@@ -10,19 +10,11 @@ public enum GameState { AbilitySelect, Playing, Dead, Cleared, RewardSelect, Sho
 [RequireComponent(typeof(StartAbilityPool), typeof(RunRewards))]
 public class GameFlow : MonoBehaviour
 {
-    // 씬에 GameFlow가 없으면 플레이 시작 시 자동 생성
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Bootstrap()
-    {
-        if (FindAnyObjectByType<GameFlow>()) return;
-        var go = new GameObject("GameFlow");
-        go.AddComponent<GameFlow>();
-        go.AddComponent<FlowDebugUI>(); // ponytail: 임시 디버그 UI, 시험판 UI 생기면 이 줄 삭제
-    }
-
+    // 자동 생성하지 않는다: 씬에 GameFlow가 저장돼 있어야 게임 씬으로 본다(GameScene)
     [SerializeField] StartAbilityPool abilityPool;
     [SerializeField] int roomsPerBoss = 2;
-    [SerializeField] int bossCount = 1;
+    // 시험판 A = 1장 보스 3명
+    [SerializeField] int bossCount = 3;
     [SerializeField] int startHour = 18;
     [SerializeField] int nightEndHour = 6;
     [SerializeField] int hoursPerBoss = 1;
@@ -59,19 +51,27 @@ public class GameFlow : MonoBehaviour
         Rewards = GetComponent<RunRewards>();
         if (!Rewards) Rewards = gameObject.AddComponent<RunRewards>();
         Persistent = SaveData.Load();
+        if (!GetComponent<FlowDebugUI>()) gameObject.AddComponent<FlowDebugUI>();
     }
 
     void Start() => BeginRun();
 
     // 시험판 A: 권능은 역행 고정이라 시작 능력 선택 없이 바로 1스테이지
     // 새 RunState = 특성·유물·G 초기화. 기억 조각·영구 성장은 Persistent에 유지
-    void BeginRun()
+    void BeginRun(int stage = 1)
     {
         Run = new RunState();
         RunReset?.Invoke();
         Rewards.NotifyChanged();
-        EnterStage(1);
+        EnterStage(stage);
         SetState(GameState.Playing);
+    }
+
+    // 디버그: 새 판으로 지정 스테이지부터 시작. 사망·보상·상점 화면 중에도 동작
+    public void DebugStartAt(int stage)
+    {
+        StopAllCoroutines();
+        BeginRun(Mathf.Clamp(stage, 1, StageCount));
     }
 
     public void SelectAbility(int index)

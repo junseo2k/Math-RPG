@@ -4,11 +4,11 @@ using UnityEngine;
 public class GrowthUI : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Bootstrap()
+    static void Bootstrap() => GameScene.WhenLoaded(() =>
     {
         if (FindAnyObjectByType<GrowthUI>()) return;
         new GameObject("GrowthUI").AddComponent<GrowthUI>();
-    }
+    });
 
     GameFlow flow;
     GUIStyle text;
