@@ -1,0 +1,20 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Claude 사용량</title>
+<style>
+body{font:14px system-ui,sans-serif;margin:16px;background:#fff;color:#222}
+table{border-collapse:collapse;width:100%}th,td{padding:4px 8px;border-bottom:1px solid #ddd;text-align:left;white-space:nowrap}
+td.w{white-space:normal}th{cursor:pointer;background:#f3f3f3;position:sticky;top:0}.n{text-align:right;font-variant-numeric:tabular-nums}
+.lim{margin:4px 0}.bar{display:inline-block;width:200px;height:10px;background:#ddd;margin:0 8px;vertical-align:middle}.bar i{display:block;height:100%;background:#d97757}
+small,.muted{color:#888;font-weight:normal}.err{color:#c33}input{width:420px;font:inherit}
+@media (prefers-color-scheme:dark){body{background:#1e1e1e;color:#ddd}th{background:#2c2c2c}th,td{border-color:#444}.bar{background:#444}}
+</style>
+<p><button id="reload">새로고침</button> <span class="muted">머리글을 누르면 정렬</span></p>
+<h2>사용 한도 <small>채팅·Claude Code 공용</small></h2>
+<div id="limits">불러오는 중…</div>
+<h2>Claude 채팅</h2>
+<div id="chats">불러오는 중…</div>
+<h2>Claude Code</h2>
+<p class="muted">기록 폴더 <input id="path"> <button id="savePath">저장</button></p>
+<div id="code">불러오는 중…</div>
+<script src="report.js"></script>
