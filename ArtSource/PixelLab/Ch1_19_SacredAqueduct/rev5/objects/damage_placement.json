@@ -1,0 +1,26 @@
+{
+ "damage_wall_l.png": [
+  5,
+  49
+ ],
+ "damage_wall_m.png": [
+  280,
+  45
+ ],
+ "damage_wall_r.png": [
+  512,
+  46
+ ],
+ "damage_water.png": [
+  9,
+  129
+ ],
+ "damage_floor.png": [
+  160,
+  143
+ ],
+ "damage_floor_dry.png": [
+  426,
+  129
+ ]
+}
