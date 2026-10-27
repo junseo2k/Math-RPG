@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Claude 사용량",
+  "version": "1.0",
+  "description": "claude.ai 채팅과 Claude Code 세션의 토큰·사용 한도를 한 화면에 보여줘요.",
+  "action": { "default_title": "Claude 사용량 보기" },
+  "background": { "service_worker": "background.js" },
+  "permissions": ["storage"],
+  "host_permissions": ["https://claude.ai/*", "file:///*"]
+}
