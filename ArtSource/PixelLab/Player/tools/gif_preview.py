@@ -1,6 +1,7 @@
 """Looping GIF previews (stdlib + numpy, no PIL).
 
   python gif_preview.py compare   # 09_idle_calm/preview/idle_calm_compare_x3.gif: regen/ unfrozen (top) vs body frozen (bottom), E..SE
+  python gif_preview.py hair [folder] # 09_idle_calm/preview/idle_calm_hair_x3.gif: <folder> (default hair_gen) on top vs current below, E..SE
   python gif_preview.py outline   # 09_idle_calm/preview/idle_calm_outline_x3.gif: with (top) / without (bottom) outer outline, E..SE
   python gif_preview.py all       # 09_idle_calm/preview/idle_calm_all_x4.gif: 8 directions, E NE N NW / W SW S SE
 """
@@ -65,6 +66,10 @@ if __name__ == '__main__':
     if sys.argv[1] == 'compare':
         rows = [[frames(os.path.join(OUT, sub, f'{n}_{d}.png')) for n, d in enumerate(DIRS)] for sub in ('regen', '')]
         write_gif(os.path.join(OUT, 'preview', 'idle_calm_compare_x3.gif'), grid(rows, 3), delay)
+    elif sys.argv[1] == 'hair':
+        before = sys.argv[2] if len(sys.argv) > 2 else 'hair_gen'
+        rows = [[frames(os.path.join(OUT, sub, f'{n}_{d}.png')) for n, d in enumerate(DIRS)] for sub in (before, '')]
+        write_gif(os.path.join(OUT, 'preview', 'idle_calm_hair_x3.gif'), grid(rows, 3), delay)
     elif sys.argv[1] == 'outline':
         oc = P.load_palette()[0]
         def strip(path):   # outer silhouette outline -> transparent (inner dark lines stay)

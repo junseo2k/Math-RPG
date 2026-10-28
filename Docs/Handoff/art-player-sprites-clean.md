@@ -75,3 +75,38 @@
 - 한 일: 사용자 요청으로 북서 idle 머리를 북동 머리 좌우 반전으로 교체(`process.py` `HEAD_FROM`/`head_from`, 북서는 머리카락 흔들림 끔). sheet_clip 종료 코드 0, 게임 반영(외곽선 없음), EditMode 6/6, 화면 `Docs/QA/Screens/idle_calm_nw_head_ingame_20261029.png`
 - 남은 일: 반전 머리의 광원 방향 정밀 확인 안 함, verify.ps1 미실행, 커밋 안 함
 - 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/idle_calm*`, `09_idle_calm/`, `Assets/Resources/Art/chr_player_idle_*.png`
+
+## 2026-10-29 idle 머리카락 코드 흔들기 (미리보기만)
+- 한 일: 머리카락을 생성 프레임 대신 코드로 흔듦(`process.py` `HAIR_SWAY` [0,+1,0,-1], 머리 위 4줄만 옆으로) → 8방향 모두 머리 윤곽 이동 1px로 통일. 망토 판별식이 금색 중간 톤까지 잡던 문제 수정(`cape_px`, 북서 머리 음영도 살아남). sheet_clip 종료 코드 0. 비교 GIF `09_idle_calm/preview/idle_calm_hair_x3.gif`(위 이전, 아래 코드), 이전 시트 `09_idle_calm/hair_gen/`
+- 남은 일: 사용자 확인 후 게임 반영·커밋. 게임에는 아직 이전 idle
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/{process.py,gif_preview.py}`, `02_final/idle_calm*`, `09_idle_calm/`
+
+## 2026-10-29 idle 머리카락 재생성 (코드 흔들기 반려)
+- 한 일: 사용자 반려(코드보다 재생성)로 코드 흔들기 삭제. 머리카락만 흔드는 문구로 8방향 v3 재생성(그룹 `8f5b66a2…`, 8회, 원본 `01_raw/clean/idle_hair/`, 북서는 북동 머리 반전 시작 자세 `idle_hair_start/`). 합성: 망토 끝 = 기존 idle_calm 생성, 머리 띠(±1px) = idle_hair 생성(`HAIR_FROM_CLIP`). 머리 변화 최대 px: 이전 0~37 → 34~50(8방향 모두 움직임). sheet_clip 종료 코드 0. GIF `09_idle_calm/preview/idle_calm_hair_x3.gif`
+- 남은 일: 사용자 확인 후 게임 반영·커밋. 게임에는 아직 이전 idle
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `01_raw/clean/{idle_hair,idle_hair_start}/`, `02_final/idle_calm*`, `09_idle_calm/`
+
+## 2026-10-29 idle 7방향 머리를 남서 머리 기준으로 수정
+- 한 일: 사용자 요청(남서 참고, 머리만)으로 7방향 기준 자세를 `edit_image_pro_flash`(참고=남서 기준 자세, 35회분)로 다시 그리고 머리 11줄만 원래 자세에 붙임 → `01_raw/clean/idle_head_start/`(시안 `01_raw/trials/head_fix/`). 이 자세로 머리카락 흔들림 7방향 재생성(그룹 `dbd40c5c…`, `idle_hair2/`, 남서는 `idle_hair` 재사용). `process.py`: `REF_FROM`(고정 기준 = 새 머리 자세), `HEAD_FROM` 삭제, 망토 띠는 바닥 3줄 위까지(발 기준점 보호). sheet_clip 종료 코드 0, 머리 변화 최대 28~46px
+- 남은 일: 사용자 확인 후 게임 반영·커밋. 게임에는 아직 이전 idle
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `01_raw/clean/{idle_head_start,idle_hair2}/`, `01_raw/trials/head_fix/`, `02_final/idle_calm*`, `09_idle_calm/`
+
+## 2026-10-29 idle 머리카락 흔들림을 남서쪽에 맞춤 (머리 스타일 원복)
+- 한 일: 오해 정정 — 머리 스타일은 원래대로(`REF_FROM = idle_hair_start`, 7방향 다시 그린 머리는 `01_raw/trials/idle_head_start_unused/`, `idle_hair2_redrawn_heads/`로 뺌). 남서 흔들림(1프레임 부풀고 2프레임 가라앉고 3프레임 원래대로) 측정 도구 `tools/hair_motion.py`. 남서 흔들림을 글로 적어 7방향 재생성(`idle_hair3` 7회, `idle_hair4` NW·W·SE 3회), 방향별로 남서와 가장 가까운 생성 선택(`HAIR_FROM_CLIP` 방향별). 남서와의 거리: E 20, NE 33, N 41, S 35, W 59, SE 59, NW 65. sheet_clip 종료 코드 0
+- 남은 일: NW·W·SE는 여전히 남서와 차이 큼(NW·W 1프레임째 거의 안 움직임). 사용자 확인 후 게임 반영·커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/{process.py,hair_motion.py}`, `01_raw/clean/{idle_hair3,idle_hair4}/`, `01_raw/clean/idle_hair_start/north-west.png`, `02_final/idle_calm*`, `09_idle_calm/`
+
+## 2026-10-29 idle 머리 흔들림 살짝 줄임
+- 한 일: 머리 합성 띠를 정수리 6줄로 좁힘(`FREEZE` `hair_rows=6`, 이전 11줄). 기준 자세 대비 머리 변화 820→649px(-21%), 머리 옆(6~12줄)은 거의 고정. sheet_clip 종료 코드 0. 줄이기 전 시트 `09_idle_calm/hair_full/`, GIF `preview/idle_calm_hair_x3.gif`(위 전, 아래 후)
+- 남은 일: 사용자 확인 후 게임 반영·커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/{process.py,gif_preview.py}`, `02_final/idle_calm*`, `09_idle_calm/`
+
+## 2026-10-29 idle 정수리 흔들림 줄임
+- 한 일: 정수리가 바깥으로 부풀지 않게 머리 합성을 시작 자세 실루엣 안쪽으로 제한(`FREEZE` `hair=3, hair_rows=6, hair_out=False`; 외곽선이 밖에 다시 그려져 부풀던 원인 차단). 정수리 5줄 프레임 간 변화 8방향 합 774→324px(-58%), 방향별 31~54px. sheet_clip 종료 코드 0. 이전 시트 `09_idle_calm/hair_rows6/`, GIF `preview/idle_calm_hair_x3.gif`(위 전, 아래 후)
+- 남은 일: 사용자 확인 후 게임 반영·커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/idle_calm*`, `09_idle_calm/`
+
+## 2026-10-29 idle 머리 흔들림 수정판 게임 반영
+- 한 일: 정수리 줄인 버전을 외곽선 없이 게임에 반영(idle 8개). EditMode 6/6, 화면 `Docs/QA/Screens/idle_calm_hairfix_ingame_20261029.png`. 커밋함
+- 남은 일: verify.ps1·빈 참조 미실행(에디터 열림), 다른 동작은 외곽선 있음(미결정)
+- 바꾼 파일: `Assets/Resources/Art/chr_player_idle_*.png`, `Docs/QA/`
