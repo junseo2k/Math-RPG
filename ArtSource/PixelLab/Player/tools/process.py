@@ -78,6 +78,9 @@ SWORD_FROM_REF = {('idle_breath', 'north-west')}
 # body, head and sword stay exactly the start pose; only the silhouette edge of the cape hem / hair tips
 # follows the generated frame, at most cape/hair px in or out (user, 2026-10-29)
 FREEZE = {'idle_calm': dict(cape=2, hair=1)}
+# NW start pose reads as hair copied forward; use the NE head mirrored (top HEAD_ROWS rows), hair held still (user, 2026-10-29)
+HEAD_FROM = {('idle_calm', 'north-west'): 'north-east'}
+HEAD_ROWS = 11
 
 
 def steel_mask(img):
@@ -158,6 +161,33 @@ def freeze_body(f, ref, pal, cape, hair):
         out[take] = f[take]
     out = outline(out, pal)[0]
     return drop_fragments(out, max_px=4, gap=0)[0]
+
+
+def head_from(img, src, pal):
+    """Replace the top HEAD_ROWS rows of img (non-cape pixels) with src's mirrored head, tops and head centres aligned."""
+    src = np.flip(src, 1)
+    red = lambda im: (im[..., 3] > 0) & (im[..., 0].astype(int) > im[..., 1].astype(int) + 40) & (im[..., 0] > 60)
+    def head(im):
+        t = bbox(im)[1]
+        m = (im[..., 3] > 0) & ~red(im)
+        m[:t] = False; m[t + HEAD_ROWS:] = False
+        return m, t
+    hi, ti = head(img)
+    hs, ts = head(src)
+    cx = lambda m, t: int(round(np.nonzero(m[t:t + 6])[1].mean()))   # crown centre, free of shoulder strands
+    dx, dy = cx(hi, ti) - cx(hs, ts), ti - ts
+    out = img.copy()
+    out[hi] = 0
+    # src's own outline is left out (outline() redraws the new silhouette); holes inside fall back to the old pixel
+    hs &= ~(src[..., :3] == pal[0]).all(-1)
+    ys, xs = np.nonzero(hs)
+    ok = (ys + dy >= 0) & (ys + dy < SIZE) & (xs + dx >= 0) & (xs + dx < SIZE)
+    out[ys[ok] + dy, xs[ok] + dx] = src[ys[ok], xs[ok]]
+    a = out[..., 3] > 0
+    left, right = np.maximum.accumulate(a, 1), np.maximum.accumulate(a[:, ::-1], 1)[:, ::-1]
+    hole = ~a & left & right & hi
+    out[hole] = img[hole]
+    return outline(out, pal)[0]
 
 
 def mirror_frames(frames):
@@ -633,6 +663,8 @@ def cmd_build(only=None):
             if d in MIRROR.get(clip, ()):
                 out, marks = mirror_frames(out), [np.flip(m, 1) for m in marks]
             reff = process_frame(ref, dx, dy, pal)[0]
+            if (clip, d) in HEAD_FROM:
+                reff = head_from(reff, base[HEAD_FROM[(clip, d)]][3], pal)
             if (clip, d) in SWORD_FROM_REF:
                 out = paste_sword(out, reff, pal)
             else:
@@ -644,7 +676,8 @@ def cmd_build(only=None):
             if clip in STABLE:
                 out = [pin_head(f, body_top(bf), pal) for f in out]
             if clip in FREEZE:
-                out = [freeze_body(f, reff, pal, **FREEZE[clip]) for f in out]
+                kw = dict(FREEZE[clip], hair=0) if (clip, d) in HEAD_FROM else FREEZE[clip]
+                out = [freeze_body(f, reff, pal, **kw) for f in out]
             bh = bbox(bf)[3] - bbox(bf)[1] + 1
             report += [f'{clip}/{d}: {s}' for s in check_clip(clip, d, out, bh)]
             sheet = np.concatenate(out, 1)
