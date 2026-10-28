@@ -5,7 +5,8 @@ import os, shutil
 HERE = os.path.dirname(os.path.abspath(__file__))
 FINAL = os.path.join(HERE, '..', '02_final')
 ART = os.path.join(HERE, '..', '..', '..', '..', 'Assets', 'Resources', 'Art')
-STATES = {'idle': 'idle', 'run': 'run', 'attack': 'attack', 'dodge': 'dash', 'hurt': 'hurt'}
+STATES = {'idle_alert': 'idle',   # alert idle replaces the game idle (user, 2026-10-28)
+          'run': 'run', 'attack': 'attack', 'dodge': 'dash', 'hurt': 'hurt'}
 DIRS = {'south': 's', 'south-east': 'se', 'east': 'e', 'north-east': 'ne',
         'north': 'n', 'north-west': 'nw', 'west': 'w', 'south-west': 'sw'}
 
