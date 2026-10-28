@@ -77,9 +77,14 @@ SWORD_FROM_REF = {('idle_breath', 'north-west')}
 
 # body, head and sword stay exactly the start pose; only the silhouette edge of the cape hem / hair tips
 # follows the generated frame, at most cape/hair px in or out (user, 2026-10-29)
-FREEZE = {'idle_calm': dict(cape=2, hair=1)}
-# NW start pose reads as hair copied forward; use the NE head mirrored (top HEAD_ROWS rows), hair held still (user, 2026-10-29)
-HEAD_FROM = {('idle_calm', 'north-west'): 'north-east'}
+FREEZE = {'idle_calm': dict(cape=2, hair=3, hair_rows=6, hair_out=False)}   # crown never puffs outward; hair changes stay inside the start silhouette (user, 2026-10-29)
+# hair band comes from hair-only generations, per direction the take whose sway is closest to SW's
+# (hair_motion.py distance; user: match the SW hair sway, keep the hairstyle, 2026-10-29)
+HAIR_FROM_CLIP = {'idle_calm': {'east': 'idle_hair', 'north-east': 'idle_hair3', 'north': 'idle_hair3',
+                                'north-west': 'idle_hair3', 'west': 'idle_hair', 'south-west': 'idle_hair',
+                                'south': 'idle_hair', 'south-east': 'idle_hair3'}}
+# frozen body/head reference: the right-hand start poses, NW head = mirrored NE head (head_from) (user, 2026-10-29)
+REF_FROM = {'idle_calm': 'idle_hair_start'}
 HEAD_ROWS = 11
 
 
@@ -135,41 +140,50 @@ def grow(m, r):
     return m
 
 
-def freeze_body(f, ref, pal, cape, hair):
+def cape_px(im):
+    """Red cape pixels only (r > g+40 also caught the gold mid-tones c39650/ae783a/d2a855/91511b)."""
+    c = im[..., :3].astype(int)
+    return (im[..., 3] > 0) & (c[..., 0] > 2.2 * c[..., 1]) & (c[..., 0] > 50)
+
+
+def freeze_body(f, ref, pal, cape, hair, hair_src=None, hair_rows=11, hair_out=True):
     """Start pose everywhere except an edge band (cape lower half: cape px, hair rows: hair px) where the
     generated frame's cape/hair/outline/empty pixels are taken; legs, skin, armour and sword never move."""
     a = ref[..., 3] > 0
-    c, cf = ref[..., :3].astype(int), f[..., :3].astype(int)
-    red = lambda c, al: al & (c[..., 0] > c[..., 1] + 40) & (c[..., 0] > 60)
+    c = ref[..., :3].astype(int)
     gold = lambda c, al: al & (c[..., 0] > 150) & (c[..., 1] > 110) & (c[..., 2] < c[..., 1] - 30)
     line = lambda img: (img[..., 3] > 0) & (img[..., :3] == pal[0]).all(-1)
     soft_ref = ~a | line(ref)
     soft_f = (f[..., 3] == 0) | line(f)
-    rows = np.nonzero(red(c, a).sum(1) >= 4)[0]
+    rows = np.nonzero(cape_px(ref).sum(1) >= 4)[0]
     top = body_top(ref)
     y = np.arange(SIZE)[:, None]
     zones = []
     if len(rows):
         mid = (rows.min() + rows.max()) // 2
-        band = grow(a, cape) & grow(~a, cape) & (y >= mid)
-        zones.append((band, soft_ref | red(c, a), soft_f | red(cf, f[..., 3] > 0)))
-    band = grow(a, hair) & grow(~a, hair) & (y <= top + 10)
-    zones.append((band, soft_ref | gold(c, a), soft_f | gold(cf, f[..., 3] > 0)))
+        band = grow(a, cape) & grow(~a, cape) & (y >= mid) & (y < ANCHOR[1] - 3)   # ground rows stay: feet anchor
+        zones.append((band, soft_ref | cape_px(ref), soft_f | cape_px(f), f))
+    band = grow(a, hair) & grow(~a, hair) & (y < top + hair_rows)
+    h = f if hair_src is None else hair_src
+    # hair_out=False: only the ref's own hair pixels may change (never its outline or the space around it), so the
+    # crown can thin by a pixel but outline() never gets pushed outward
+    ok_ref = (soft_ref | gold(c, a)) if hair_out else gold(c, a)
+    zones.append((band, ok_ref, (h[..., 3] == 0) | line(h) | gold(h[..., :3].astype(int), h[..., 3] > 0), h))
     out = ref.copy()
-    for band, ok_ref, ok_f in zones:
+    for band, ok_ref, ok_f, src in zones:
         take = band & ok_ref & ok_f
-        out[take] = f[take]
+        out[take] = src[take]
     out = outline(out, pal)[0]
     return drop_fragments(out, max_px=4, gap=0)[0]
 
 
-def head_from(img, src, pal):
-    """Replace the top HEAD_ROWS rows of img (non-cape pixels) with src's mirrored head, tops and head centres aligned."""
-    src = np.flip(src, 1)
-    red = lambda im: (im[..., 3] > 0) & (im[..., 0].astype(int) > im[..., 1].astype(int) + 40) & (im[..., 0] > 60)
+def head_from(img, src, pal, mirror=True):
+    """Replace the top HEAD_ROWS rows of img (non-cape pixels) with src's (mirrored) head, tops and head centres aligned."""
+    if mirror:
+        src = np.flip(src, 1)
     def head(im):
         t = bbox(im)[1]
-        m = (im[..., 3] > 0) & ~red(im)
+        m = (im[..., 3] > 0) & ~cape_px(im)
         m[:t] = False; m[t + HEAD_ROWS:] = False
         return m, t
     hi, ti = head(img)
@@ -663,8 +677,8 @@ def cmd_build(only=None):
             if d in MIRROR.get(clip, ()):
                 out, marks = mirror_frames(out), [np.flip(m, 1) for m in marks]
             reff = process_frame(ref, dx, dy, pal)[0]
-            if (clip, d) in HEAD_FROM:
-                reff = head_from(reff, base[HEAD_FROM[(clip, d)]][3], pal)
+            if clip in REF_FROM:
+                reff = process_frame(read_png(os.path.join(RAW, REF_FROM[clip], f'{d}.png')), rdx, rdy, pal)[0]
             if (clip, d) in SWORD_FROM_REF:
                 out = paste_sword(out, reff, pal)
             else:
@@ -676,8 +690,13 @@ def cmd_build(only=None):
             if clip in STABLE:
                 out = [pin_head(f, body_top(bf), pal) for f in out]
             if clip in FREEZE:
-                kw = dict(FREEZE[clip], hair=0) if (clip, d) in HEAD_FROM else FREEZE[clip]
-                out = [freeze_body(f, reff, pal, **kw) for f in out]
+                hair = [None] * len(out)
+                if clip in HAIR_FROM_CLIP:
+                    src = HAIR_FROM_CLIP[clip]
+                    hr = raw_frames(src[d] if isinstance(src, dict) else src, d)
+                    hx, hy, _ = clip_offset(rot, rdx, rdy, hr)
+                    hair = [process_frame(r, hx, hy, pal)[0] for r in hr[drop:]]
+                out = [freeze_body(f, reff, pal, hair_src=h, **FREEZE[clip]) for f, h in zip(out, hair)]
             bh = bbox(bf)[3] - bbox(bf)[1] + 1
             report += [f'{clip}/{d}: {s}' for s in check_clip(clip, d, out, bh)]
             sheet = np.concatenate(out, 1)
