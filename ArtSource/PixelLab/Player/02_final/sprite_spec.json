@@ -1,0 +1,77 @@
+{
+  "frame_size": [
+    64,
+    64
+  ],
+  "anchor_px": [
+    32,
+    56
+  ],
+  "anchor_note": "ground contact between feet, y from top",
+  "unity_pivot": [
+    0.5,
+    0.125
+  ],
+  "ppu": 32,
+  "scale": 1,
+  "direction_order": [
+    "south",
+    "south-east",
+    "east",
+    "north-east",
+    "north",
+    "north-west",
+    "west",
+    "south-west"
+  ],
+  "palette": "palette.hex",
+  "palette_colors": 16,
+  "outline_color": "#000000",
+  "sheet_layout": "per clip: <clip>/<dir>.png = frames left->right; <clip>_sheet.png = rows in direction_order",
+  "shadow": {
+    "file": "shadow.png",
+    "note": "separate layer, draw under sprite at ~40% alpha"
+  },
+  "clips": {
+    "idle": {
+      "frames": 4,
+      "fps": 6,
+      "loop": true
+    },
+    "run": {
+      "frames": 8,
+      "fps": 12,
+      "loop": true
+    },
+    "attack": {
+      "frames": 6,
+      "fps": 12,
+      "loop": false
+    },
+    "dodge": {
+      "frames": 6,
+      "fps": 12,
+      "loop": false
+    },
+    "hurt": {
+      "frames": 4,
+      "fps": 16,
+      "loop": false
+    }
+  },
+  "attack_phases": {
+    "windup": [
+      0,
+      1
+    ],
+    "strike": [
+      2,
+      3
+    ],
+    "recover": [
+      4,
+      5
+    ]
+  },
+  "attack_trail": "separate asset (not in sprite)"
+}

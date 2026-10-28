@@ -1,0 +1,17 @@
+idle/south-east: f1: height 45 vs base 42
+idle/south-east: f2: height 46 vs base 42
+idle/south-east: f3: height 46 vs base 42
+idle/east: loop seam diff 465 > 1.5x max step 294
+idle/north: f2: height 46 vs base 42
+idle/north: f3: height 46 vs base 42
+run/south-east: f6: pixels below ground line (bottom row 56)
+run/south-east: f7: pixels below ground line (bottom row 56)
+run/north-east: f2: pixels below ground line (bottom row 56)
+run/north-west: f1: pixels below ground line (bottom row 56)
+run/north-west: f1: height 47 vs base 43
+run/north-west: f2: pixels below ground line (bottom row 56)
+run/west: f7: pixels below ground line (bottom row 56)
+dodge/south-east: f2: pixels below ground line (bottom row 56)
+dodge/south-east: f3: pixels below ground line (bottom row 56)
+verified 45 files: palette 16 colours, alpha 0/255, 1px 4-direction outline, no diagonal corners
+exit 0
