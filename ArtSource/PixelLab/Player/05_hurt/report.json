@@ -1,0 +1,616 @@
+{
+ "unique_rgb": 16,
+ "alpha": [
+  0,
+  255
+ ],
+ "fps": 16,
+ "dirs": {
+  "east": {
+   "file": "0_east.png",
+   "size": [
+    258,
+    66
+   ],
+   "frames": 4,
+   "frame": [
+    {
+     "w": 26,
+     "h": 43,
+     "margin": {
+      "l": 18,
+      "t": 13,
+      "r": 20,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 14,
+     "outline_ok": true
+    },
+    {
+     "w": 27,
+     "h": 42,
+     "margin": {
+      "l": 16,
+      "t": 14,
+      "r": 21,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 15,
+     "outline_ok": true
+    },
+    {
+     "w": 28,
+     "h": 42,
+     "margin": {
+      "l": 17,
+      "t": 14,
+      "r": 19,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 14,
+     "outline_ok": true
+    },
+    {
+     "w": 29,
+     "h": 43,
+     "margin": {
+      "l": 19,
+      "t": 13,
+      "r": 16,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 13,
+     "outline_ok": true
+    }
+   ],
+   "body_top_range": 2
+  },
+  "north-east": {
+   "file": "1_north-east.png",
+   "size": [
+    258,
+    66
+   ],
+   "frames": 4,
+   "frame": [
+    {
+     "w": 36,
+     "h": 45,
+     "margin": {
+      "l": 8,
+      "t": 11,
+      "r": 20,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 11,
+     "outline_ok": true
+    },
+    {
+     "w": 34,
+     "h": 46,
+     "margin": {
+      "l": 7,
+      "t": 10,
+      "r": 23,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 10,
+     "outline_ok": true
+    },
+    {
+     "w": 35,
+     "h": 44,
+     "margin": {
+      "l": 8,
+      "t": 12,
+      "r": 21,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 12,
+     "outline_ok": true
+    },
+    {
+     "w": 36,
+     "h": 43,
+     "margin": {
+      "l": 10,
+      "t": 13,
+      "r": 18,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 13,
+     "outline_ok": true
+    }
+   ],
+   "body_top_range": 3
+  },
+  "north": {
+   "file": "2_north.png",
+   "size": [
+    258,
+    66
+   ],
+   "frames": 4,
+   "frame": [
+    {
+     "w": 32,
+     "h": 42,
+     "margin": {
+      "l": 16,
+      "t": 14,
+      "r": 16,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 14,
+     "outline_ok": true
+    },
+    {
+     "w": 32,
+     "h": 43,
+     "margin": {
+      "l": 16,
+      "t": 13,
+      "r": 16,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 13,
+     "outline_ok": true
+    },
+    {
+     "w": 32,
+     "h": 42,
+     "margin": {
+      "l": 16,
+      "t": 14,
+      "r": 16,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 14,
+     "outline_ok": true
+    },
+    {
+     "w": 32,
+     "h": 42,
+     "margin": {
+      "l": 16,
+      "t": 14,
+      "r": 16,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 14,
+     "outline_ok": true
+    }
+   ],
+   "body_top_range": 1
+  },
+  "north-west": {
+   "file": "3_north-west.png",
+   "size": [
+    258,
+    66
+   ],
+   "frames": 4,
+   "frame": [
+    {
+     "w": 36,
+     "h": 44,
+     "margin": {
+      "l": 18,
+      "t": 12,
+      "r": 10,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 12,
+     "outline_ok": true
+    },
+    {
+     "w": 39,
+     "h": 45,
+     "margin": {
+      "l": 18,
+      "t": 11,
+      "r": 7,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 11,
+     "outline_ok": true
+    },
+    {
+     "w": 34,
+     "h": 45,
+     "margin": {
+      "l": 23,
+      "t": 11,
+      "r": 7,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 12,
+     "outline_ok": true
+    },
+    {
+     "w": 36,
+     "h": 43,
+     "margin": {
+      "l": 18,
+      "t": 13,
+      "r": 10,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 13,
+     "outline_ok": true
+    }
+   ],
+   "body_top_range": 2
+  },
+  "west": {
+   "file": "4_west.png",
+   "size": [
+    258,
+    66
+   ],
+   "frames": 4,
+   "frame": [
+    {
+     "w": 32,
+     "h": 42,
+     "margin": {
+      "l": 14,
+      "t": 14,
+      "r": 18,
+      "b": 8
+     },
+     "anchor": [
+      33,
+      56
+     ],
+     "body_top": 15,
+     "outline_ok": true
+    },
+    {
+     "w": 33,
+     "h": 42,
+     "margin": {
+      "l": 13,
+      "t": 14,
+      "r": 18,
+      "b": 8
+     },
+     "anchor": [
+      33,
+      56
+     ],
+     "body_top": 15,
+     "outline_ok": true
+    },
+    {
+     "w": 32,
+     "h": 43,
+     "margin": {
+      "l": 15,
+      "t": 13,
+      "r": 17,
+      "b": 8
+     },
+     "anchor": [
+      33,
+      56
+     ],
+     "body_top": 14,
+     "outline_ok": true
+    },
+    {
+     "w": 29,
+     "h": 43,
+     "margin": {
+      "l": 17,
+      "t": 13,
+      "r": 18,
+      "b": 8
+     },
+     "anchor": [
+      33,
+      56
+     ],
+     "body_top": 13,
+     "outline_ok": true
+    }
+   ],
+   "body_top_range": 2
+  },
+  "south-west": {
+   "file": "5_south-west.png",
+   "size": [
+    258,
+    66
+   ],
+   "frames": 4,
+   "frame": [
+    {
+     "w": 34,
+     "h": 45,
+     "margin": {
+      "l": 10,
+      "t": 11,
+      "r": 20,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 11,
+     "outline_ok": true
+    },
+    {
+     "w": 37,
+     "h": 47,
+     "margin": {
+      "l": 9,
+      "t": 9,
+      "r": 18,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 9,
+     "outline_ok": true
+    },
+    {
+     "w": 36,
+     "h": 44,
+     "margin": {
+      "l": 10,
+      "t": 12,
+      "r": 18,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 12,
+     "outline_ok": true
+    },
+    {
+     "w": 35,
+     "h": 42,
+     "margin": {
+      "l": 9,
+      "t": 14,
+      "r": 20,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 14,
+     "outline_ok": true
+    }
+   ],
+   "body_top_range": 5
+  },
+  "south": {
+   "file": "6_south.png",
+   "size": [
+    258,
+    66
+   ],
+   "frames": 4,
+   "frame": [
+    {
+     "w": 36,
+     "h": 44,
+     "margin": {
+      "l": 14,
+      "t": 12,
+      "r": 14,
+      "b": 8
+     },
+     "anchor": [
+      26,
+      56
+     ],
+     "body_top": 12,
+     "outline_ok": true
+    },
+    {
+     "w": 37,
+     "h": 45,
+     "margin": {
+      "l": 13,
+      "t": 11,
+      "r": 14,
+      "b": 8
+     },
+     "anchor": [
+      26,
+      56
+     ],
+     "body_top": 11,
+     "outline_ok": true
+    },
+    {
+     "w": 36,
+     "h": 44,
+     "margin": {
+      "l": 14,
+      "t": 12,
+      "r": 14,
+      "b": 8
+     },
+     "anchor": [
+      26,
+      56
+     ],
+     "body_top": 12,
+     "outline_ok": true
+    },
+    {
+     "w": 35,
+     "h": 42,
+     "margin": {
+      "l": 15,
+      "t": 14,
+      "r": 14,
+      "b": 8
+     },
+     "anchor": [
+      26,
+      56
+     ],
+     "body_top": 14,
+     "outline_ok": true
+    }
+   ],
+   "body_top_range": 3
+  },
+  "south-east": {
+   "file": "7_south-east.png",
+   "size": [
+    258,
+    66
+   ],
+   "frames": 4,
+   "frame": [
+    {
+     "w": 36,
+     "h": 41,
+     "margin": {
+      "l": 19,
+      "t": 15,
+      "r": 9,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 16,
+     "outline_ok": true
+    },
+    {
+     "w": 36,
+     "h": 42,
+     "margin": {
+      "l": 18,
+      "t": 14,
+      "r": 10,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 15,
+     "outline_ok": true
+    },
+    {
+     "w": 35,
+     "h": 44,
+     "margin": {
+      "l": 20,
+      "t": 12,
+      "r": 9,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 13,
+     "outline_ok": true
+    },
+    {
+     "w": 35,
+     "h": 42,
+     "margin": {
+      "l": 21,
+      "t": 14,
+      "r": 8,
+      "b": 8
+     },
+     "anchor": [
+      32,
+      56
+     ],
+     "body_top": 14,
+     "outline_ok": true
+    }
+   ],
+   "body_top_range": 3
+  }
+ },
+ "fails": [],
+ "notes": [
+  "north-west f1: 39x45 > 36x48",
+  "south-west f1: 37x47 > 36x48",
+  "south f1: 37x45 > 36x48"
+ ]
+}

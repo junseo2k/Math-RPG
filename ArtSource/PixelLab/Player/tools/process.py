@@ -16,7 +16,8 @@ DIRS = ['south', 'south-east', 'east', 'north-east', 'north', 'north-west', 'wes
 CLIPS = {  # name: (frames, fps, loop, frames dropped from raw start)
     'idle': (4, 6, True, 1), 'run': (8, 12, True, 1),
     'attack': (6, 12, False, 1), 'dodge': (6, 12, False, 1),
-    'hurt': (4, 16, False, 1)}   # spec asked 3f@12fps; v3 needs even >= 4 -> 4f@16fps = 0.25 s (user, 2026-10-28)
+    'hurt': (4, 16, False, 1),   # spec asked 3f@12fps; v3 needs even >= 4 -> 4f@16fps = 0.25 s (user, 2026-10-28)
+    'death': (6, 10, False, 1)}  # one-shot, ends lying down (game: PlayHold)
 SIZE, ANCHOR = 64, (32, 56)       # anchor = ground contact; feet bottom pixel row = 55
 MAX_COLORS = 16                   # incl. black outline (pixel-art standard, 2026-10-27)
 W = np.array([2.0, 4.0, 3.0])    # perceptual-ish RGB weights for nearest colour
@@ -35,6 +36,21 @@ def feet_anchor(img):
     bot = ys.max()
     xs = np.nonzero(a[bot - 1:bot + 1].any(0))[0]
     return (xs.min() + xs.max() + 1) // 2, bot
+
+
+def planted_feet(img):
+    """Feet contact point: bottom row, runs of >= 3 px (sword tip / cape specks ignored). Returns (x, ground y)."""
+    a = img[..., 3] > 0
+    bot = np.nonzero(a.any(1))[0].max()
+    row = np.r_[0, a[bot].astype(int), 0]
+    st, en = np.nonzero(np.diff(row) == 1)[0], np.nonzero(np.diff(row) == -1)[0]
+    runs = [(s, e) for s, e in zip(st, en) if e - s >= 3] or list(zip(st, en))
+    return int((runs[0][0] + runs[-1][1]) // 2), int(bot + 1)
+
+
+# frames whose feet must stay where the standing pose has them (ArtSpecification 1-6): clip -> frame indices (None = all)
+PLANTED = {'hurt': None, 'death': [0]}
+SNAP_MAX = 2   # px; larger drift is a real pose change, not generation noise
 
 
 def place(img, dx, dy):
@@ -421,7 +437,8 @@ def process_frame(img, dx, dy, pal):
     f, cleaned = cleanup(f, pal)
     f, sun = gold_sun(f)
     f, ostats, mark = outline(f, pal)
-    return f, dict(clipped_px=clipped, cleaned_px=cleaned, sun_gold_px=sun, **ostats), mark
+    f, specks = drop_fragments(f, max_px=4, gap=0)   # islands left after outline-corner cleanup are generation specks
+    return f, dict(clipped_px=clipped, cleaned_px=cleaned, sun_gold_px=sun, specks_px=specks, **ostats), mark
 
 
 def cmd_build(only=None):
@@ -450,10 +467,18 @@ def cmd_build(only=None):
             if len(raws) != n:
                 report.append(f'{clip}/{d}: {len(raws)} raw frames, spec {n} (not padded)')
             out, marks = [], []
+            home = planted_feet(bf)
             for i, r in enumerate(raws):
                 f, st, m = process_frame(r, dx, dy, pal)
+                snap = [0, 0]
+                if clip in PLANTED and (PLANTED[clip] is None or i in PLANTED[clip]):
+                    fx, fy = planted_feet(f)
+                    sx, sy = home[0] - fx, home[1] - fy
+                    if (sx or sy) and abs(sx) <= SNAP_MAX and abs(sy) <= SNAP_MAX:
+                        f, st, m = process_frame(r, dx + sx, dy + sy, pal)
+                        snap = [sx, sy]
                 out.append(f); marks.append(m)
-                log[f'{clip}/{d}/f{i}'] = dict(offset=[dx, dy], align=how, **st)
+                log[f'{clip}/{d}/f{i}'] = dict(offset=[dx, dy], snap=snap, align=how, **st)
             bh = bbox(bf)[3] - bbox(bf)[1] + 1
             report += [f'{clip}/{d}: {s}' for s in check_clip(clip, d, out, bh)]
             sheet = np.concatenate(out, 1)
