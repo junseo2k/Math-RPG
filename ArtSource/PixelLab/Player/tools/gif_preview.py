@@ -1,6 +1,7 @@
 """Looping GIF previews (stdlib + numpy, no PIL).
 
   python gif_preview.py compare   # 09_idle_calm/preview/idle_calm_compare_x3.gif: regen/ unfrozen (top) vs body frozen (bottom), E..SE
+  python gif_preview.py outline   # 09_idle_calm/preview/idle_calm_outline_x3.gif: with (top) / without (bottom) outer outline, E..SE
   python gif_preview.py all       # 09_idle_calm/preview/idle_calm_all_x4.gif: 8 directions, E NE N NW / W SW S SE
 """
 import os, struct, sys
@@ -64,7 +65,19 @@ if __name__ == '__main__':
     if sys.argv[1] == 'compare':
         rows = [[frames(os.path.join(OUT, sub, f'{n}_{d}.png')) for n, d in enumerate(DIRS)] for sub in ('regen', '')]
         write_gif(os.path.join(OUT, 'preview', 'idle_calm_compare_x3.gif'), grid(rows, 3), delay)
+    elif sys.argv[1] == 'outline':
+        oc = P.load_palette()[0]
+        def strip(path):   # outer silhouette outline -> transparent (inner dark lines stay)
+            s = read_png(path)
+            m = s[..., 3] > 0
+            p = np.pad(m, 1)
+            edge = m & ~(p[:-2, 1:-1] & p[2:, 1:-1] & p[1:-1, :-2] & p[1:-1, 2:]) & (s[..., :3] == oc).all(-1)
+            s[edge] = 0
+            return [P.on_bg(s[:, i * 68:i * 68 + 64]) for i in range(4)]
+        rows = [[frames(os.path.join(OUT, f'{n}_{d}.png')) for n, d in enumerate(DIRS)],
+                [strip(os.path.join(OUT, f'{n}_{d}.png')) for n, d in enumerate(DIRS)]]
+        write_gif(os.path.join(OUT, 'preview', 'idle_calm_outline_x3.gif'), grid(rows, 3), delay)
     else:
-        cells = [frames(os.path.join(OUT, f'{n}_{d}.png')) for n, d in enumerate(DIRS)]
+        cells =[frames(os.path.join(OUT, f'{n}_{d}.png')) for n, d in enumerate(DIRS)]
         rows = [cells[:4], cells[4:]]
         write_gif(os.path.join(OUT, 'preview', 'idle_calm_all_x4.gif'), grid(rows), delay)

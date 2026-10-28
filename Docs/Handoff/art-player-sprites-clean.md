@@ -65,3 +65,13 @@
 - 한 일: 사용자 결정("게임에 넣기")으로 `export_unity.py` STATES `idle_calm → idle`, `chr_player_idle_{8방향}.png` 교체. EditMode 6/6 통과(브리지 직접 연결), 8방향 로드 확인, 화면 `Docs/QA/Screens/idle_calm_ingame_20261029.png`, 리포트 `Docs/QA/idle_calm_ingame_20261029.md`
 - 남은 일: verify.ps1·빈 참조 검사는 에디터가 열려 있어 못 돌림(종료 코드 3). 화면은 남서 방향 1장만 확인. 커밋 안 함
 - 바꾼 파일: `ArtSource/PixelLab/Player/tools/export_unity.py`, `Assets/Resources/Art/chr_player_idle_*.png`, `Docs/QA/`
+
+## 2026-10-29 idle 바깥 외곽선 제거
+- 한 일: 사용자 결정("윤곽선 안 넣은 버전으로")으로 `export_unity.py`에 `NO_OUTLINE={'idle_calm'}` — 게임 복사본만 바깥 1px 외곽선 제거, `02_final`은 외곽선 유지. EditMode 6/6, 화면 `Docs/QA/Screens/idle_calm_nooutline_ingame*_20261029.png`. 비교 GIF `09_idle_calm/preview/idle_calm_outline_x3.gif`(`gif_preview.py outline`)
+- 남은 일: 다른 동작(run·attack·dash·hurt·death)은 외곽선 있음 — 맞출지 결정 필요. 가장자리에 검은 픽셀 프레임당 5~9개 남음, 발끝 1px 위. verify.ps1 미실행. 커밋 안 함
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/{export_unity.py,gif_preview.py}`, `Assets/Resources/Art/chr_player_idle_*.png`, `09_idle_calm/preview/idle_calm_outline_x3.gif`, `Docs/QA/`
+
+## 2026-10-29 idle 북서 머리 교체
+- 한 일: 사용자 요청으로 북서 idle 머리를 북동 머리 좌우 반전으로 교체(`process.py` `HEAD_FROM`/`head_from`, 북서는 머리카락 흔들림 끔). sheet_clip 종료 코드 0, 게임 반영(외곽선 없음), EditMode 6/6, 화면 `Docs/QA/Screens/idle_calm_nw_head_ingame_20261029.png`
+- 남은 일: 반전 머리의 광원 방향 정밀 확인 안 함, verify.ps1 미실행, 커밋 안 함
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/idle_calm*`, `09_idle_calm/`, `Assets/Resources/Art/chr_player_idle_*.png`
