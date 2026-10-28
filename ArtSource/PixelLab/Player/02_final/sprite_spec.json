@@ -67,6 +67,16 @@
       "frames": 4,
       "fps": 6,
       "loop": true
+    },
+    "idle_breath": {
+      "frames": 4,
+      "fps": 6,
+      "loop": true
+    },
+    "idle_calm": {
+      "frames": 4,
+      "fps": 6,
+      "loop": true
     }
   },
   "attack_phases": {

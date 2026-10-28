@@ -18,7 +18,11 @@ CLIPS = {  # name: (frames, fps, loop, frames dropped from raw start)
     'attack': (6, 12, False, 1), 'dodge': (6, 12, False, 1),
     'hurt': (4, 16, False, 1),   # spec asked 3f@12fps; v3 needs even >= 4 -> 4f@16fps = 0.25 s (user, 2026-10-28)
     'death': (6, 10, False, 1),  # one-shot, ends lying down (game: PlayHold)
-    'idle_alert': (4, 6, True, 1)}   # sword-ready guard idle, delivery only (07_idle_alert, 2026-10-28)
+    'idle_alert': (4, 6, True, 1),    # sword-ready guard idle, delivery only (07_idle_alert, 2026-10-28)
+    'idle_breath': (4, 6, True, 1),   # breathing idle from right-hand start poses (08_idle_breath, 2026-10-29)
+    'idle_calm': (4, 6, True, 1)}     # still guard idle, only hair tips + cape hem sway (09_idle_calm, 2026-10-29)
+# standing poses that clips are aligned to: right-hand sword versions (W/NW/SE edited, S flipped; user, 2026-10-29)
+ROTATIONS = 'idle_breath_start'
 SIZE, ANCHOR = 64, (32, 56)       # anchor = ground contact; feet bottom pixel row = 55
 MAX_COLORS = 16                   # incl. black outline (pixel-art standard, 2026-10-27)
 W = np.array([2.0, 4.0, 3.0])    # perceptual-ish RGB weights for nearest colour
@@ -50,21 +54,140 @@ def planted_feet(img):
 
 
 # frames whose feet must stay where the standing pose has them (ArtSpecification 1-6): clip -> frame indices (None = all)
-PLANTED = {'hurt': None, 'death': [0], 'idle_alert': None}
+PLANTED = {'hurt': None, 'death': [0], 'idle_alert': None, 'idle_breath': None, 'idle_calm': None}
 SNAP_MAX = 2   # px; larger drift is a real pose change, not generation noise
 
 # every generated idle/N take bobbed the head 2-5 px (2026-10-28): rotation pose held, only the cape hem sways (user)
 STILL = {'idle': ['north'], 'idle_alert': ['north']}
-HEM_SWAY = (0, 1, 0, -1)   # px per frame
+# the whole cape swings like a pendulum; 8 small steps instead of 4 so it doesn't stutter (user, 2026-10-29)
+STILL_FRAMES = 8
+
+# sword belongs in the right hand; W-side art mirrors E so these held it in the left (user, 2026-10-29).
+# S faces the camera, so a horizontal flip puts the sword in the right hand without regenerating.
+MIRROR = {'idle_alert': ['south'], 'run': ['south'], 'attack': ['south'], 'dodge': ['south'],
+          'hurt': ['south'], 'death': ['south']}   # all clips right-handed (user, 2026-10-29)
+
+# head/torso height pinned to the standing pose; dodge/death drop the body on purpose, run keeps its stride bob (user, 2026-10-29)
+STABLE = ('idle_breath', 'idle_calm', 'attack', 'hurt')
+STABLE_MAX = 4   # px; a larger difference is a real pose change (raised arm, lean), not generation bob
 
 
-def hem_sway(img, s, rows=4):
-    """Shift the bottom `rows` cape rows (and the outline row under them) sideways by s px."""
+# v3 drops the NW idle sword in some frames (every take, 2026-10-29): paint the start pose's blade onto each frame
+SWORD_FROM_REF = {('idle_breath', 'north-west')}
+
+# body, head and sword stay exactly the start pose; only the silhouette edge of the cape hem / hair tips
+# follows the generated frame, at most cape/hair px in or out (user, 2026-10-29)
+FREEZE = {'idle_calm': dict(cape=2, hair=1)}
+
+
+def steel_mask(img):
+    c = img[..., :3].astype(int)
+    return (img[..., 3] > 0) & (c.max(-1) - c.min(-1) < 25) & (lum(c) > 60)
+
+
+def lost_sword(f, ref):
+    """Near-start pose whose blade is (mostly) gone: v3 sometimes draws it as a 1px dark line that cleanup erases."""
+    a, b = f[..., 3] > 0, ref[..., 3] > 0
+    return steel_mask(f).sum() < 0.4 * steel_mask(ref).sum() and (a & b).sum() / max(1, (a | b).sum()) >= 0.7
+
+
+def paste_sword(frames, ref, pal):
+    """Copy the grey blade (and its 1px outline) of the reference pose onto every frame."""
+    steel = steel_mask(ref)
+    m = np.pad(steel, 1)
+    near = m[:-2, 1:-1] | m[2:, 1:-1] | m[1:-1, :-2] | m[1:-1, 2:] | steel
+    mask = near & (ref[..., 3] > 0) & (steel | (ref[..., :3] == pal[0]).all(-1))
+    out = []
+    for f in frames:
+        f = f.copy()
+        f[mask] = ref[mask]
+        out.append(outline(f, pal)[0])
+    return out
+
+
+def body_top(img):
+    return int(np.nonzero((img[..., 3] > 0).sum(1) >= 6)[0][0])   # first row >= 6 px wide (hair spikes excluded)
+
+
+def pin_head(f, top, pal):
+    """Move everything above mid-body so body_top == top: the torso stretches/compresses by the difference
+    at the seam while the legs and feet stay put; then redraw the outline across the seam."""
+    k = body_top(f) - top
+    if k == 0 or abs(k) > STABLE_MAX:
+        return f
+    seam = (body_top(f) + ANCHOR[1]) // 2
+    out = f.copy()
+    if k > 0:                                    # head too low: lift, repeating the k rows above the seam
+        out[:seam - k] = f[k:seam]
+    else:                                        # head too high: lower, dropping |k| rows above the seam
+        out[-k:seam] = f[:seam + k]
+        out[:-k] = 0
+    return outline(out, pal)[0]
+
+
+def grow(m, r):
+    for _ in range(r):
+        p = np.pad(m, 1)
+        m = m | p[:-2, 1:-1] | p[2:, 1:-1] | p[1:-1, :-2] | p[1:-1, 2:]
+    return m
+
+
+def freeze_body(f, ref, pal, cape, hair):
+    """Start pose everywhere except an edge band (cape lower half: cape px, hair rows: hair px) where the
+    generated frame's cape/hair/outline/empty pixels are taken; legs, skin, armour and sword never move."""
+    a = ref[..., 3] > 0
+    c, cf = ref[..., :3].astype(int), f[..., :3].astype(int)
+    red = lambda c, al: al & (c[..., 0] > c[..., 1] + 40) & (c[..., 0] > 60)
+    gold = lambda c, al: al & (c[..., 0] > 150) & (c[..., 1] > 110) & (c[..., 2] < c[..., 1] - 30)
+    line = lambda img: (img[..., 3] > 0) & (img[..., :3] == pal[0]).all(-1)
+    soft_ref = ~a | line(ref)
+    soft_f = (f[..., 3] == 0) | line(f)
+    rows = np.nonzero(red(c, a).sum(1) >= 4)[0]
+    top = body_top(ref)
+    y = np.arange(SIZE)[:, None]
+    zones = []
+    if len(rows):
+        mid = (rows.min() + rows.max()) // 2
+        band = grow(a, cape) & grow(~a, cape) & (y >= mid)
+        zones.append((band, soft_ref | red(c, a), soft_f | red(cf, f[..., 3] > 0)))
+    band = grow(a, hair) & grow(~a, hair) & (y <= top + 10)
+    zones.append((band, soft_ref | gold(c, a), soft_f | gold(cf, f[..., 3] > 0)))
+    out = ref.copy()
+    for band, ok_ref, ok_f in zones:
+        take = band & ok_ref & ok_f
+        out[take] = f[take]
+    out = outline(out, pal)[0]
+    return drop_fragments(out, max_px=4, gap=0)[0]
+
+
+def mirror_frames(frames):
+    """Flip frames horizontally, shifted so the flipped legs (bottom 8 rows) overlap the original best."""
+    flipped = [np.flip(f, 1) for f in frames]
+    a, b = frames[0][-16:-8, :, 3] > 0, flipped[0][-16:-8, :, 3] > 0
+    s = max(range(-4, 5), key=lambda s: (a & np.roll(b, s, 1)).sum())
+    return [np.roll(f, s, 1) for f in flipped]
+
+
+def cape_flutter(img, th, amp=2.0, spread=0.0, lag=0.6):
+    """Bend the cape below the shoulders at phase th: rows move sideways by sin*amp and widen by cos*spread,
+    both growing toward the hem (0 at the shoulders), resampled nearest so the palette and outline survive.
+    lag (radians at the hem) delays lower rows so the hem trails the shoulders."""
     c = img[..., :3].astype(int)
     red = (img[..., 3] > 0) & (c[..., 0] > c[..., 1] + 40) & (c[..., 0] > 60)
-    hem = np.nonzero(red.sum(1) >= 10)[0].max()
+    rows = np.nonzero(red.sum(1) >= 10)[0]
+    top, hem = rows.min(), rows.max() + 1          # +1: outline row under the hem
     out = img.copy()
-    out[hem - rows + 2:hem + 2] = np.roll(img[hem - rows + 2:hem + 2], s, 1)
+    xs = np.arange(img.shape[1])
+    for y in range(top, hem + 1):
+        w = ((y - top) / (hem - top)) ** 1.5
+        cols = np.nonzero(img[y, :, 3] > 0)[0]
+        cx = (cols.min() + cols.max()) / 2
+        s, f = np.sin(th - lag * w), np.cos(th - lag * w)
+        src = np.round(cx + (xs - cx - s * amp * w) / (1 + f * spread * w)).astype(int)
+        ok = (src >= 0) & (src < img.shape[1])
+        row = np.zeros_like(img[y])
+        row[ok] = img[y, src[ok]]
+        out[y] = row
     return out
 
 
@@ -79,7 +202,7 @@ def place(img, dx, dy):
 
 
 def rotation_offset(d):
-    rot = read_png(os.path.join(RAW, 'rotations', f'{d}.png'))
+    rot = read_png(os.path.join(RAW, ROTATIONS, f'{d}.png'))
     fx, fy = feet_anchor(rot)
     return rot, ANCHOR[0] - fx, ANCHOR[1] - 1 - fy
 
@@ -196,7 +319,11 @@ def drop_fragments(img, max_px=30, gap=3):
     for _ in range(gap):
         p = np.pad(near, 1)
         near = p[1:-1, 1:-1] | p[:-2, 1:-1] | p[2:, 1:-1] | p[1:-1, :-2] | p[1:-1, 2:] | p[:-2, :-2] | p[:-2, 2:] | p[2:, :-2] | p[2:, 2:]
-    small = [i for i in range(1, n + 1) if sizes[i] <= max_px and i != sizes.argmax() and not (near & (lab == i)).any()]
+    c = img[..., :3].astype(int)
+    steel = (c.max(-1) - c.min(-1) < 25) & (lum(c) > 60)
+    # a blade drawn apart from the hidden hand (NW back views) is an island too: keep mostly-steel islands (2026-10-29)
+    small = [i for i in range(1, n + 1) if sizes[i] <= max_px and i != sizes.argmax() and not (near & (lab == i)).any()
+             and not (sizes[i] >= 6 and steel[lab == i].mean() >= 0.4)]
     kill = np.isin(lab, small)
     img = img.copy(); img[kill] = 0
     return img, int(kill.sum())
@@ -395,6 +522,12 @@ def check_clip(name, d, frames, base_h):
 
 
 # ---------- outputs ----------
+def stack_rows(rows):
+    """Stack sheet rows vertically, padding shorter rows (fewer frames) with transparency on the right."""
+    w = max(r.shape[1] for r in rows)
+    return np.concatenate([np.pad(r, ((0, 0), (0, w - r.shape[1]), (0, 0))) for r in rows], 0)
+
+
 def on_bg(img):
     m = img[..., 3:4] / 255.0
     out = (img[..., :3] * m + np.array(BG) * (1 - m)).astype(np.uint8)
@@ -478,10 +611,11 @@ def cmd_build(only=None):
             rot, rdx, rdy, bf = base[d]
             raws = raw_frames(clip, d)
             if d in STILL.get(clip, ()):
-                raws = [raws[0]] + [hem_sway(raws[0], s) for s in HEM_SWAY]
+                raws = [raws[0]] + [cape_flutter(raws[0], 2 * np.pi * t / STILL_FRAMES) for t in range(STILL_FRAMES)]
             dx, dy, how = clip_offset(rot, rdx, rdy, raws)
+            ref = raws[0]   # v3 keeps the start pose as raw frame 0
             raws = raws[drop:]
-            if len(raws) != n:
+            if len(raws) != n and d not in STILL.get(clip, ()):
                 report.append(f'{clip}/{d}: {len(raws)} raw frames, spec {n} (not padded)')
             out, marks = [], []
             home = planted_feet(bf)
@@ -496,6 +630,21 @@ def cmd_build(only=None):
                         snap = [sx, sy]
                 out.append(f); marks.append(m)
                 log[f'{clip}/{d}/f{i}'] = dict(offset=[dx, dy], snap=snap, align=how, **st)
+            if d in MIRROR.get(clip, ()):
+                out, marks = mirror_frames(out), [np.flip(m, 1) for m in marks]
+            reff = process_frame(ref, dx, dy, pal)[0]
+            if (clip, d) in SWORD_FROM_REF:
+                out = paste_sword(out, reff, pal)
+            else:
+                lost = [i for i, f in enumerate(out) if d == 'north-west' and lost_sword(f, reff)]   # only NW loses the blade
+                for i in lost:
+                    out[i] = paste_sword([out[i]], reff, pal)[0]
+                if lost:
+                    report.append(f'{clip}/{d}: sword restored from start pose in f{lost}')
+            if clip in STABLE:
+                out = [pin_head(f, body_top(bf), pal) for f in out]
+            if clip in FREEZE:
+                out = [freeze_body(f, reff, pal, **FREEZE[clip]) for f in out]
             bh = bbox(bf)[3] - bbox(bf)[1] + 1
             report += [f'{clip}/{d}: {s}' for s in check_clip(clip, d, out, bh)]
             sheet = np.concatenate(out, 1)
@@ -508,9 +657,9 @@ def cmd_build(only=None):
                 f[m] = [255, 0, 255, 255]
             prev_rows.append(np.concatenate(dbg, 1))
         if rows:
-            write_png(os.path.join(FINAL, f'{clip}_sheet.png'), np.concatenate(rows, 0))
-            write_png(os.path.join(PREVIEW, f'{clip}_sheet_x4.png'), upscale(on_bg(np.concatenate(rows, 0)), 4))
-            write_png(os.path.join(PREVIEW, f'{clip}_outline_marks_x4.png'), upscale(np.concatenate(prev_rows, 0), 4))
+            write_png(os.path.join(FINAL, f'{clip}_sheet.png'), stack_rows(rows))
+            write_png(os.path.join(PREVIEW, f'{clip}_sheet_x4.png'), upscale(on_bg(stack_rows(rows)), 4))
+            write_png(os.path.join(PREVIEW, f'{clip}_outline_marks_x4.png'), upscale(stack_rows(prev_rows), 4))
     write_png(os.path.join(PREVIEW, 'rotations_x4.png'), upscale(on_bg(np.concatenate([base[d][3] for d in DIRS], 1)), 4))
     # floor shadow: separate asset, not baked
     sh = np.zeros((SIZE, SIZE, 4), np.uint8)

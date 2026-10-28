@@ -14,7 +14,7 @@ OUT = os.path.join(P.ROOT, sys.argv[2] if len(sys.argv) > 2 else '05_hurt')
 DIRS = ['east', 'north-east', 'north', 'north-west', 'west', 'south-west', 'south', 'south-east']
 PAD = int(sys.argv[3]) if len(sys.argv) > 3 else 1
 GAP = int(sys.argv[4]) if len(sys.argv) > 4 else 0
-FRAMES, FPS, MARGIN, MAX_W, MAX_H = P.CLIPS[CLIP][0], P.CLIPS[CLIP][1], 4, 36, 48
+FPS, MARGIN, MAX_W, MAX_H = P.CLIPS[CLIP][1], 4, 36, 48
 
 
 def outline_ok(f, oc):
@@ -29,6 +29,7 @@ def main():
     oc = P.load_palette()[0]
     for n, d in enumerate(DIRS):
         src = read_png(os.path.join(P.FINAL, CLIP, f'{d}.png'))
+        FRAMES = src.shape[1] // 64   # per direction: STILL directions may have more frames
         sheet = np.zeros((64 + 2 * PAD, 64 * FRAMES + GAP * (FRAMES - 1) + 2 * PAD, 4), np.uint8)
         for i in range(FRAMES):
             x = PAD + i * (64 + GAP)
@@ -39,6 +40,7 @@ def main():
         path = os.path.join(OUT, f'{n}_{d}.png')
         assert open(path, 'rb').read(8) == b'\x89PNG\r\n\x1a\n', path
         s = read_png(path)
+        FRAMES = (s.shape[1] - 2 * PAD + GAP) // (64 + GAP)
         alpha |= set(np.unique(s[..., 3]).tolist())
         want = (64 + 2 * PAD, 64 * FRAMES + GAP * (FRAMES - 1) + 2 * PAD)
         if s.shape[:2] != want: fails.append(f'{d}: size {s.shape[1]}x{s.shape[0]} != {want[1]}x{want[0]}')
@@ -72,13 +74,13 @@ def main():
                       body_top_range=max(bt) - min(bt))
         P.write_apng(os.path.join(OUT, 'preview', f'{CLIP}_{d}_x4.png'), [upscale(P.on_bg(f), 4) for f in frames], FPS)
         rows.append(np.concatenate([P.on_bg(f) for f in frames], 1))
-    write_png(os.path.join(OUT, 'preview', f'{CLIP}_all_x4.png'), upscale(np.concatenate(rows, 0), 4))
+    write_png(os.path.join(OUT, 'preview', f'{CLIP}_all_x4.png'), upscale(P.stack_rows(rows), 4))
     ncol = len(np.unique(np.concatenate(allpx), axis=0))
     if ncol > 16: fails.append(f'{ncol} colours > 16')
     if not alpha <= {0, 255}: fails.append(f'alpha values {sorted(alpha)}')
     json.dump(dict(unique_rgb=ncol, alpha=sorted(alpha), fps=FPS, dirs=rep, fails=fails, notes=notes),
               open(os.path.join(OUT, 'report.json'), 'w'), indent=1)
-    print(f'sheets {len(DIRS)}, frames/sheet {FRAMES}, colours {ncol}, alpha {sorted(alpha)}')
+    print(f'sheets {len(DIRS)}, colours {ncol}, alpha {sorted(alpha)}')
     for d, v in rep.items():
         print(d, 'WxH max', max(f['w'] for f in v['frame']), max(f['h'] for f in v['frame']), 'body_top range', v['body_top_range'])
     print(f'notes (size/margin, not failures): {len(notes)}')
