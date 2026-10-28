@@ -52,6 +52,20 @@ def planted_feet(img):
 PLANTED = {'hurt': None, 'death': [0]}
 SNAP_MAX = 2   # px; larger drift is a real pose change, not generation noise
 
+# every generated idle/N take bobbed the head 2-5 px (2026-10-28): rotation pose held, only the cape hem sways (user)
+STILL = {'idle': ['north']}
+HEM_SWAY = (0, 1, 0, -1)   # px per frame
+
+
+def hem_sway(img, s, rows=4):
+    """Shift the bottom `rows` cape rows (and the outline row under them) sideways by s px."""
+    c = img[..., :3].astype(int)
+    red = (img[..., 3] > 0) & (c[..., 0] > c[..., 1] + 40) & (c[..., 0] > 60)
+    hem = np.nonzero(red.sum(1) >= 10)[0].max()
+    out = img.copy()
+    out[hem - rows + 2:hem + 2] = np.roll(img[hem - rows + 2:hem + 2], s, 1)
+    return out
+
 
 def place(img, dx, dy):
     out = np.zeros((SIZE, SIZE, 4), np.uint8)
@@ -462,6 +476,8 @@ def cmd_build(only=None):
                 report.append(f'{clip}/{d}: raw missing'); continue
             rot, rdx, rdy, bf = base[d]
             raws = raw_frames(clip, d)
+            if d in STILL.get(clip, ()):
+                raws = [raws[0]] + [hem_sway(raws[0], s) for s in HEM_SWAY]
             dx, dy, how = clip_offset(rot, rdx, rdy, raws)
             raws = raws[drop:]
             if len(raws) != n:
