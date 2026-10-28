@@ -1,9 +1,5 @@
-idle/south-east: f1: height 45 vs base 42
-idle/south-east: f2: height 46 vs base 42
-idle/south-east: f3: height 46 vs base 42
-idle/east: loop seam diff 465 > 1.5x max step 294
-idle/north: f2: height 46 vs base 42
-idle/north: f3: height 46 vs base 42
+idle/south-east: loop seam diff 460 > 1.5x max step 279
+idle/east: loop seam diff 467 > 1.5x max step 305
 run/south-east: f6: pixels below ground line (bottom row 56)
 run/south-east: f7: pixels below ground line (bottom row 56)
 run/north-east: f2: pixels below ground line (bottom row 56)
