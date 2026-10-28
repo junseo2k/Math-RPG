@@ -2,6 +2,7 @@
 then re-open the files and check them. Exit 1 on any FAIL; report.json holds per-frame numbers.
 
   python process.py build death && python sheet_clip.py death 06_death
+  python sheet_clip.py idle_alert 07_idle_alert 0 4    # outer padding 0, 4px gap between frames
 """
 import json, os, sys
 import numpy as np
@@ -11,7 +12,9 @@ from pngio import read_png, write_png, upscale
 CLIP = sys.argv[1] if len(sys.argv) > 1 else 'hurt'
 OUT = os.path.join(P.ROOT, sys.argv[2] if len(sys.argv) > 2 else '05_hurt')
 DIRS = ['east', 'north-east', 'north', 'north-west', 'west', 'south-west', 'south', 'south-east']
-FRAMES, FPS, PAD, MARGIN, MAX_W, MAX_H = P.CLIPS[CLIP][0], P.CLIPS[CLIP][1], 1, 4, 36, 48
+PAD = int(sys.argv[3]) if len(sys.argv) > 3 else 1
+GAP = int(sys.argv[4]) if len(sys.argv) > 4 else 0
+FRAMES, FPS, MARGIN, MAX_W, MAX_H = P.CLIPS[CLIP][0], P.CLIPS[CLIP][1], 4, 36, 48
 
 
 def outline_ok(f, oc):
@@ -26,8 +29,10 @@ def main():
     oc = P.load_palette()[0]
     for n, d in enumerate(DIRS):
         src = read_png(os.path.join(P.FINAL, CLIP, f'{d}.png'))
-        sheet = np.zeros((src.shape[0] + 2 * PAD, src.shape[1] + 2 * PAD, 4), np.uint8)
-        sheet[PAD:-PAD, PAD:-PAD] = src
+        sheet = np.zeros((64 + 2 * PAD, 64 * FRAMES + GAP * (FRAMES - 1) + 2 * PAD, 4), np.uint8)
+        for i in range(FRAMES):
+            x = PAD + i * (64 + GAP)
+            sheet[PAD:PAD + 64, x:x + 64] = src[:, 64 * i:64 * (i + 1)]
         write_png(os.path.join(OUT, f'{n}_{d}.png'), sheet)
     fails, notes, rep, allpx, alpha, rows = [], [], {}, [], set(), []
     for n, d in enumerate(DIRS):
@@ -35,11 +40,14 @@ def main():
         assert open(path, 'rb').read(8) == b'\x89PNG\r\n\x1a\n', path
         s = read_png(path)
         alpha |= set(np.unique(s[..., 3]).tolist())
-        want = (64 + 2 * PAD, 64 * FRAMES + 2 * PAD)
+        want = (64 + 2 * PAD, 64 * FRAMES + GAP * (FRAMES - 1) + 2 * PAD)
         if s.shape[:2] != want: fails.append(f'{d}: size {s.shape[1]}x{s.shape[0]} != {want[1]}x{want[0]}')
-        border = np.ones(s.shape[:2], bool); border[PAD:-PAD, PAD:-PAD] = False
-        if s[border, 3].any(): fails.append(f'{d}: outer padding not transparent')
-        frames = [s[PAD:PAD + 64, PAD + 64 * i:PAD + 64 * (i + 1)] for i in range(FRAMES)]
+        cells = [(PAD, PAD + i * (64 + GAP)) for i in range(FRAMES)]
+        border = np.ones(s.shape[:2], bool)
+        for y, x in cells:
+            border[y:y + 64, x:x + 64] = False
+        if s[border, 3].any(): fails.append(f'{d}: padding/gap not transparent')
+        frames = [s[y:y + 64, x:x + 64] for y, x in cells]
         home = P.planted_feet(read_png(os.path.join(P.FINAL, 'rotations', f'{d}.png')))
         fr = []
         for i, f in enumerate(frames):

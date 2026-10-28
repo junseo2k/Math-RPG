@@ -5,3 +5,8 @@
 - 남은 일: 게임 화면(Unity) 미확인. PixelLab 생성 26회 사용
 - idle N: 생성 후보 6개 모두 머리 2~5px 흔들림 → 사용자 결정으로 기본 포즈 고정 + 망토 끝 4줄만 좌우 1px(0,+1,0,-1). `process.py`의 `STILL`·`hem_sway`, 미리보기 `03_preview/idle_north_still_x6.png`
 - 바꾼 파일: `ArtSource/PixelLab/Player/01_raw/clean/idle/{south-east,east,north-east}/`, `02_final/idle*`, `02_final/issues.txt`, `02_final/process_log.json`, `03_preview/idle_*`, `ISSUES.md`, `tools/process.py`, `chr_player_idle_n.png`, `Assets/Resources/Art/chr_player_idle_{se,e,ne}.png`
+
+## 2026-10-28 경계 idle (idle_alert) 8방향 납품
+- 한 일: 사용자 명세(64×64, 16색, 4프레임 반복, 8방향)로 PixelLab v3 생성. 1차는 검을 휘둘러 실패(`07_idle_alert/take1/`). 2차는 시작·끝 프레임을 정지 회전 그림으로 고정해 검이 고정됨. 북서 1회 재생성, 북은 기본 포즈 고정 + 망토 끝 1px(`STILL`). 시트 268×64 8장 `ArtSource/PixelLab/Player/07_idle_alert/`, 판정표 `07_idle_alert/README.md`. `sheet_clip.py`에 패딩·간격 인자 추가, `process.py` CLIPS에 `idle_alert` 추가. PixelLab 생성 18회
+- 남은 일: 명세 실패 — 폭 36px 초과(NE 37, NW·SW 39, SE 40), 몸통 2px(NW·SW·SE), 반복 연결(E), 기준점 W (33,56)·S (26,56). 망토 끝(N 외)·광원 미측정. 게임 폴더 미반영(요청 없음), 커밋 안 함
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/{process.py,sheet_clip.py}`, `01_raw/clean/idle_alert/`, `01_raw/trials/idle_alert_*`, `02_final/idle_alert*`, `02_final/{issues.txt,process_log.json,sprite_spec.json}`, `03_preview/idle_alert_*`, `07_idle_alert/`
