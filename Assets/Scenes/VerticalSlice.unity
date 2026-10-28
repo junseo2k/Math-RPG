@@ -4021,9 +4021,15 @@ MonoBehaviour:
   safeDistanceFromEntrance: 10
   playerAnimSpeeds:
   - state: idle
-    fps: 5
+    fps: 6
   - state: run
-    fps: 10
+    fps: 12
+  - state: attack
+    fps: 12
+  - state: dash
+    fps: 12
+  - state: hurt
+    fps: 16
 --- !u!1 &1617135300
 GameObject:
   m_ObjectHideFlags: 0

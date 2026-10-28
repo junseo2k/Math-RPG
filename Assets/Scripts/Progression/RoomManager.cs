@@ -30,8 +30,11 @@ public class RoomManager : MonoBehaviour, IRewindable
     [Header("플레이어 애니메이션 속도 (초당 프레임)")]
     [SerializeField] AnimSpeed[] playerAnimSpeeds =
     {
-        new() { state = "idle", fps = 5f },
-        new() { state = "run", fps = 10f },
+        new() { state = "idle", fps = 6f },
+        new() { state = "run", fps = 12f },
+        new() { state = "attack", fps = 12f },
+        new() { state = "dash", fps = 12f },
+        new() { state = "hurt", fps = 16f },
     };
 
     static Sprite square;
@@ -272,7 +275,7 @@ public class RoomManager : MonoBehaviour, IRewindable
         var anim = go.AddComponent<SpriteAnimator>();
         anim.BaseName = "chr_player";
         foreach (var s in playerAnimSpeeds) anim.SetFps(s.state, s.fps);
-        // 그림(48px, 투명 여백 포함) 크기를 따라가지 않게 기존 판정 1x1 유지
+        // 그림(64px, 투명 여백 포함) 크기를 따라가지 않게 기존 판정 1x1 유지
         go.AddComponent<BoxCollider2D>().size = Vector2.one;
         var controller = go.AddComponent<PlayerController>();
         go.AddComponent<PlayerAttack>();
