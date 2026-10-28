@@ -1,1 +1,34 @@
-
+idle/south-east: f1: height 45 vs base 42
+idle/south-east: f2: height 46 vs base 42
+idle/south-east: f3: height 46 vs base 42
+idle/east: loop seam diff 465 > 1.5x max step 294
+idle/north: f2: height 46 vs base 42
+idle/north: f3: height 46 vs base 42
+run/south-east: f6: pixels below ground line (bottom row 56)
+run/south-east: f7: pixels below ground line (bottom row 56)
+run/north-east: f2: pixels below ground line (bottom row 56)
+run/north-west: f1: pixels below ground line (bottom row 56)
+run/north-west: f1: height 47 vs base 43
+run/north-west: f2: pixels below ground line (bottom row 56)
+run/west: f7: pixels below ground line (bottom row 56)
+dodge/south-east: f2: pixels below ground line (bottom row 56)
+dodge/south-east: f3: pixels below ground line (bottom row 56)
+death/south: f3: pixels below ground line (bottom row 56)
+death/south: f4: pixels below ground line (bottom row 56)
+death/south: f5: pixels below ground line (bottom row 56)
+death/south-east: f4: pixels below ground line (bottom row 56)
+death/south-east: f5: pixels below ground line (bottom row 56)
+death/north-east: f3: pixels below ground line (bottom row 56)
+death/north-east: f4: pixels below ground line (bottom row 56)
+death/north-east: f5: pixels below ground line (bottom row 57)
+death/north-west: f3: pixels below ground line (bottom row 56)
+death/north-west: f4: pixels below ground line (bottom row 56)
+death/north-west: f5: pixels below ground line (bottom row 56)
+death/west: f3: pixels below ground line (bottom row 56)
+death/west: f4: pixels below ground line (bottom row 56)
+death/west: f5: pixels below ground line (bottom row 57)
+death/south-west: f1: pixels below ground line (bottom row 56)
+death/south-west: f2: pixels below ground line (bottom row 56)
+death/south-west: f3: pixels below ground line (bottom row 57)
+death/south-west: f4: pixels below ground line (bottom row 57)
+death/south-west: f5: pixels below ground line (bottom row 57)

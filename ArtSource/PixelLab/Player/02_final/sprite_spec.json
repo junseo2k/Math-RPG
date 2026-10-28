@@ -57,6 +57,11 @@
       "frames": 4,
       "fps": 16,
       "loop": false
+    },
+    "death": {
+      "frames": 6,
+      "fps": 10,
+      "loop": false
     }
   },
   "attack_phases": {
