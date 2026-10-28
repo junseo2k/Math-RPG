@@ -17,7 +17,8 @@ CLIPS = {  # name: (frames, fps, loop, frames dropped from raw start)
     'idle': (4, 6, True, 1), 'run': (8, 12, True, 1),
     'attack': (6, 12, False, 1), 'dodge': (6, 12, False, 1),
     'hurt': (4, 16, False, 1),   # spec asked 3f@12fps; v3 needs even >= 4 -> 4f@16fps = 0.25 s (user, 2026-10-28)
-    'death': (6, 10, False, 1)}  # one-shot, ends lying down (game: PlayHold)
+    'death': (6, 10, False, 1),  # one-shot, ends lying down (game: PlayHold)
+    'idle_alert': (4, 6, True, 1)}   # sword-ready guard idle, delivery only (07_idle_alert, 2026-10-28)
 SIZE, ANCHOR = 64, (32, 56)       # anchor = ground contact; feet bottom pixel row = 55
 MAX_COLORS = 16                   # incl. black outline (pixel-art standard, 2026-10-27)
 W = np.array([2.0, 4.0, 3.0])    # perceptual-ish RGB weights for nearest colour
@@ -49,11 +50,11 @@ def planted_feet(img):
 
 
 # frames whose feet must stay where the standing pose has them (ArtSpecification 1-6): clip -> frame indices (None = all)
-PLANTED = {'hurt': None, 'death': [0]}
+PLANTED = {'hurt': None, 'death': [0], 'idle_alert': None}
 SNAP_MAX = 2   # px; larger drift is a real pose change, not generation noise
 
 # every generated idle/N take bobbed the head 2-5 px (2026-10-28): rotation pose held, only the cape hem sways (user)
-STILL = {'idle': ['north']}
+STILL = {'idle': ['north'], 'idle_alert': ['north']}
 HEM_SWAY = (0, 1, 0, -1)   # px per frame
 
 

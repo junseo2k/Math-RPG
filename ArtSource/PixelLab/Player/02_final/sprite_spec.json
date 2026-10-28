@@ -62,6 +62,11 @@
       "frames": 6,
       "fps": 10,
       "loop": false
+    },
+    "idle_alert": {
+      "frames": 4,
+      "fps": 6,
+      "loop": true
     }
   },
   "attack_phases": {
