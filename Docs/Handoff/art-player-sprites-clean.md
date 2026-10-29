@@ -110,3 +110,23 @@
 - 한 일: 정수리 줄인 버전을 외곽선 없이 게임에 반영(idle 8개). EditMode 6/6, 화면 `Docs/QA/Screens/idle_calm_hairfix_ingame_20261029.png`. 커밋함
 - 남은 일: verify.ps1·빈 참조 미실행(에디터 열림), 다른 동작은 외곽선 있음(미결정)
 - 바꾼 파일: `Assets/Resources/Art/chr_player_idle_*.png`, `Docs/QA/`
+
+## 2026-10-29 쓰러짐(death_calm) 8방향 4프레임 납품본
+- 한 일: 명세 충돌(idle과 쓰러짐)을 사용자가 결정(쓰러짐, 발 기준점 고정, 상자 완화). 게임 idle 첫 프레임(외곽선 없음)을 시작 프레임으로 v3 생성 8회 + N·NW 재생성 2회. `process.py`에 `death_calm` 클립, `PICK`(f0 = idle, 생성 2~4번), `START_FROM`(게임 idle과 정수 픽셀 정렬) 추가. `sheet_clip.py`에 외곽선 없는 납품(`NO_OUTLINE`)과 쓰러짐 기준점 규칙(`FALLS`) 추가. sheet_clip 종료 코드 0, 16색, 알파 0/255, f0 = 게임 idle 0px 차이. 기록 `ArtSource/PixelLab/Player/10_death_calm/README.md`
+- 남은 일: NE f1 검 사라짐, N f1 검 2자루, NW f1~f3 검 없음(눈으로 확인한 실패). 수정 방법은 사용자 결정 필요. 게임 미반영·미커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/{process.py,sheet_clip.py}`, `01_raw/clean/{death_calm,death_calm_start}/`, `01_raw/trials/{death_calm_take1,death_calm_take2}/`, `02_final/{death_calm*,issues.txt,process_log.json,sprite_spec.json}`, `10_death_calm/`
+
+## 2026-10-29 쓰러짐 NE·N 끝 프레임 고정 재생성
+- 한 일: 누운 끝 자세를 end_frame으로 고정해 NE(끝 = E f3)·N(끝 = N f3)·NW(끝 = W f3)를 다시 생성(3회). NE·N은 검 한 자루가 유지돼 교체했고, NE 마지막 프레임은 E와 같은 그림이야. NW는 몸이 오른쪽으로 돌아서 버림. sheet_clip 종료 코드 0, f0 = 게임 idle 0px 차이
+- 남은 일: NW 검 없음(f1~f3). 해결 방법은 사용자 결정 필요. 게임 미반영·미커밋
+- 바꾼 파일: `01_raw/clean/{death_calm/north,death_calm/north-east,death_calm_end}/`, `01_raw/trials/{death_calm_take1_used,death_calm_take3}/`, `02_final/death_calm*`, `10_death_calm/`
+
+## 2026-10-29 쓰러짐 칼 크기를 idle에 맞춤
+- 한 일: `process.py` `fix_sword` 추가. 생성 프레임의 칼날이 길거나 두꺼우면 같은 손잡이·각도로 idle 길이 중앙값 11.6px, 두께 2px로 다시 그림(생성 없음). 보이는 칼날은 이제 11.2~12.4px. sheet_clip 종료 코드 0, 16색, 알파 0/255
+- 남은 일: NW 검 없음. 게임 미반영·미커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/death_calm*`, `10_death_calm/`
+
+## 2026-10-29 쓰러짐(death_calm) 게임 반영
+- 한 일: `export_unity.py`에서 death 원본을 death_calm으로 바꾸고 외곽선을 지움(`NO_OUTLINE`). `chr_player_death_*` 8장만 바뀌었고 납품 시트와 픽셀이 같음. death 6fps를 `RoomManager.playerAnimSpeeds`에 추가(코드 + 씬; Unity MCP로 씬 값 추가 후 저장). EditMode 6/6, 콘솔 오류 0, 플레이 화면 `Docs/QA/Screens/death_calm_ingame_20261029.png`·`death_calm_ingame_zoom_grid_20261029.png`(쓰러진 마지막 프레임 유지, 잘림 없음)
+- 남은 일: NW 검 없음. verify.ps1 미실행(에디터 열림). 쓰러지는 중간 프레임은 게임 화면에서 따로 캡처하지 않음. 미커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/export_unity.py`, `Assets/Resources/Art/chr_player_death_*.png`, `Assets/Scripts/Progression/RoomManager.cs`, `Assets/Scenes/VerticalSlice.unity`, `Docs/QA/Screens/death_calm_ingame*`
