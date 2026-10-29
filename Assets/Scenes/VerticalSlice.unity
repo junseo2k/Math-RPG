@@ -2782,6 +2782,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3b3dfb307a7a2148bbe3628a20c0fbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RebirthOverlay
+  deathPause: 1
   lightOut: 0.4
   blackout: 0.6
   dayCard: 0.6
@@ -3459,6 +3460,8 @@ MonoBehaviour:
   clockTurn: 1
   content: {fileID: 50161223}
   hpFill: {fileID: 643165723}
+  hpDeferredFill: {fileID: 0}
+  deferredColor: {r: 0.35, g: 0.6, b: 1, a: 1}
   hpText: {fileID: 1564505177}
   abilityText: {fileID: 1853459310}
   dashFill: {fileID: 1204717725}
@@ -4003,6 +4006,7 @@ MonoBehaviour:
       m_Action: Rewind
       m_Flags: 0
     m_Flags: 0
+    m_Priority: 0
   showDebug: 1
   showGhost: 0
 --- !u!114 &1594185363

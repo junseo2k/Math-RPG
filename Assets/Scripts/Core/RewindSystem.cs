@@ -42,7 +42,7 @@ public class RewindSystem : MonoBehaviour
         public int taken;   // 플레이어가 받은 피해 합
         public int dealt;   // 적에게 준 피해 합
         // 플레이어가 적중시킨 휘두름: 복원 지점 기준 시각, 판정 중심·크기, 피해
-        public List<(float offset, Vector2 center, Vector2 size, int damage)> hits;
+        public List<(float offset, Vector2 center, Vector2 size, float angle, int damage)> hits;
         public SliceBoss boss;
         // 보스가 결정된 공격을 이어가는 중(예고·실행)으로 복원됨
         public bool bossContinuing;
@@ -58,7 +58,7 @@ public class RewindSystem : MonoBehaviour
 
     readonly List<Frame> frames = new();
     readonly List<(float time, bool player, int amount)> damageLog = new();
-    readonly List<(float time, Vector2 center, Vector2 size, int damage)> hitLog = new();
+    readonly List<(float time, Vector2 center, Vector2 size, float angle, int damage)> hitLog = new();
     GameFlow flow;
     RoomManager rooms;
     PlayerController player;
@@ -93,11 +93,16 @@ public class RewindSystem : MonoBehaviour
     }
 
     // 스테이지를 넘어서는 역행은 없음
-    void OnStageChanged(int _) => ClearRecords();
+    void OnStageChanged(int _)
+    {
+        ClearRecords();
+        RewindSpawned.ClearAll();
+    }
 
     void OnRunReset()
     {
         ClearRecords();
+        RewindSpawned.ClearAll();
         readyAt = 0f;
         lastResult = "-";
     }
@@ -115,9 +120,9 @@ public class RewindSystem : MonoBehaviour
         damageLog.Add((Time.time, health == Player.Health, amount));
     }
 
-    void OnHitLanded(Vector2 center, Vector2 size, int damage)
+    void OnHitLanded(Vector2 center, Vector2 size, float angle, int damage)
     {
-        if (flow && flow.State == GameState.Playing) hitLog.Add((Time.time, center, size, damage));
+        if (flow && flow.State == GameState.Playing) hitLog.Add((Time.time, center, size, angle, damage));
     }
 
     public void ReduceCooldown(float seconds) => readyAt -= seconds;
@@ -135,6 +140,7 @@ public class RewindSystem : MonoBehaviour
         float oldest = frames[0].time;
         damageLog.RemoveAll(e => e.time < oldest);
         hitLog.RemoveAll(e => e.time < oldest);
+        RewindSpawned.ForgetBefore(oldest);
     }
 
     void Update()
@@ -222,8 +228,8 @@ public class RewindSystem : MonoBehaviour
             if (player) info.taken += amount;
             else info.dealt += amount;
         }
-        foreach (var (time, center, size, damage) in hitLog)
-            if (time > since) info.hits.Add((time - since, center, size, damage));
+        foreach (var (time, center, size, angle, damage) in hitLog)
+            if (time > since) info.hits.Add((time - since, center, size, angle, damage));
         damageLog.RemoveAll(e => e.time > since);
         hitLog.RemoveAll(e => e.time > since);
         info.bossContinuing = boss && boss.CurrentPhase is SliceBoss.Phase.Telegraph or SliceBoss.Phase.Active;

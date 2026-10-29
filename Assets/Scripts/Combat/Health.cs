@@ -41,12 +41,15 @@ public class Health : MonoBehaviour, IRewindable
     public static int Round(float damage) => Mathf.Max(1, Mathf.RoundToInt(damage));
 
     float invincibleUntil;
+    GameFlow flow;
+    bool DamageBlocked => TimeControl.IsStopped || (flow && flow.State != GameState.Playing);
     // 일시적인 받는 피해 감소(%, 만료 시각)
     readonly List<(float amount, float until)> reductions = new();
 
     void Awake()
     {
         Hp = maxHp;
+        flow = FindAnyObjectByType<GameFlow>();
         Rewindables.All.Add(this);
     }
 
@@ -113,14 +116,14 @@ public class Health : MonoBehaviour, IRewindable
 
     public void TakeDamage(int amount)
     {
-        if (IsDead || Invincible || Time.time < invincibleUntil) return;
+        if (DamageBlocked || IsDead || Invincible || Time.time < invincibleUntil) return;
         invincibleUntil = Time.time + hitInvincibleTime;
         Apply(amount);
     }
 
     public void TakeHit(int amount, Vector2 from)
     {
-        if (IsDead) return;
+        if (DamageBlocked || IsDead) return;
         if (Dodging) DodgeSucceeded?.Invoke();
         if (Invincible || Time.time < invincibleUntil) return;
         TakeDamage(amount);
@@ -130,7 +133,7 @@ public class Health : MonoBehaviour, IRewindable
     // 무적을 무시하는 피해(유예 피해 적용 등)
     public void ApplyDirect(int amount)
     {
-        if (IsDead) return;
+        if (DamageBlocked || IsDead) return;
         Apply(amount);
     }
 

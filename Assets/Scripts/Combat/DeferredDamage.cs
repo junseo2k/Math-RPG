@@ -79,6 +79,7 @@ public class DeferredDamage : MonoBehaviour, IRewindable
 
     public void Add(int amount)
     {
+        if (TimeControl.IsStopped || (flow && flow.State != GameState.Playing)) return;
         pending.Add(new Pending { amount = amount, applyAt = Time.time + deferTime });
         SoundPlayer.Play("sfx_def_deferred");
     }
@@ -101,6 +102,7 @@ public class DeferredDamage : MonoBehaviour, IRewindable
 
     void Update()
     {
+        if (TimeControl.IsStopped || (flow && flow.State != GameState.Playing)) return;
         for (int i = pending.Count - 1; i >= 0; i--)
         {
             if (Time.time < pending[i].applyAt) continue;

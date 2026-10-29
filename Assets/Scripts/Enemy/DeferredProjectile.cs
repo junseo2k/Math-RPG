@@ -1,8 +1,16 @@
 using UnityEngine;
 
 // 유예 보스 투사체. 직격은 즉시 피해, 멈춘 뒤 지나간 자리에 궤적 예약(TrailStrike)을 남긴다
-public class DeferredProjectile : MonoBehaviour
+[RequireComponent(typeof(RewindSpawned))]
+public class DeferredProjectile : MonoBehaviour, IRewindable
 {
+    struct Snapshot
+    {
+        public Vector3 position;
+        public float traveled;
+        public bool done, dodged;
+    }
+
     Vector2 direction;
     float speed;
     int damage;
@@ -12,6 +20,32 @@ public class DeferredProjectile : MonoBehaviour
     float traveled;
     bool done;
     bool dodged;
+    RewindSpawned lifetime;
+
+    void Awake()
+    {
+        lifetime = GetComponent<RewindSpawned>();
+        Rewindables.All.Add(this);
+    }
+
+    void OnDestroy() => Rewindables.All.Remove(this);
+
+    public object Capture() => new Snapshot
+    {
+        position = transform.position,
+        traveled = traveled,
+        done = done,
+        dodged = dodged,
+    };
+
+    public void Restore(object state)
+    {
+        var s = (Snapshot)state;
+        transform.position = s.position;
+        traveled = s.traveled;
+        done = s.done;
+        dodged = s.dodged;
+    }
 
     public void Init(Vector2 dir, float speed, int damage, float maxDistance, TrailSettings trail)
     {
@@ -25,7 +59,7 @@ public class DeferredProjectile : MonoBehaviour
 
     void Update()
     {
-        if (done) return;
+        if (done || !lifetime.CanTick) return;
         Vector2 pos = transform.position;
         float step = speed * Time.deltaTime;
         float radius = transform.localScale.x * 0.5f;
@@ -68,6 +102,6 @@ public class DeferredProjectile : MonoBehaviour
             go.transform.SetParent(transform.parent);
             go.AddComponent<TrailStrike>().Init(start, end, trail);
         }
-        Destroy(gameObject);
+        lifetime.Despawn();
     }
 }

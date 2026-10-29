@@ -32,6 +32,7 @@ public class PlayerAttack : MonoBehaviour, IRewindable
     float swingAngle;
 
     PlayerController controller;
+    GameFlow flow;
     float readyAt;
     int bonus;
     float bonusUntil;
@@ -46,7 +47,7 @@ public class PlayerAttack : MonoBehaviour, IRewindable
     public bool LastHitCrit { get; private set; }
 
     // 적중한 휘두름 1회마다: 판정 중심, 크기, 피해 (역행의 취소된 공격 기록용)
-    public static event Action<Vector2, Vector2, int> HitLanded;
+    public static event Action<Vector2, Vector2, float, int> HitLanded;
 
     // 고정 추가 피해. 다음 적중 1회에 적용 (빗나가면 유지)
     public void GrantNextBonus(int amount, float duration)
@@ -71,7 +72,24 @@ public class PlayerAttack : MonoBehaviour, IRewindable
     void OnDestroy()
     {
         Rewindables.All.Remove(this);
+        if (flow) flow.RunReset -= ResetAttack;
         if (rangeView) Destroy(rangeView.gameObject);
+    }
+
+    void Start()
+    {
+        flow = FindAnyObjectByType<GameFlow>();
+        if (flow) flow.RunReset += ResetAttack;
+    }
+
+    void ResetAttack()
+    {
+        readyAt = 0f;
+        bonus = 0;
+        bonusUntil = 0f;
+        oneShot.Clear();
+        swingShownUntil = 0f;
+        LastHitCrit = false;
     }
 
     public object Capture()
@@ -160,6 +178,6 @@ public class PlayerAttack : MonoBehaviour, IRewindable
             }
         if (!landed) return;
         bonus = 0;
-        HitLanded?.Invoke(center, B.range, total);
+        HitLanded?.Invoke(center, B.range, swingAngle, total);
     }
 }

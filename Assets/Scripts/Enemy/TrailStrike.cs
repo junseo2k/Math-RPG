@@ -12,8 +12,15 @@ public struct TrailSettings
 }
 
 // 투사체가 남긴 점선 궤적: 대기 → 예고 깜빡임 → 발동(맞으면 유예 피해). 규칙: Docs/Bosses/02_Deferral.md
-public class TrailStrike : MonoBehaviour
+[RequireComponent(typeof(RewindSpawned))]
+public class TrailStrike : MonoBehaviour, IRewindable
 {
+    struct Snapshot
+    {
+        public float elapsed;
+        public bool hitDone, warned;
+    }
+
     static readonly Color DotColor = new(1f, 0.75f, 0.3f, 0.6f);
     static readonly Color StrikeColor = new(1f, 0.8f, 0.4f, 0.9f);
 
@@ -25,6 +32,43 @@ public class TrailStrike : MonoBehaviour
     bool warned;
     SpriteRenderer[] dots;
     SpriteRenderer bar;
+    RewindSpawned lifetime;
+
+    void Awake()
+    {
+        lifetime = GetComponent<RewindSpawned>();
+        Rewindables.All.Add(this);
+    }
+
+    void OnDestroy() => Rewindables.All.Remove(this);
+
+    public object Capture() => new Snapshot
+    {
+        elapsed = Time.time - startTime,
+        hitDone = hitDone,
+        warned = warned,
+    };
+
+    public void Restore(object state)
+    {
+        var s = (Snapshot)state;
+        startTime = Time.time - s.elapsed;
+        hitDone = s.hitDone;
+        warned = s.warned;
+        RefreshView(s.elapsed);
+    }
+
+    void RefreshView(float elapsed)
+    {
+        bool active = elapsed >= settings.delay && elapsed < settings.delay + settings.active;
+        bar.enabled = active;
+        bool warning = elapsed >= settings.delay - settings.warning && elapsed < settings.delay;
+        foreach (var d in dots)
+        {
+            d.enabled = !active;
+            d.color = warning && Mathf.FloorToInt(elapsed / 0.075f) % 2 == 0 ? Color.white : DotColor;
+        }
+    }
 
     public void Init(Vector2 from, Vector2 to, TrailSettings trail)
     {
@@ -59,6 +103,7 @@ public class TrailStrike : MonoBehaviour
 
     void Update()
     {
+        if (!lifetime.CanTick) return;
         float t = Time.time - startTime;
         if (t < settings.delay - settings.warning) return;
 
@@ -86,7 +131,7 @@ public class TrailStrike : MonoBehaviour
             return;
         }
 
-        Destroy(gameObject);
+        lifetime.Despawn();
     }
 
     // 대시 무적 중이면 맞지 않음. 궤적 하나당 한 번만 판정

@@ -1,10 +1,15 @@
-using System.Collections;
 using UnityEngine;
 
 // 역행 보스 고리 파동: 보스 중심으로 퍼짐 → 최대 반경에서 멈춤(반시계 나선) → 보스 쪽으로 오므라듦. 규칙: Docs/Bosses/03_Reversal.md
-[RequireComponent(typeof(LineRenderer))]
-public class GroundWave : MonoBehaviour
+[RequireComponent(typeof(LineRenderer), typeof(RewindSpawned))]
+public class GroundWave : MonoBehaviour, IRewindable
 {
+    struct Snapshot
+    {
+        public float radius, pauseLeft;
+        public bool returning, paused, hitThisPass;
+    }
+
     static readonly Color SpiralColor = new(0.3f, 0.9f, 0.9f, 0.6f);
     const int Segments = 48;
 
@@ -21,8 +26,45 @@ public class GroundWave : MonoBehaviour
     bool returning;
     bool paused;
     bool hitThisPass;
+    float pauseLeft;
+    RewindSpawned lifetime;
+    SpriteRenderer spiral;
+    Material material;
 
     Vector3 Center => owner ? owner.position : origin;
+
+    void Awake()
+    {
+        lifetime = GetComponent<RewindSpawned>();
+        Rewindables.All.Add(this);
+    }
+
+    void OnDestroy()
+    {
+        Rewindables.All.Remove(this);
+        if (material) Destroy(material);
+    }
+
+    public object Capture() => new Snapshot
+    {
+        radius = radius,
+        pauseLeft = pauseLeft,
+        returning = returning,
+        paused = paused,
+        hitThisPass = hitThisPass,
+    };
+
+    public void Restore(object state)
+    {
+        var s = (Snapshot)state;
+        radius = s.radius;
+        pauseLeft = s.pauseLeft;
+        returning = s.returning;
+        paused = s.paused;
+        hitThisPass = s.hitThisPass;
+        Draw();
+        UpdateSpiral();
+    }
 
     public void Init(float startRadius, float maxRadius, float thickness, float speed, float returnSpeed, float wallPause, int damage, Transform owner, Color color)
     {
@@ -41,7 +83,8 @@ public class GroundWave : MonoBehaviour
         line.useWorldSpace = true;
         line.positionCount = Segments;
         line.widthMultiplier = thickness;
-        line.material = new Material(Shader.Find("Sprites/Default"));
+        material = new Material(Shader.Find("Sprites/Default"));
+        line.sharedMaterial = material;
         line.startColor = line.endColor = color;
         line.sortingOrder = 2;
         Draw();
@@ -49,7 +92,20 @@ public class GroundWave : MonoBehaviour
 
     void Update()
     {
-        if (paused) return;
+        if (!lifetime.CanTick) return;
+        if (paused)
+        {
+            pauseLeft -= Time.deltaTime;
+            if (pauseLeft <= 0f)
+            {
+                returning = true;
+                hitThisPass = false;
+                paused = false;
+            }
+            Draw();
+            UpdateSpiral();
+            return;
+        }
         CheckHit();
 
         if (!returning)
@@ -58,7 +114,10 @@ public class GroundWave : MonoBehaviour
             if (radius >= maxRadius)
             {
                 radius = maxRadius;
-                StartCoroutine(Reverse());
+                paused = true;
+                pauseLeft = wallPause;
+                SoundPlayer.Play("sfx_rev_reverse");
+                UpdateSpiral();
             }
         }
         else
@@ -66,7 +125,7 @@ public class GroundWave : MonoBehaviour
             radius -= returnSpeed * Time.deltaTime;
             if (radius <= 0f)
             {
-                Destroy(gameObject);
+                lifetime.Despawn();
                 return;
             }
         }
@@ -83,14 +142,15 @@ public class GroundWave : MonoBehaviour
         }
     }
 
-    IEnumerator Reverse()
+    void UpdateSpiral()
     {
-        paused = true;
-        SoundPlayer.Play("sfx_rev_reverse");
-        yield return Spiral(Center, wallPause, transform.parent);
-        returning = true;
-        hitThisPass = false;
-        paused = false;
+        if (paused)
+        {
+            if (!spiral) spiral = CreateSpiral(Center, transform);
+            spiral.transform.position = Center;
+            spiral.transform.rotation = Quaternion.Euler(0f, 0f, (wallPause - pauseLeft) * 360f);
+        }
+        if (spiral) spiral.enabled = paused;
     }
 
     // 퍼질 때·오므라들 때 각각 1회. 대시 무적 중에 겹치면 회피 성공으로 그 회차 판정 끝
@@ -107,22 +167,16 @@ public class GroundWave : MonoBehaviour
     }
 
     // 역행 예고: 반시계로 도는 표식 (최종 아트 전 임시)
-    public static IEnumerator Spiral(Vector3 pos, float duration, Transform parent)
+    public static SpriteRenderer CreateSpiral(Vector3 pos, Transform parent)
     {
         var sr = new GameObject("Spiral").AddComponent<SpriteRenderer>();
         sr.transform.SetParent(parent);
         sr.transform.position = pos;
-        sr.transform.localScale = Vector3.one * 1.2f;
+        sr.transform.localScale = Vector3.one * 1.2f / Mathf.Max(Mathf.Abs(parent.lossyScale.x), 0.0001f);
         sr.sprite = AssetLibrary.SpriteUnitsOr("fx_rev_spiral", 1f, RoomManager.Square);
         sr.color = SpiralColor;
         sr.sortingOrder = 3;
 
-        float end = Time.time + duration;
-        while (Time.time < end && sr)
-        {
-            sr.transform.Rotate(0f, 0f, 360f * Time.deltaTime);
-            yield return null;
-        }
-        if (sr) Destroy(sr.gameObject);
+        return sr;
     }
 }

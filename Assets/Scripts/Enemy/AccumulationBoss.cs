@@ -1,10 +1,21 @@
-using System.Collections;
 using UnityEngine;
 
 // 1장 보스1: 시간 축적. 규칙: Docs/Bosses/01_Accumulation.md
 [RequireComponent(typeof(Health), typeof(SpriteRenderer), typeof(BoxCollider2D))]
-public class AccumulationBoss : MonoBehaviour
+public class AccumulationBoss : MonoBehaviour, IRewindable
 {
+    enum Phase { Accumulating, Windup, Charging, Warning, Exhausted }
+
+    struct Snapshot
+    {
+        public Vector3 position;
+        public Phase phase;
+        public int stacks;
+        public float stackLeft, chargeLeft, phaseLeft, traveled;
+        public Vector2 chargeDir;
+        public bool hit;
+    }
+
     // 전투 수치는 CombatBalance (Tools/전투 밸런스 열기)
     static CombatBalance.AccumulationBossStats B => CombatBalance.Instance.accumulationBoss;
 
@@ -31,6 +42,13 @@ public class AccumulationBoss : MonoBehaviour
     Color baseColor;
     GameFlow flow;
     PlayerController player;
+    Phase phase;
+    float stackLeft;
+    float chargeLeft;
+    float phaseLeft;
+    float traveled;
+    Vector2 chargeDir;
+    bool hit;
 
     void Awake()
     {
@@ -41,110 +59,156 @@ public class AccumulationBoss : MonoBehaviour
         box = GetComponent<BoxCollider2D>();
         baseColor = body.color;
         anim = GetComponent<SpriteAnimator>();
+        BeginCycle();
+        Rewindables.All.Add(this);
     }
 
     void Start()
     {
         flow = FindAnyObjectByType<GameFlow>();
         player = FindAnyObjectByType<PlayerController>();
-        StartCoroutine(Loop());
     }
 
-    IEnumerator Loop()
+    public object Capture() => new Snapshot
     {
-        while (true)
+        position = transform.position,
+        phase = phase,
+        stacks = Stacks,
+        stackLeft = stackLeft,
+        chargeLeft = chargeLeft,
+        phaseLeft = phaseLeft,
+        traveled = traveled,
+        chargeDir = chargeDir,
+        hit = hit,
+    };
+
+    public void Restore(object state)
+    {
+        var s = (Snapshot)state;
+        transform.position = s.position;
+        phase = s.phase;
+        Stacks = s.stacks;
+        stackLeft = s.stackLeft;
+        chargeLeft = s.chargeLeft;
+        phaseLeft = s.phaseLeft;
+        traveled = s.traveled;
+        chargeDir = s.chargeDir;
+        hit = s.hit;
+        if (anim) anim.Release();
+        UpdateView();
+    }
+
+    void BeginCycle()
+    {
+        phase = Phase.Accumulating;
+        Stacks = 0;
+        stackLeft = B.stackInterval;
+        chargeLeft = B.chargeInterval;
+    }
+
+    void Update()
+    {
+        if (health.IsDead || !flow || flow.State != GameState.Playing || TimeControl.IsStopped) return;
+        float dt = Time.deltaTime;
+        if (phase is Phase.Accumulating or Phase.Windup or Phase.Charging)
         {
-            Stacks = 0;
-            float nextStack = Time.time + B.stackInterval;
-            float nextCharge = Time.time + B.chargeInterval;
-
-            while (Stacks < B.maxStacks)
+            stackLeft -= dt;
+            while (stackLeft <= 0f && Stacks < B.maxStacks)
             {
-                if (Time.time >= nextCharge)
-                {
-                    yield return Charge();
-                    nextCharge = Time.time + B.chargeInterval;
-                }
-                // 돌진 중에도 축적은 계속된다
-                while (Time.time >= nextStack && Stacks < B.maxStacks)
-                {
-                    Stacks++;
-                    SoundPlayer.Play("sfx_acc_stack");
-                    nextStack += B.stackInterval;
-                }
-                yield return null;
+                Stacks++;
+                SoundPlayer.Play("sfx_acc_stack");
+                stackLeft += Mathf.Max(B.stackInterval, 0.0001f);
             }
-
-            SoundPlayer.Play("sfx_acc_warning");
-            if (anim) anim.SetLoop("warning");
-            yield return Blink(B.releaseWarning);
-            Shockwave();
-            SoundPlayer.Play("sfx_acc_release");
-            if (anim)
-            {
-                anim.PlayOnce("release");
-                anim.SetLoop("exhausted");
-            }
-
-            Stacks = 0;
-            body.color = baseColor * 0.5f;
-            SoundPlayer.Play("sfx_acc_exhaust");
-            yield return new WaitForSeconds(B.exhaustTime);
-            body.color = baseColor;
-            if (anim) anim.SetLoop("idle");
         }
+
+        phaseLeft -= dt;
+        switch (phase)
+        {
+            case Phase.Accumulating:
+                chargeLeft -= dt;
+                if (Stacks >= B.maxStacks)
+                {
+                    phase = Phase.Warning;
+                    phaseLeft = B.releaseWarning;
+                    SoundPlayer.Play("sfx_acc_warning");
+                }
+                else if (chargeLeft <= 0f && player)
+                {
+                    phase = Phase.Windup;
+                    phaseLeft = B.chargeWindup;
+                    SoundPlayer.Play("sfx_acc_windup");
+                }
+                break;
+            case Phase.Windup:
+                if (phaseLeft > 0f) break;
+                chargeDir = player ? (Vector2)(player.transform.position - transform.position) : Vector2.right;
+                chargeDir = chargeDir.sqrMagnitude > 0.0001f ? chargeDir.normalized : Vector2.right;
+                traveled = 0f;
+                hit = false;
+                phase = Phase.Charging;
+                SoundPlayer.Play("sfx_acc_charge");
+                break;
+            case Phase.Charging:
+                TickCharge(dt);
+                break;
+            case Phase.Warning:
+                if (phaseLeft > 0f) break;
+                Shockwave();
+                SoundPlayer.Play("sfx_acc_release");
+                SoundPlayer.Play("sfx_acc_exhaust");
+                Stacks = 0;
+                phase = Phase.Exhausted;
+                phaseLeft = B.exhaustTime;
+                if (anim) anim.PlayOnce("release");
+                break;
+            case Phase.Exhausted:
+                if (phaseLeft <= 0f) BeginCycle();
+                break;
+        }
+        UpdateView();
     }
 
-    IEnumerator Charge()
+    void TickCharge(float dt)
     {
-        if (!player) yield break;
+        if (dt <= 0f) return;
+        var pos = transform.position;
+        float distance = Mathf.Min(B.chargeSpeed * dt, Mathf.Max(B.chargeDistance - traveled, 0f));
+        Vector2 next = (Vector2)pos + chargeDir * distance;
+        next = new Vector2(Mathf.Clamp(next.x, -moveLimitX, moveLimitX), Mathf.Clamp(next.y, -moveLimitY, moveLimitY));
+        float step = Vector2.Distance(next, pos);
+        traveled += step;
+        transform.position = new Vector3(next.x, next.y, pos.z);
+        if (!hit && player && box.bounds.Intersects(player.GetComponent<Collider2D>().bounds))
+        {
+            player.Health.TakeHit(B.chargeDamage, transform.position);
+            hit = true;
+        }
+        if (step >= 0.0001f && traveled < B.chargeDistance) return;
+        phase = Phase.Accumulating;
+        chargeLeft = B.chargeInterval;
+    }
 
-        body.color = new Color(1f, 0.6f, 0.1f);
-        SoundPlayer.Play("sfx_acc_windup");
-        if (anim) anim.SetLoop("windup");
-        yield return new WaitForSeconds(B.chargeWindup);
-
-        Vector2 dir = ((Vector2)(player.transform.position - transform.position)).normalized;
-        SoundPlayer.Play("sfx_acc_charge");
+    void UpdateView()
+    {
+        body.color = phase switch
+        {
+            Phase.Windup => new Color(1f, 0.6f, 0.1f),
+            Phase.Warning => Mathf.FloorToInt(phaseLeft / 0.1f) % 2 == 0 ? Color.white : baseColor,
+            Phase.Exhausted => baseColor * 0.5f,
+            _ => baseColor,
+        };
         if (anim)
         {
-            anim.Face(dir.x < 0f ? -1 : 1);
-            anim.SetLoop("charge");
-        }
-        float traveled = 0f;
-        bool hit = false;
-        while (traveled < B.chargeDistance)
-        {
-            var pos = transform.position;
-            Vector2 next = (Vector2)pos + dir * B.chargeSpeed * Time.deltaTime;
-            next = new Vector2(Mathf.Clamp(next.x, -moveLimitX, moveLimitX), Mathf.Clamp(next.y, -moveLimitY, moveLimitY));
-            float step = Vector2.Distance(next, pos);
-            if (step < 0.0001f) break;
-            traveled += step;
-            transform.position = new Vector3(next.x, next.y, pos.z);
-
-            if (!hit && box.bounds.Intersects(player.GetComponent<Collider2D>().bounds))
+            anim.SetLoop(phase switch
             {
-                player.Health.TakeHit(B.chargeDamage, transform.position);
-                hit = true;
-            }
-            yield return null;
+                Phase.Windup => "windup",
+                Phase.Charging => "charge",
+                Phase.Warning => "warning",
+                Phase.Exhausted => "exhausted",
+                _ => "idle",
+            });
+            if (phase == Phase.Charging) anim.Face(chargeDir.x < 0f ? -1 : 1);
         }
-        body.color = baseColor;
-        if (anim) anim.SetLoop("idle");
-    }
-
-    IEnumerator Blink(float duration)
-    {
-        float end = Time.time + duration;
-        bool on = false;
-        while (Time.time < end)
-        {
-            on = !on;
-            body.color = on ? Color.white : baseColor;
-            yield return new WaitForSeconds(0.1f);
-        }
-        body.color = baseColor;
     }
 
     void Shockwave()
@@ -182,12 +246,17 @@ public class AccumulationBoss : MonoBehaviour
 
     void OnDied()
     {
-        StopAllCoroutines();
         if (flow) flow.ClearStage();
         Destroy(gameObject);
     }
 
     void OnDestroy()
+    {
+        Rewindables.All.Remove(this);
+        ClearPips();
+    }
+
+    void ClearPips()
     {
         if (pips == null) return;
         foreach (var p in pips)
@@ -200,7 +269,7 @@ public class AccumulationBoss : MonoBehaviour
         int n = Mathf.Max(B.maxStacks, 1);
         if (pips == null || pips.Length != n)
         {
-            OnDestroy();
+            ClearPips();
             pips = new SpriteRenderer[n];
             for (int i = 0; i < n; i++)
             {
