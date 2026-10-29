@@ -84,13 +84,17 @@ STABLE_MAX = 4   # px; a larger difference is a real pose change (raised arm, le
 # v3 drops the NW idle sword in some frames (every take, 2026-10-29): paint the start pose's blade onto each frame
 SWORD_FROM_REF = {('idle_breath', 'north-west')}
 
+# whole hair sways, not just the crown (user, 2026-10-29): band runs from the crown down to the hair ends
+HAIR_ALL = 26
 # body, head and sword stay exactly the start pose; only the silhouette edge of the cape hem / hair tips
 # follows the generated frame, at most cape/hair px in or out (user, 2026-10-29)
-FREEZE = {'idle_calm': dict(cape=2, hair=3, hair_rows=6, hair_out=False),
-          'hurt_calm': dict(cape=4, hair=0, hair_rows=0, hair_out=False)}   # crown never puffs outward; hair changes stay inside the start silhouette (user, 2026-10-29)
+FREEZE = {'idle_calm': dict(cape=2, hair=3, hair_rows=HAIR_ALL, hair_out=False, crown_rows=6),
+          'hurt_calm': dict(cape=4, hair=3, hair_rows=HAIR_ALL, hair_out=False, crown_rows=6)}   # crown never puffs outward (user, 2026-10-29)
 # hurt_calm N lifts the head in every take (4 tries): head and body stay the idle, only the cape flare is taken
 # (user: pushed-back feel without clipping, 2026-10-29)
 FREEZE_DIRS = {'hurt_calm': ['north']}
+# hurt N's generated head is lifted, so its hair band comes from the idle's hair sway instead
+HAIR_FROM_FINAL = {'hurt_calm': 'idle_calm'}
 # hair band comes from hair-only generations, per direction the take whose sway is closest to SW's
 # (hair_motion.py distance; user: match the SW hair sway, keep the hairstyle, 2026-10-29)
 HAIR_FROM_CLIP = {'idle_calm': {'east': 'idle_hair', 'north-east': 'idle_hair3', 'north': 'idle_hair3',
@@ -245,7 +249,7 @@ def cape_px(im):
     return (im[..., 3] > 0) & (c[..., 0] > 2.2 * c[..., 1]) & (c[..., 0] > 50)
 
 
-def freeze_body(f, ref, pal, cape, hair, hair_src=None, hair_rows=11, hair_out=True):
+def freeze_body(f, ref, pal, cape, hair, hair_src=None, hair_rows=11, hair_out=True, crown_rows=None):
     """Start pose everywhere except an edge band (cape lower half: cape px, hair rows: hair px) where the
     generated frame's cape/hair/outline/empty pixels are taken; legs, skin, armour and sword never move."""
     a = ref[..., 3] > 0
@@ -267,6 +271,8 @@ def freeze_body(f, ref, pal, cape, hair, hair_src=None, hair_rows=11, hair_out=T
     # hair_out=False: only the ref's own hair pixels may change (never its outline or the space around it), so the
     # crown can thin by a pixel but outline() never gets pushed outward
     ok_ref = (soft_ref | gold(c, a)) if hair_out else gold(c, a)
+    if crown_rows is not None:   # crown stays inside the start silhouette; hair below it may sway outward too
+        ok_ref = np.where(y < top + crown_rows, gold(c, a), soft_ref | gold(c, a))
     zones.append((band, ok_ref, (h[..., 3] == 0) | line(h) | gold(h[..., :3].astype(int), h[..., 3] > 0), h))
     out = ref.copy()
     for band, ok_ref, ok_f, src in zones:
@@ -821,12 +827,17 @@ def cmd_build(only=None):
             if clip in FREEZE and d in FREEZE_DIRS.get(clip, DIRS):
                 fref = out[ALIGN_TO[clip][1]] if clip in ALIGN_TO else reff   # aligned clips freeze to the game idle
                 hair = [None] * len(out)
-                if clip in HAIR_FROM_CLIP:
+                if clip in HAIR_FROM_FINAL:   # hair sway frames of an already built clip (same pose, already aligned)
+                    hs = read_png(os.path.join(FINAL, HAIR_FROM_FINAL[clip], f'{d}.png'))
+                    hair = [hs[:, SIZE * (i % (hs.shape[1] // SIZE)):SIZE * (i % (hs.shape[1] // SIZE) + 1)] for i in range(len(out))]
+                elif clip in HAIR_FROM_CLIP:
                     src = HAIR_FROM_CLIP[clip]
                     hr = raw_frames(src[d] if isinstance(src, dict) else src, d)
                     hx, hy, _ = clip_offset(rot, rdx, rdy, hr)
                     hair = [process_frame(r, hx, hy, pal)[0] for r in hr[drop:]]
-                out = [freeze_body(f, fref, pal, hair_src=h, **FREEZE[clip]) for f, h in zip(out, hair)]
+                keep = ALIGN_TO[clip][1] % len(out) if clip in ALIGN_TO else None   # the exact idle frame stays as is
+                out = [f if i == keep else freeze_body(f, fref, pal, hair_src=h, **FREEZE[clip])
+                       for i, (f, h) in enumerate(zip(out, hair))]
             bh = bbox(bf)[3] - bbox(bf)[1] + 1
             report += [f'{clip}/{d}: {s}' for s in check_clip(clip, d, out, bh)]
             sheet = np.concatenate(out, 1)
