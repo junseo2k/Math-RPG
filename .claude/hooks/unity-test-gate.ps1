@@ -1,6 +1,6 @@
 # Claude Code hook: run Unity EditMode tests before the agent may finish a turn that touched .cs files.
 #   mark  (PostToolUse Edit|Write|MultiEdit) : flag that tests are needed when a .cs file changed
-#   gate  (Stop)                              : if flagged, run tests (batchmode) or ask the agent to use Unity MCP
+#   gate  (Stop)                              : if flagged, run verify.ps1 (batchmode) or ask the agent to use Unity MCP
 param([Parameter(Mandatory)][ValidateSet('mark', 'gate')][string]$Mode)
 
 $ErrorActionPreference = 'Stop'
@@ -44,31 +44,9 @@ C# files changed and the Unity editor is open. Before finishing:
     exit 2
 }
 
-$version = (Select-String -Path "$project\ProjectSettings\ProjectVersion.txt" -Pattern '^m_EditorVersion: (.+)$').Matches[0].Groups[1].Value
-$unity = "C:\Program Files\Unity\Hub\Editor\$version\Editor\Unity.exe"
-if (-not (Test-Path $unity)) {
-    [Console]::Error.WriteLine("Unity $version not found at $unity. Tests were NOT run; tell the user.")
-    exit 0
+$report = (& "$project\verify.ps1") -join "`n"
+switch ($LASTEXITCODE) {
+    0 { Remove-Item $flag, $attempts -ErrorAction SilentlyContinue; exit 0 }
+    3 { [Console]::Error.WriteLine("Tests were NOT run; tell the user.`n$report"); exit 0 }
+    default { [Console]::Error.WriteLine("verify.ps1 failed (attempt $n/$maxAttempts). Fix before finishing.`n$report"); exit 2 }
 }
-
-$results = Join-Path $project 'TestResults-EditMode.xml'
-$log = Join-Path $project 'TestResults-EditMode.log'
-Remove-Item $results -ErrorAction SilentlyContinue
-$p = Start-Process $unity -Wait -PassThru -NoNewWindow -ArgumentList @(
-    '-batchmode', '-nographics', '-projectPath', "`"$project`"",
-    '-runTests', '-testPlatform', 'EditMode', '-testResults', "`"$results`"", '-logFile', "`"$log`"")
-
-if ($p.ExitCode -eq 0) {
-    Remove-Item $flag, $attempts -ErrorAction SilentlyContinue
-    exit 0
-}
-
-if (Test-Path $results) {
-    $failed = ([xml](Get-Content $results -Raw)).SelectNodes("//test-case[@result='Failed']") |
-        ForEach-Object { "- $($_.fullname): $($_.failure.message.'#cdata-section'.Trim())" }
-    [Console]::Error.WriteLine("Unity EditMode tests failed (attempt $n/$maxAttempts):`n$($failed -join "`n")`nFix them before finishing.")
-} else {
-    $errors = Select-String -Path $log -Pattern 'error CS\d+' | Select-Object -First 10 | ForEach-Object { $_.Line.Trim() }
-    [Console]::Error.WriteLine("Unity batchmode exited $($p.ExitCode) without test results (attempt $n/$maxAttempts). Compile errors:`n$($errors -join "`n")`nFull log: $log")
-}
-exit 2
