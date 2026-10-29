@@ -8,12 +8,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FINAL = os.path.join(HERE, '..', '02_final')
 ART = os.path.join(HERE, '..', '..', '..', '..', 'Assets', 'Resources', 'Art')
 STATES = {'idle_calm': 'idle',   # body-frozen guard idle replaces the breathing idle (user, 2026-10-29)
-          'run': 'run', 'attack': 'attack', 'dodge': 'dash', 'hurt': 'hurt',
+          'run': 'run', 'attack': 'attack', 'dodge': 'dash',
+          'hurt_calm': 'hurt',     # recoil-and-recover from the in-game idle replaces the old hurt (user, 2026-10-29)
           'death_calm': 'death'}   # forward collapse from the in-game idle replaces the 6-frame death (user, 2026-10-29)
 DIRS = {'south': 's', 'south-east': 'se', 'east': 'e', 'north-east': 'ne',
         'north': 'n', 'north-west': 'nw', 'west': 'w', 'south-west': 'sw'}
 # game copy without the outer 1px silhouette outline; 02_final keeps it (user, 2026-10-29)
-NO_OUTLINE = {'idle_calm', 'death_calm'}
+NO_OUTLINE = {'idle_calm', 'death_calm', 'hurt_calm'}
 
 
 def strip_outline(src, dst):

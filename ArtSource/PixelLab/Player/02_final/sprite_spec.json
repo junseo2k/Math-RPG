@@ -82,6 +82,11 @@
       "frames": 4,
       "fps": 6,
       "loop": false
+    },
+    "hurt_calm": {
+      "frames": 4,
+      "fps": 6,
+      "loop": false
     }
   },
   "attack_phases": {

@@ -1,0 +1,4 @@
+death_calm/east: f3: pixels below ground line (bottom row 56)
+death_calm/north-west: f3: pixels below ground line (bottom row 56)
+verified 108 files: palette 16 colours, alpha 0/255, 1px 4-direction outline, no diagonal corners
+build exit 0

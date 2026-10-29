@@ -10,7 +10,8 @@
 - 칼 크기 통일(2026-10-29, 사용자 요청 "칼 크기는 idle 유지"): `process.py` `fix_sword`. f1~f3 칼날이 idle보다 길거나(>L+1) 두꺼우면(픽셀 수 > 2.5×길이) 지우고, 같은 손잡이 지점·같은 각도로 길이 L, 두께 2px로 다시 그림(어두운 6b736b 심 + 광원 쪽 밝은 bbbebe + 끝 a5a8a7). L = idle 칼날 길이 중앙값 11.6px를 모든 방향에 씀. 방향별 idle 길이는 원근(NE 8.8)이나 몸에 가림(W 6.8, N 0) 때문에 짧게 보이는 거라 쓰지 않음. 생성 없음
   - 전후 길이/두께: E f2 15.9→12.2, E f3 14.4→11.8, NE f1 15.9→11.8, N f1 15.4(두께 3.2)→12.3(1.7), N f3 14.0→11.8, W f1 조각 3개→12.4. 이제 보이는 칼날은 모두 11.2~12.4px, 두께 1.5~2.1px. 짧은 칼(가려진 것: W f2 3.2, SW f3 6.0)은 늘리지 않음
   - 확인(눈): W f1은 다시 그린 칼이 허리 앞을 가로지름. E f3·NE f3은 같은 그림
-- 게임 반영(2026-10-29): `export_unity.py`에서 death_calm → `chr_player_death_*`(외곽선 없음, 8장, 납품 시트 프레임과 픽셀 일치). death 재생 6fps를 `RoomManager.playerAnimSpeeds`에 추가(코드 초기값 + VerticalSlice 씬 값). EditMode 6/6, 화면 `Docs/QA/Screens/death_calm_ingame_20261029.png`(마지막 프레임 유지 확인)
+- 몸통 구멍 수정(2026-10-29, 사용자 신고 "남서쪽 몸통 사라짐"): `fix_sword`가 칼을 지운 뒤 외곽선 조각을 정리하면서 몸 안쪽의 검은 명암까지 지우고 있었어(피격 SW f1·f2, 쓰러짐 SW·NE·SE·W·E·S 일부). 칼날은 실루엣 가장자리에 닿은 회색 덩어리만 고르고, 정리는 지운 칼날 주변 2px 안으로 제한. 검사: 두 동작 모든 생성 프레임에서 칼 처리로 지워진 몸 픽셀 0개, sheet_clip 종료 코드 0. 남은 빈 곳은 팔·망토·다리 사이 틈(생성 원본에도 있음)
+- 게임 반영(2026-10-29, 몸통 구멍 수정 후 다시 내보냄 — death 7장 갱신, 납품 시트와 픽셀 일치, 화면 `Docs/QA/Screens/death_calm_sw_holefix_20261029.png`): `export_unity.py`에서 death_calm → `chr_player_death_*`(외곽선 없음, 8장, 납품 시트 프레임과 픽셀 일치). death 재생 6fps를 `RoomManager.playerAnimSpeeds`에 추가(코드 초기값 + VerticalSlice 씬 값). EditMode 6/6, 화면 `Docs/QA/Screens/death_calm_ingame_20261029.png`(마지막 프레임 유지 확인)
 
 ## 도구 지원
 | 명세 | PixelLab 인자 | 처리 |

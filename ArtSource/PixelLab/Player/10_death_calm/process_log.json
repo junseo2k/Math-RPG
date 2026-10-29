@@ -187,7 +187,7 @@
   "thick_marked": 3,
   "corners_removed": 5
  },
- "death_calm/south/start_shift": [
+ "death_calm/south/idle_shift": [
   0,
   0
  ],
@@ -197,7 +197,7 @@
    13.0,
    0.0,
    11.6,
-   12.4
+   0.0
   ]
  },
  "death_calm/south-east/f0": {
@@ -276,7 +276,7 @@
   "thick_marked": 4,
   "corners_removed": 7
  },
- "death_calm/south-east/start_shift": [
+ "death_calm/south-east/idle_shift": [
   0,
   -1
  ],
@@ -284,7 +284,7 @@
   "idle_len": 11.6,
   "after": [
    11.6,
-   12.2,
+   0.0,
    11.2,
    12.0
   ]
@@ -365,7 +365,7 @@
   "thick_marked": 3,
   "corners_removed": 4
  },
- "death_calm/east/start_shift": [
+ "death_calm/east/idle_shift": [
   0,
   0
  ],
@@ -454,7 +454,7 @@
   "thick_marked": 6,
   "corners_removed": 3
  },
- "death_calm/north-east/start_shift": [
+ "death_calm/north-east/idle_shift": [
   0,
   0
  ],
@@ -543,7 +543,7 @@
   "thick_marked": 3,
   "corners_removed": 0
  },
- "death_calm/north/start_shift": [
+ "death_calm/north/idle_shift": [
   0,
   0
  ],
@@ -632,7 +632,7 @@
   "thick_marked": 11,
   "corners_removed": 12
  },
- "death_calm/north-west/start_shift": [
+ "death_calm/north-west/idle_shift": [
   0,
   0
  ],
@@ -721,7 +721,7 @@
   "thick_marked": 7,
   "corners_removed": 2
  },
- "death_calm/west/start_shift": [
+ "death_calm/west/idle_shift": [
   0,
   0
  ],
@@ -729,7 +729,7 @@
   "idle_len": 11.6,
   "after": [
    6.8,
-   12.4,
+   6.0,
    3.2,
    12.4
   ]
@@ -810,7 +810,7 @@
   "thick_marked": 6,
   "corners_removed": 10
  },
- "death_calm/south-west/start_shift": [
+ "death_calm/south-west/idle_shift": [
   0,
   0
  ],

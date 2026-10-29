@@ -47,12 +47,12 @@
      "outline_ok": true
     },
     {
-     "w": 40,
+     "w": 41,
      "h": 24,
      "margin": {
       "l": 13,
       "t": 31,
-      "r": 11,
+      "r": 10,
       "b": 9
      },
      "anchor": [
@@ -331,12 +331,12 @@
      "outline_ok": true
     },
     {
-     "w": 21,
+     "w": 28,
      "h": 38,
      "margin": {
       "l": 18,
       "t": 17,
-      "r": 25,
+      "r": 18,
       "b": 9
      },
      "anchor": [
@@ -514,10 +514,10 @@
     },
     {
      "w": 44,
-     "h": 17,
+     "h": 18,
      "margin": {
       "l": 11,
-      "t": 36,
+      "t": 35,
       "r": 9,
       "b": 11
      },
@@ -609,7 +609,7 @@
  },
  "fails": [],
  "notes": [
-  "east f2: 40x24 > 36x48",
+  "east f2: 41x24 > 36x48",
   "east f3: 43x15 > 36x48",
   "north-east f1: 37x38 > 36x48",
   "north-east f2: 37x25 > 36x48",
@@ -624,7 +624,7 @@
   "south-west f2: 38x26 > 36x48",
   "south-west f3: 43x15 > 36x48",
   "south f2: 41x21 > 36x48",
-  "south f3: 44x17 > 36x48",
+  "south f3: 44x18 > 36x48",
   "south-east f2: 41x23 > 36x48",
   "south-east f3: 45x13 > 36x48"
  ]
