@@ -130,3 +130,28 @@
 - 한 일: `export_unity.py`에서 death 원본을 death_calm으로 바꾸고 외곽선을 지움(`NO_OUTLINE`). `chr_player_death_*` 8장만 바뀌었고 납품 시트와 픽셀이 같음. death 6fps를 `RoomManager.playerAnimSpeeds`에 추가(코드 + 씬; Unity MCP로 씬 값 추가 후 저장). EditMode 6/6, 콘솔 오류 0, 플레이 화면 `Docs/QA/Screens/death_calm_ingame_20261029.png`·`death_calm_ingame_zoom_grid_20261029.png`(쓰러진 마지막 프레임 유지, 잘림 없음)
 - 남은 일: NW 검 없음. verify.ps1 미실행(에디터 열림). 쓰러지는 중간 프레임은 게임 화면에서 따로 캡처하지 않음. 미커밋
 - 바꾼 파일: `ArtSource/PixelLab/Player/tools/export_unity.py`, `Assets/Resources/Art/chr_player_death_*.png`, `Assets/Scripts/Progression/RoomManager.cs`, `Assets/Scenes/VerticalSlice.unity`, `Docs/QA/Screens/death_calm_ingame*`
+
+## 2026-10-29 피격(hurt_calm) 8방향 4프레임 납품본
+- 한 일: 게임 idle을 시작·끝 프레임으로 v3 생성 8회 + 뒤쪽 3방향 재생성 3회(NE·N 채택). `process.py`에 `hurt_calm` 클립, `ALIGN_TO`(마지막 프레임 = 게임 idle, 발 맞춤), `TRIM_ABOVE_IDLE`, 피격 전 방향 칼 붙이기 추가. sheet_clip 종료 코드 0, 16색, 알파 0/255. 기록 `ArtSource/PixelLab/Player/11_hurt_calm/README.md`
+- 남은 일: NW f1·f2 칼을 든 팔이 올라감, N 충격 약함. 게임 미반영(반영 시 hurt 6fps 필요). 미커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/{process.py,sheet_clip.py}`, `01_raw/clean/hurt_calm/`, `01_raw/trials/hurt_calm_take{1,2}/`, `02_final/hurt_calm*`, `11_hurt_calm/`
+
+## 2026-10-29 피격 NW·N 재생성
+- 한 일: N(상체 젖힘 강조)·NW(칼 든 손 낮게 유지) 1회씩 재생성해 채택. N 충격 조각은 `drop_fragments`(gap 1, 20px)로 지움, NW 사라진 칼은 시작 자세 칼로 복원. sheet_clip 종료 코드 0, 16색, 알파 0/255, f3 = 게임 idle
+- 남은 일: 게임 미반영(반영 시 hurt 6fps 필요). 미커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `01_raw/clean/hurt_calm/{north,north-west}`, `01_raw/trials/hurt_calm_{used2,take3}/`, `02_final/hurt_calm*`, `11_hurt_calm/`
+
+## 2026-10-29 피격 머리 잘림 수정
+- 한 일: 머리 위를 잘라내던 `TRIM_ABOVE_IDLE`을 끔(N 머리가 평평하게 잘렸음). N 재생성 1회도 머리가 솟아 버렸고, N만 몸을 idle로 고정하고 망토 자락만 생성본에서 가져옴(`FREEZE_DIRS`). sheet_clip 종료 코드 0, 16색, 알파 0/255
+- 남은 일: 게임 미반영(hurt 6fps 필요). 미커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `01_raw/trials/hurt_calm_take4/`, `02_final/hurt_calm*`, `11_hurt_calm/`
+
+## 2026-10-29 칼 처리 때문에 몸통이 뚫리던 문제 수정
+- 한 일: `fix_sword`가 몸 안쪽 검은 명암까지 지우던 문제를 고침(칼날은 가장자리 회색 덩어리만, 정리는 칼날 주변 2px만). 피격·쓰러짐 다시 조립(sheet_clip 둘 다 종료 코드 0), death 그림 7장 게임에 다시 내보냄(납품 시트와 픽셀 일치). 플레이 화면 `Docs/QA/Screens/death_calm_sw_holefix_20261029.png`(+ 확대 보조선)
+- 남은 일: 피격 게임 미반영. 미커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/{death_calm,hurt_calm}*`, `10_death_calm/`, `11_hurt_calm/`, `Assets/Resources/Art/chr_player_death_*.png`, `Docs/QA/Screens/death_calm_sw_holefix*`
+
+## 2026-10-29 피격(hurt_calm) 게임 반영
+- 한 일: `export_unity.py`에서 hurt를 hurt_calm(외곽선 없음)으로 바꿔 `chr_player_hurt_*` 8장 교체(납품 시트와 픽셀 일치). hurt 16fps → 6fps(코드 + 씬, 씬 변경은 그 한 줄뿐). EditMode 6/6, 콘솔 오류 0, 플레이 화면 `Docs/QA/Screens/hurt_calm_ingame_20261029.png`
+- 남은 일: 피격 0.67초와 경직 시간(hitStun) 비교 안 함. verify.ps1 미실행(에디터 열림). 미커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/export_unity.py`, `Assets/Resources/Art/chr_player_hurt_*.png`, `Assets/Scripts/Progression/RoomManager.cs`, `Assets/Scenes/VerticalSlice.unity`, `Docs/QA/Screens/hurt_calm_ingame*`

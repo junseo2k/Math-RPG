@@ -1,0 +1,5 @@
+hurt_calm/east: sword restored from start pose in f[0, 1]
+hurt_calm/north-east: sword restored from start pose in f[0]
+hurt_calm/north-west: sword restored from start pose in f[0, 1, 2]
+verified 108 files: palette 16 colours, alpha 0/255, 1px 4-direction outline, no diagonal corners
+build exit 0

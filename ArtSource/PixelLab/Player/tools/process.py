@@ -21,7 +21,8 @@ CLIPS = {  # name: (frames, fps, loop, frames dropped from raw start)
     'idle_alert': (4, 6, True, 1),    # sword-ready guard idle, delivery only (07_idle_alert, 2026-10-28)
     'idle_breath': (4, 6, True, 1),   # breathing idle from right-hand start poses (08_idle_breath, 2026-10-29)
     'idle_calm': (4, 6, True, 1),     # still guard idle, only hair tips + cape hem sway (09_idle_calm, 2026-10-29)
-    'death_calm': (4, 6, False, 1)}   # forward collapse from the in-game idle, outline-free delivery (10_death_calm, 2026-10-29)
+    'death_calm': (4, 6, False, 1),   # forward collapse from the in-game idle, outline-free delivery (10_death_calm, 2026-10-29)
+    'hurt_calm': (4, 6, False, 1)}    # recoil and recover to the in-game idle, outline-free delivery (11_hurt_calm, 2026-10-29)
 # standing poses that clips are aligned to: right-hand sword versions (W/NW/SE edited, S flipped; user, 2026-10-29)
 ROTATIONS = 'idle_breath_start'
 SIZE, ANCHOR = 64, (32, 56)       # anchor = ground contact; feet bottom pixel row = 55
@@ -55,11 +56,14 @@ def planted_feet(img):
 
 
 # frames whose feet must stay where the standing pose has them (ArtSpecification 1-6): clip -> frame indices (None = all)
-PLANTED = {'hurt': None, 'death': [0], 'death_calm': [0],'idle_alert': None, 'idle_breath': None, 'idle_calm': None}
+PLANTED = {'hurt': None, 'death': [0], 'death_calm': [0], 'hurt_calm': None, 'idle_alert': None, 'idle_breath': None, 'idle_calm': None}
 # raw frames used instead of dropping the start: death_calm opens on the exact in-game idle pose (raw 0) and skips raw 1,
 # which was still standing but lifted/shifted the feet (N, S); 2026-10-29
 PICK = {'death_calm': [0, 2, 3, 4]}
-START_FROM = {'death_calm': 'idle_calm'}
+# (clip it is taken from, frame index): that frame becomes the exact in-game idle frame and the other frames take the
+# same integer shift; hurt_calm ends on it (recovered), death_calm opens on it
+ALIGN_TO = {'death_calm': ('idle_calm', 0), 'hurt_calm': ('idle_calm', -1)}
+TRIM_ABOVE_IDLE = set()   # was {'hurt_calm'}: it cut N's lifted head flat; N is regenerated as a push-back instead (user, 2026-10-29)
 SNAP_MAX = 2   # px; larger drift is a real pose change, not generation noise
 
 # every generated idle/N take bobbed the head 2-5 px (2026-10-28): rotation pose held, only the cape hem sways (user)
@@ -73,7 +77,7 @@ MIRROR = {'idle_alert': ['south'], 'run': ['south'], 'attack': ['south'], 'dodge
           'hurt': ['south'], 'death': ['south']}   # all clips right-handed (user, 2026-10-29)
 
 # head/torso height pinned to the standing pose; dodge/death drop the body on purpose, run keeps its stride bob (user, 2026-10-29)
-STABLE = ('idle_breath', 'idle_calm', 'attack', 'hurt')
+STABLE = ('idle_breath', 'idle_calm', 'attack', 'hurt', 'hurt_calm')
 STABLE_MAX = 4   # px; a larger difference is a real pose change (raised arm, lean), not generation bob
 
 
@@ -82,7 +86,11 @@ SWORD_FROM_REF = {('idle_breath', 'north-west')}
 
 # body, head and sword stay exactly the start pose; only the silhouette edge of the cape hem / hair tips
 # follows the generated frame, at most cape/hair px in or out (user, 2026-10-29)
-FREEZE = {'idle_calm': dict(cape=2, hair=3, hair_rows=6, hair_out=False)}   # crown never puffs outward; hair changes stay inside the start silhouette (user, 2026-10-29)
+FREEZE = {'idle_calm': dict(cape=2, hair=3, hair_rows=6, hair_out=False),
+          'hurt_calm': dict(cape=4, hair=0, hair_rows=0, hair_out=False)}   # crown never puffs outward; hair changes stay inside the start silhouette (user, 2026-10-29)
+# hurt_calm N lifts the head in every take (4 tries): head and body stay the idle, only the cape flare is taken
+# (user: pushed-back feel without clipping, 2026-10-29)
+FREEZE_DIRS = {'hurt_calm': ['north']}
 # hair band comes from hair-only generations, per direction the take whose sway is closest to SW's
 # (hair_motion.py distance; user: match the SW hair sway, keep the hairstyle, 2026-10-29)
 HAIR_FROM_CLIP = {'idle_calm': {'east': 'idle_hair', 'north-east': 'idle_hair3', 'north': 'idle_hair3',
@@ -98,9 +106,20 @@ def steel_mask(img):
     return (img[..., 3] > 0) & (c.max(-1) - c.min(-1) < 25) & (lum(c) > 60)
 
 
-def blade_parts(img, min_px=3):
-    """8-connected steel components (>= min_px), largest first."""
+def blade_parts(img, min_px=3, edge=0.5):
+    """8-connected steel components (>= min_px) that lie on the silhouette edge, largest first. A thin blade touches
+    transparency or the outline with most of its pixels; grey armour highlights sit inside the body and are skipped
+    (SW hurt lost its torso highlights to fix_sword before this, 2026-10-29)."""
     m = steel_mask(img)
+    a = img[..., 3] > 0
+    t = np.pad(~a, 1)
+    by_air = t[:-2, 1:-1] | t[2:, 1:-1] | t[1:-1, :-2] | t[1:-1, 2:]
+    open_ = ~a | (a & (img[..., :3] == 0).all(-1) & by_air)   # transparent or the real outline (black next to air)
+    p = np.pad(open_, 1)
+    touch = np.zeros(m.shape, bool)
+    for dy in (0, 1, 2):
+        for dx in (0, 1, 2):
+            touch |= p[dy:dy + m.shape[0], dx:dx + m.shape[1]]
     lab, parts = np.zeros(m.shape, int), []
     for y, x in zip(*np.nonzero(m)):
         if lab[y, x]:
@@ -113,8 +132,9 @@ def blade_parts(img, min_px=3):
                 for q in range(max(b - 1, 0), min(b + 2, m.shape[1])):
                     if m[p, q] and not lab[p, q]:
                         lab[p, q] = lab[y, x]; st.append((p, q))
-        if len(comp) >= min_px:
-            parts.append(np.array(comp))
+        comp = np.array(comp)
+        if len(comp) >= min_px and touch[comp[:, 0], comp[:, 1]].mean() >= edge:
+            parts.append(comp)
     return sorted(parts, key=len, reverse=True)
 
 
@@ -151,13 +171,16 @@ def fix_sword(f, length, pal):
     n = np.array([-d[1], d[0]])
     n = n if n @ LIGHT_DIR >= 0 else -n
     out = f.copy()
-    out[steel_mask(out)] = 0
+    out[c[:, 0], c[:, 1]] = 0   # only the blade components, never armour greys
+    old = np.zeros(out.shape[:2], bool)
+    old[c[:, 0], c[:, 1]] = True
+    old = grow(old, 2)   # the old blade's own outline; dark armour shading elsewhere must stay (SW hurt torso, 2026-10-29)
     for _ in range(2):   # the old blade's outline pixels left floating
         a = out[..., 3] > 0
         col = (out[..., :3] != pal[0]).any(-1) & a
         p = np.pad(col, 1)
         near = p[:-2, 1:-1] | p[2:, 1:-1] | p[1:-1, :-2] | p[1:-1, 2:]
-        out[a & ~col & ~near] = 0
+        out[a & ~col & ~near & old] = 0
     steps = int(round(length))
     for i in range(steps):
         y, x = np.round(hilt + d * i).astype(int)
@@ -752,17 +775,32 @@ def cmd_build(only=None):
                 log[f'{clip}/{d}/f{i}'] = dict(offset=[dx, dy], snap=snap, align=how, **st)
             if d in MIRROR.get(clip, ()):
                 out, marks = mirror_frames(out), [np.flip(m, 1) for m in marks]
-            if clip in START_FROM:   # open on the exact in-game idle frame; later frames take the same integer shift
-                idle = read_png(os.path.join(FINAL, START_FROM[clip], f'{d}.png'))[:, :SIZE]
-                _, sx, sy = min((int((np.roll(out[0], (y, x), (0, 1)) != idle).any(-1).sum()), x, y)
+            if clip in ALIGN_TO:   # one frame is the exact in-game idle frame; the others take the same integer shift
+                src, k = ALIGN_TO[clip]
+                k %= len(out)
+                idle = read_png(os.path.join(FINAL, src, f'{d}.png'))[:, :SIZE]
+                _, sx, sy = min((int((np.roll(out[k], (y, x), (0, 1)) != idle).any(-1).sum()), x, y)
                                 for x in range(-3, 4) for y in range(-3, 4))
-                out = [idle] + [np.roll(f, (sy, sx), (0, 1)) for f in out[1:]]
-                log[f'{clip}/{d}/start_shift'] = [sx, sy]
+                out = [idle if i == k else np.roll(f, (sy, sx), (0, 1)) for i, f in enumerate(out)]
+                log[f'{clip}/{d}/idle_shift'] = [sx, sy]
+                if clip in TRIM_ABOVE_IDLE:   # head is pinned, so anything above the idle's top row is a stray hair spike
+                    top = int(np.nonzero((idle[..., 3] > 0).any(1))[0][0])
+                    out = [f if i == k else outline(np.concatenate([np.zeros_like(f[:top]), f[top:]]), pal)[0]
+                           for i, f in enumerate(out)]
+                    # impact sparks the N retake drew beside the head: small islands 1px+ off the body
+                    out = [f if i == k else drop_fragments(f, max_px=20, gap=1)[0] for i, f in enumerate(out)]
+                # planted feet follow the game idle's feet (SE idle sits 1px off the rotation pose)
+                hx, hy = planted_feet(idle)
+                for i, f in enumerate(out):
+                    if i != k and clip in PLANTED and (PLANTED[clip] is None or i in PLANTED[clip]):
+                        fx, fy = planted_feet(f)
+                        if abs(hx - fx) <= SNAP_MAX and abs(hy - fy) <= SNAP_MAX:
+                            out[i] = np.roll(f, (hy - fy, hx - fx), (0, 1))
                 # blade keeps the idle blade's size: one length for every direction (median of the idle blades) because
                 # per-direction idle blades are foreshortened (NE 8.8) or half hidden (W 6.8, N 0), not shorter swords
-                lens = [blade_len(read_png(os.path.join(FINAL, START_FROM[clip], f'{k}.png'))[:, :SIZE]) for k in DIRS]
+                lens = [blade_len(read_png(os.path.join(FINAL, src, f'{n}.png'))[:, :SIZE]) for n in DIRS]
                 L = float(np.median([v for v in lens if v >= 4]))
-                out = [out[0]] + [fix_sword(f, L, pal) for f in out[1:]]
+                out = [f if i == k else fix_sword(f, L, pal) for i, f in enumerate(out)]
                 log[f'{clip}/{d}/sword'] = dict(idle_len=round(L, 1), after=[round(blade_len(f), 1) for f in out])
             reff = process_frame(ref, dx, dy, pal)[0]
             if clip in REF_FROM:
@@ -771,21 +809,24 @@ def cmd_build(only=None):
                 out = paste_sword(out, reff, pal)
             else:
                 # only NW loses the blade; a falling body can't take the standing pose's blade
-                lost = [i for i, f in enumerate(out) if d == 'north-west' and clip != 'death_calm' and lost_sword(f, reff)]
+                # hurt_calm stays close to the idle pose, so any direction that drops the blade gets it back
+                lost = [i for i, f in enumerate(out) if (d == 'north-west' or clip == 'hurt_calm') and clip != 'death_calm'
+                        and lost_sword(f, reff)]
                 for i in lost:
                     out[i] = paste_sword([out[i]], reff, pal)[0]
                 if lost:
                     report.append(f'{clip}/{d}: sword restored from start pose in f{lost}')
             if clip in STABLE:
                 out = [pin_head(f, body_top(bf), pal) for f in out]
-            if clip in FREEZE:
+            if clip in FREEZE and d in FREEZE_DIRS.get(clip, DIRS):
+                fref = out[ALIGN_TO[clip][1]] if clip in ALIGN_TO else reff   # aligned clips freeze to the game idle
                 hair = [None] * len(out)
                 if clip in HAIR_FROM_CLIP:
                     src = HAIR_FROM_CLIP[clip]
                     hr = raw_frames(src[d] if isinstance(src, dict) else src, d)
                     hx, hy, _ = clip_offset(rot, rdx, rdy, hr)
                     hair = [process_frame(r, hx, hy, pal)[0] for r in hr[drop:]]
-                out = [freeze_body(f, reff, pal, hair_src=h, **FREEZE[clip]) for f, h in zip(out, hair)]
+                out = [freeze_body(f, fref, pal, hair_src=h, **FREEZE[clip]) for f, h in zip(out, hair)]
             bh = bbox(bf)[3] - bbox(bf)[1] + 1
             report += [f'{clip}/{d}: {s}' for s in check_clip(clip, d, out, bh)]
             sheet = np.concatenate(out, 1)

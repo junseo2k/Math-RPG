@@ -15,7 +15,7 @@ DIRS = ['east', 'north-east', 'north', 'north-west', 'west', 'south-west', 'sout
 PAD = int(sys.argv[3]) if len(sys.argv) > 3 else 1
 GAP = int(sys.argv[4]) if len(sys.argv) > 4 else 0
 FPS, MARGIN, MAX_W, MAX_H = P.CLIPS[CLIP][1], 4, 36, 48
-NO_OUTLINE = {'death_calm'}   # delivered like the game idle: outer 1px outline stripped (export_unity.strip_outline)
+NO_OUTLINE = {'death_calm', 'hurt_calm'}   # delivered like the game idle: outer 1px outline stripped (export_unity.strip_outline)
 FALLS = {'death', 'death_calm'}   # only the start pose is anchored; the body moves as it falls
 
 

@@ -4033,7 +4033,7 @@ MonoBehaviour:
   - state: dash
     fps: 12
   - state: hurt
-    fps: 16
+    fps: 6
   - state: death
     fps: 6
 --- !u!1 &1617135300

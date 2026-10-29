@@ -1,2 +1,3 @@
-death_calm/east: f3: pixels below ground line (bottom row 56)
-death_calm/north-west: f3: pixels below ground line (bottom row 56)
+hurt_calm/east: sword restored from start pose in f[0, 1]
+hurt_calm/north-east: sword restored from start pose in f[0]
+hurt_calm/north-west: sword restored from start pose in f[0, 1, 2]
