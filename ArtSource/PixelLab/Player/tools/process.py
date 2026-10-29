@@ -266,7 +266,10 @@ def freeze_body(f, ref, pal, cape, hair, hair_src=None, hair_rows=11, hair_out=T
         mid = (rows.min() + rows.max()) // 2
         band = grow(a, cape) & grow(~a, cape) & (y >= mid) & (y < ANCHOR[1] - 3)   # ground rows stay: feet anchor
         zones.append((band, soft_ref | cape_px(ref), soft_f | cape_px(f), f))
-    band = grow(a, hair) & grow(~a, hair) & (y < top + hair_rows)
+    # face skin (pale, b close to g) and 1px around it never takes the hair source: E/W profiles sit on the silhouette
+    # edge inside the hair band and got overdrawn (user, 2026-10-29)
+    skin = a & (c[..., 0] > 150) & (c[..., 2] >= c[..., 1] - 55)
+    band = grow(a, hair) & grow(~a, hair) & (y < top + hair_rows) & ~grow(skin, 1)
     h = f if hair_src is None else hair_src
     # hair_out=False: only the ref's own hair pixels may change (never its outline or the space around it), so the
     # crown can thin by a pixel but outline() never gets pushed outward
