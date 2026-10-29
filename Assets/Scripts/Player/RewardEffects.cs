@@ -18,7 +18,7 @@ public class RewardEffects : MonoBehaviour
     RewindSystem rewind;
     bool refundPending;
     // 과거의 잔상: 재개 후 실행할 시각, 판정, 피해
-    readonly List<(float at, Vector2 center, Vector2 size, int damage)> afterimages = new();
+    readonly List<(float at, Vector2 center, Vector2 size, float angle, int damage)> afterimages = new();
 
     void Awake()
     {
@@ -113,8 +113,8 @@ public class RewardEffects : MonoBehaviour
         }
 
         if (T(TraitId.PastAfterimage) > 0f)
-            foreach (var (offset, center, size, damage) in info.hits)
-                afterimages.Add((Time.time + offset, center, size, Health.Round(damage * T(TraitId.PastAfterimage))));
+            foreach (var (offset, center, size, angle, damage) in info.hits)
+                afterimages.Add((Time.time + offset, center, size, angle, Health.Round(damage * T(TraitId.PastAfterimage))));
 
         refundPending = T(TraitId.TimeRefund) > 0f;
 
@@ -130,7 +130,7 @@ public class RewardEffects : MonoBehaviour
             health.AddReduction(R(RelicId.MoonShard).value, R(RelicId.MoonShard).duration);
     }
 
-    void OnHitLanded(Vector2 center, Vector2 size, int damage)
+    void OnHitLanded(Vector2 center, Vector2 size, float angle, int damage)
     {
         if (!refundPending || !rewind) return;
         refundPending = false;
@@ -139,25 +139,27 @@ public class RewardEffects : MonoBehaviour
 
     void Update()
     {
+        if (TimeControl.IsStopped || !flow || flow.State != GameState.Playing) return;
         for (int i = afterimages.Count - 1; i >= 0; i--)
         {
-            var (at, center, size, damage) = afterimages[i];
+            var (at, center, size, angle, damage) = afterimages[i];
             if (Time.time < at) continue;
             afterimages.RemoveAt(i);
-            foreach (var hit in Physics2D.OverlapBoxAll(center, size, 0f))
+            foreach (var hit in Physics2D.OverlapBoxAll(center, size, angle))
                 if (hit.gameObject != gameObject && hit.TryGetComponent(out Health target) && !target.IsDead)
                     target.TakeHit(damage, center);
-            ShowAfterimage(center, size);
+            ShowAfterimage(center, size, angle);
         }
     }
 
-    void ShowAfterimage(Vector2 center, Vector2 size)
+    void ShowAfterimage(Vector2 center, Vector2 size, float angle)
     {
         var sr = new GameObject("Afterimage").AddComponent<SpriteRenderer>();
         sr.sprite = RoomManager.Square;
         sr.color = AfterimageColor;
         sr.sortingOrder = 3;
         sr.transform.position = center;
+        sr.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         sr.transform.localScale = size;
         Destroy(sr.gameObject, afterimageShow);
     }

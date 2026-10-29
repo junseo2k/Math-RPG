@@ -3,8 +3,15 @@ using UnityEngine;
 // 1장 보스2: 시간 유예. 규칙: Docs/Bosses/02_Deferral.md
 // 정지장 대상 아님(IFreezable 미구현)
 [RequireComponent(typeof(Health), typeof(SpriteRenderer), typeof(BoxCollider2D))]
-public class DeferralBoss : MonoBehaviour
+public class DeferralBoss : MonoBehaviour, IRewindable
 {
+    struct Snapshot
+    {
+        public Vector3 position;
+        public Vector2 dir;
+        public float fireLeft;
+    }
+
     // 전투 수치는 CombatBalance (Tools/전투 밸런스 열기)
     static CombatBalance.DeferralBossStats B => CombatBalance.Instance.deferralBoss;
 
@@ -30,6 +37,7 @@ public class DeferralBoss : MonoBehaviour
         health.Damaged += OnHit;
         health.Died += OnDied;
         anim = GetComponent<SpriteAnimator>();
+        Rewindables.All.Add(this);
     }
 
     void Start()
@@ -45,6 +53,7 @@ public class DeferralBoss : MonoBehaviour
 
     void Update()
     {
+        if (health.IsDead || !flow || flow.State != GameState.Playing || TimeControl.IsStopped) return;
         var pos = transform.position;
         Vector2 next = (Vector2)pos + dir * B.moveSpeed * Time.deltaTime;
         if (Mathf.Abs(next.x) >= moveLimitX) dir.x = -Mathf.Sign(next.x) * Mathf.Abs(dir.x);
@@ -58,6 +67,24 @@ public class DeferralBoss : MonoBehaviour
             nextFire = Time.time + B.fireInterval;
             Fire();
         }
+    }
+
+    void OnDestroy() => Rewindables.All.Remove(this);
+
+    public object Capture() => new Snapshot
+    {
+        position = transform.position,
+        dir = dir,
+        fireLeft = Mathf.Max(nextFire - Time.time, 0f),
+    };
+
+    public void Restore(object state)
+    {
+        var s = (Snapshot)state;
+        transform.position = s.position;
+        dir = s.dir;
+        nextFire = Time.time + s.fireLeft;
+        if (anim) anim.Release();
     }
 
     void Fire()

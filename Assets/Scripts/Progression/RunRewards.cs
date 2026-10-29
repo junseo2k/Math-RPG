@@ -102,7 +102,8 @@ public class RunRewards : MonoBehaviour
         ApplySolarSettings(); // 플레이 중 설정 변경도 카드 문구에 반영
         var pool = new List<TraitDef>();
         foreach (var t in traits)
-            if (Level(t.id) < MaxLevel(t) && (!rewindOnly || t.rewindOnly)) pool.Add(t);
+            // 현재 1장 보스는 반복되는 운명의 조기 예고 표시를 지원하지 않는다.
+            if (t.id != TraitId.RepeatingFate && Level(t.id) < MaxLevel(t) && (!rewindOnly || t.rewindOnly)) pool.Add(t);
         Shuffle(pool);
 
         var offers = new List<RewardOffer>();

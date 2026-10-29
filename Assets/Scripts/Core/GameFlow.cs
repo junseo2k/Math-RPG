@@ -87,6 +87,7 @@ public class GameFlow : MonoBehaviour
     public void ClearStage()
     {
         if (State != GameState.Playing) return;
+        RewindSpawned.ClearAll();
         bool boss = IsBossStage;
         int gold = boss ? Rewards.BossGold : Rewards.NormalGold;
         Run.gold += gold;
@@ -222,7 +223,8 @@ public class GameFlow : MonoBehaviour
 
     IEnumerator OpenGrowthAfterDeath()
     {
-        yield return new WaitForSeconds(rebirthDelay);
+        var overlay = FindAnyObjectByType<RebirthOverlay>();
+        yield return new WaitForSeconds(rebirthDelay + (overlay ? overlay.DeathPause : 1f));
         SetState(GameState.Growth);
     }
 

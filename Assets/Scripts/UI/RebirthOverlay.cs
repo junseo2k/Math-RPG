@@ -4,10 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 사망 → 재탄생 연출. 총 길이 = 재탄생 대기(2초). 규칙: Docs/Art/ArtSpecification.md 5-2
+// 사망 → 대기 → 재탄생 연출. 규칙: Docs/Art/ArtSpecification.md 5-2
 // 되감기가 아니라 '다음 날'임을 보여준다(사망 ≠ 시간 역행)
 public class RebirthOverlay : MonoBehaviour
 {
+    [SerializeField, Min(0f)] float deathPause = 1f;
+    public float DeathPause => deathPause;
     [SerializeField] float lightOut = 0.4f;  // 주인공 빛이 꺼짐
     [SerializeField] float blackout = 0.6f;  // 암전
     [SerializeField] float dayCard = 0.6f;   // "N일째 18:00"
@@ -61,6 +63,7 @@ public class RebirthOverlay : MonoBehaviour
         var player = FindAnyObjectByType<PlayerController>();
         var view = player ? player.GetComponent<SpriteRenderer>() : null;
 
+        yield return new WaitForSeconds(deathPause);
         yield return Tween(lightOut, t => SetAlpha(view, 1f - t));
         yield return Tween(blackout, t => black.color = new Color(0f, 0f, 0f, t));
 
