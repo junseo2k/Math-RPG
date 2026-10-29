@@ -35,6 +35,7 @@ public class RoomManager : MonoBehaviour, IRewindable
         new() { state = "attack", fps = 12f },
         new() { state = "dash", fps = 12f },
         new() { state = "hurt", fps = 16f },
+        new() { state = "death", fps = 6f },
     };
 
     static Sprite square;

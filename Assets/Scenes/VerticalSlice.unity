@@ -4030,6 +4030,8 @@ MonoBehaviour:
     fps: 12
   - state: hurt
     fps: 16
+  - state: death
+    fps: 6
 --- !u!1 &1617135300
 GameObject:
   m_ObjectHideFlags: 0

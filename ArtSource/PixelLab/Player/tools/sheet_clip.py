@@ -15,12 +15,26 @@ DIRS = ['east', 'north-east', 'north', 'north-west', 'west', 'south-west', 'sout
 PAD = int(sys.argv[3]) if len(sys.argv) > 3 else 1
 GAP = int(sys.argv[4]) if len(sys.argv) > 4 else 0
 FPS, MARGIN, MAX_W, MAX_H = P.CLIPS[CLIP][1], 4, 36, 48
+NO_OUTLINE = {'death_calm'}   # delivered like the game idle: outer 1px outline stripped (export_unity.strip_outline)
+FALLS = {'death', 'death_calm'}   # only the start pose is anchored; the body moves as it falls
+
+
+def edge_of(f):
+    m = f[..., 3] > 0
+    p = np.pad(m, 1)
+    return m & ~(p[:-2, 1:-1] & p[2:, 1:-1] & p[1:-1, :-2] & p[1:-1, 2:])
+
+
+def strip(f, oc):
+    f = f.copy()
+    f[edge_of(f) & (f[..., :3] == oc).all(-1)] = 0
+    return f
 
 
 def outline_ok(f, oc):
-    m = f[..., 3] > 0
-    p = np.pad(m, 1)
-    edge = m & ~(p[:-2, 1:-1] & p[2:, 1:-1] & p[1:-1, :-2] & p[1:-1, 2:])
+    edge = edge_of(f)
+    if CLIP in NO_OUTLINE:   # no ring left: the silhouette edge is mostly coloured, not the outline colour
+        return float((f[edge, :3] == oc).all(-1).mean()) < 0.5
     return bool((f[edge, :3] == oc).all()) and not P.outline_corners(f, oc).any()
 
 
@@ -33,7 +47,8 @@ def main():
         sheet = np.zeros((64 + 2 * PAD, 64 * FRAMES + GAP * (FRAMES - 1) + 2 * PAD, 4), np.uint8)
         for i in range(FRAMES):
             x = PAD + i * (64 + GAP)
-            sheet[PAD:PAD + 64, x:x + 64] = src[:, 64 * i:64 * (i + 1)]
+            cell = src[:, 64 * i:64 * (i + 1)]
+            sheet[PAD:PAD + 64, x:x + 64] = strip(cell, oc) if CLIP in NO_OUTLINE else cell
         write_png(os.path.join(OUT, f'{n}_{d}.png'), sheet)
     fails, notes, rep, allpx, alpha, rows = [], [], {}, [], set(), []
     for n, d in enumerate(DIRS):
@@ -65,7 +80,9 @@ def main():
             if min(m.values()) == 0: fails.append(f'{d} f{i}: touches canvas edge (clipped?)')
             elif min(m.values()) < MARGIN: notes.append(f'{d} f{i}: margin {min(m.values())} < {MARGIN}')
             # feet stay where the standing pose (same direction) has them; in death only the start pose is anchored
-            if anc != home and (CLIP != 'death' or i == 0): fails.append(f'{d} f{i}: anchor {anc} != standing {home}')
+            if CLIP in NO_OUTLINE:   # the standing pose is compared outline-free too
+                home = P.planted_feet(strip(read_png(os.path.join(P.FINAL, 'rotations', f'{d}.png')), oc))
+            if anc != home and (CLIP not in FALLS or i == 0): fails.append(f'{d} f{i}: anchor {anc} != standing {home}')
             if not ok: fails.append(f'{d} f{i}: silhouette edge not 1px outline colour')
             fr.append(dict(w=w, h=h, margin=m, anchor=list(anc), body_top=body_top, outline_ok=ok))
             allpx.append(f[a][:, :3])

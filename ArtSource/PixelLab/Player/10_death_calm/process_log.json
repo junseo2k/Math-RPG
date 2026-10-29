@@ -1,0 +1,826 @@
+{
+ "rotation/south": {
+  "offset": [
+   8,
+   9
+  ],
+  "clipped_px": 0,
+  "cleaned_px": 2,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 2,
+  "thick_fixed": 4,
+  "thick_marked": 2,
+  "corners_removed": 8
+ },
+ "rotation/south-east": {
+  "offset": [
+   13,
+   9
+  ],
+  "clipped_px": 0,
+  "cleaned_px": 2,
+  "sun_gold_px": 11,
+  "specks_px": 0,
+  "missing_fixed": 12,
+  "thick_fixed": 10,
+  "thick_marked": 3,
+  "corners_removed": 8
+ },
+ "rotation/east": {
+  "offset": [
+   8,
+   9
+  ],
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 5,
+  "thick_fixed": 12,
+  "thick_marked": 3,
+  "corners_removed": 8
+ },
+ "rotation/north-east": {
+  "offset": [
+   3,
+   9
+  ],
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 5,
+  "specks_px": 0,
+  "missing_fixed": 2,
+  "thick_fixed": 7,
+  "thick_marked": 8,
+  "corners_removed": 9
+ },
+ "rotation/north": {
+  "offset": [
+   8,
+   9
+  ],
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 1,
+  "thick_fixed": 1,
+  "thick_marked": 6,
+  "corners_removed": 4
+ },
+ "rotation/north-west": {
+  "offset": [
+   13,
+   9
+  ],
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 3,
+  "thick_fixed": 4,
+  "thick_marked": 6,
+  "corners_removed": 5
+ },
+ "rotation/west": {
+  "offset": [
+   1,
+   9
+  ],
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 6,
+  "thick_fixed": 6,
+  "thick_marked": 2,
+  "corners_removed": 5
+ },
+ "rotation/south-west": {
+  "offset": [
+   4,
+   8
+  ],
+  "clipped_px": 0,
+  "cleaned_px": 2,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 3,
+  "thick_fixed": 13,
+  "thick_marked": 2,
+  "corners_removed": 9
+ },
+ "death_calm/south/f0": {
+  "offset": [
+   -2,
+   -3
+  ],
+  "snap": [
+   0,
+   1
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 1,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 121,
+  "thick_fixed": 0,
+  "thick_marked": 2,
+  "corners_removed": 0
+ },
+ "death_calm/south/f1": {
+  "offset": [
+   -2,
+   -3
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 5,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 91,
+  "thick_fixed": 12,
+  "thick_marked": 3,
+  "corners_removed": 1
+ },
+ "death_calm/south/f2": {
+  "offset": [
+   -2,
+   -3
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 79,
+  "thick_fixed": 8,
+  "thick_marked": 11,
+  "corners_removed": 4
+ },
+ "death_calm/south/f3": {
+  "offset": [
+   -2,
+   -3
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 68,
+  "thick_fixed": 9,
+  "thick_marked": 3,
+  "corners_removed": 5
+ },
+ "death_calm/south/start_shift": [
+  0,
+  0
+ ],
+ "death_calm/south/sword": {
+  "idle_len": 11.6,
+  "after": [
+   13.0,
+   0.0,
+   11.6,
+   12.4
+  ]
+ },
+ "death_calm/south-east/f0": {
+  "offset": [
+   -2,
+   -1
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.84",
+  "clipped_px": 0,
+  "cleaned_px": 5,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 116,
+  "thick_fixed": 0,
+  "thick_marked": 3,
+  "corners_removed": 2
+ },
+ "death_calm/south-east/f1": {
+  "offset": [
+   -2,
+   -1
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.84",
+  "clipped_px": 0,
+  "cleaned_px": 4,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 104,
+  "thick_fixed": 11,
+  "thick_marked": 2,
+  "corners_removed": 2
+ },
+ "death_calm/south-east/f2": {
+  "offset": [
+   -2,
+   -1
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.84",
+  "clipped_px": 0,
+  "cleaned_px": 3,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 106,
+  "thick_fixed": 14,
+  "thick_marked": 3,
+  "corners_removed": 0
+ },
+ "death_calm/south-east/f3": {
+  "offset": [
+   -2,
+   -1
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.84",
+  "clipped_px": 0,
+  "cleaned_px": 2,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 94,
+  "thick_fixed": 15,
+  "thick_marked": 4,
+  "corners_removed": 7
+ },
+ "death_calm/south-east/start_shift": [
+  0,
+  -1
+ ],
+ "death_calm/south-east/sword": {
+  "idle_len": 11.6,
+  "after": [
+   11.6,
+   12.2,
+   11.2,
+   12.0
+  ]
+ },
+ "death_calm/east/f0": {
+  "offset": [
+   -4,
+   -4
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 2,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 111,
+  "thick_fixed": 0,
+  "thick_marked": 2,
+  "corners_removed": 0
+ },
+ "death_calm/east/f1": {
+  "offset": [
+   -4,
+   -4
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 88,
+  "thick_fixed": 6,
+  "thick_marked": 4,
+  "corners_removed": 1
+ },
+ "death_calm/east/f2": {
+  "offset": [
+   -4,
+   -4
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 1,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 113,
+  "thick_fixed": 6,
+  "thick_marked": 5,
+  "corners_removed": 3
+ },
+ "death_calm/east/f3": {
+  "offset": [
+   -4,
+   -4
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 1,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 92,
+  "thick_fixed": 4,
+  "thick_marked": 3,
+  "corners_removed": 4
+ },
+ "death_calm/east/start_shift": [
+  0,
+  0
+ ],
+ "death_calm/east/sword": {
+  "idle_len": 11.6,
+  "after": [
+   11.6,
+   0.0,
+   12.2,
+   11.8
+  ]
+ },
+ "death_calm/north-east/f0": {
+  "offset": [
+   -3,
+   -2
+  ],
+  "snap": [
+   -1,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 115,
+  "thick_fixed": 0,
+  "thick_marked": 5,
+  "corners_removed": 2
+ },
+ "death_calm/north-east/f1": {
+  "offset": [
+   -3,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 2,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 113,
+  "thick_fixed": 10,
+  "thick_marked": 6,
+  "corners_removed": 2
+ },
+ "death_calm/north-east/f2": {
+  "offset": [
+   -3,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 80,
+  "thick_fixed": 5,
+  "thick_marked": 3,
+  "corners_removed": 2
+ },
+ "death_calm/north-east/f3": {
+  "offset": [
+   -3,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 97,
+  "thick_fixed": 2,
+  "thick_marked": 6,
+  "corners_removed": 3
+ },
+ "death_calm/north-east/start_shift": [
+  0,
+  0
+ ],
+ "death_calm/north-east/sword": {
+  "idle_len": 11.6,
+  "after": [
+   8.8,
+   11.8,
+   0.0,
+   11.8
+  ]
+ },
+ "death_calm/north/f0": {
+  "offset": [
+   -6,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.85",
+  "clipped_px": 0,
+  "cleaned_px": 1,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 109,
+  "thick_fixed": 0,
+  "thick_marked": 6,
+  "corners_removed": 0
+ },
+ "death_calm/north/f1": {
+  "offset": [
+   -6,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.85",
+  "clipped_px": 0,
+  "cleaned_px": 1,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 130,
+  "thick_fixed": 5,
+  "thick_marked": 4,
+  "corners_removed": 0
+ },
+ "death_calm/north/f2": {
+  "offset": [
+   -6,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.85",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 87,
+  "thick_fixed": 3,
+  "thick_marked": 9,
+  "corners_removed": 6
+ },
+ "death_calm/north/f3": {
+  "offset": [
+   -6,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.85",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 122,
+  "thick_fixed": 0,
+  "thick_marked": 3,
+  "corners_removed": 0
+ },
+ "death_calm/north/start_shift": [
+  0,
+  0
+ ],
+ "death_calm/north/sword": {
+  "idle_len": 11.6,
+  "after": [
+   0.0,
+   12.3,
+   0.0,
+   11.8
+  ]
+ },
+ "death_calm/north-west/f0": {
+  "offset": [
+   -8,
+   -4
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 119,
+  "thick_fixed": 0,
+  "thick_marked": 3,
+  "corners_removed": 0
+ },
+ "death_calm/north-west/f1": {
+  "offset": [
+   -8,
+   -4
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 4,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 111,
+  "thick_fixed": 3,
+  "thick_marked": 6,
+  "corners_removed": 1
+ },
+ "death_calm/north-west/f2": {
+  "offset": [
+   -8,
+   -4
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 3,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 89,
+  "thick_fixed": 7,
+  "thick_marked": 7,
+  "corners_removed": 6
+ },
+ "death_calm/north-west/f3": {
+  "offset": [
+   -8,
+   -4
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.82",
+  "clipped_px": 0,
+  "cleaned_px": 2,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 73,
+  "thick_fixed": 3,
+  "thick_marked": 11,
+  "corners_removed": 12
+ },
+ "death_calm/north-west/start_shift": [
+  0,
+  0
+ ],
+ "death_calm/north-west/sword": {
+  "idle_len": 11.6,
+  "after": [
+   10.9,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "death_calm/west/f0": {
+  "offset": [
+   -11,
+   -2
+  ],
+  "snap": [
+   1,
+   0
+  ],
+  "align": "IoU 0.81",
+  "clipped_px": 0,
+  "cleaned_px": 2,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 102,
+  "thick_fixed": 0,
+  "thick_marked": 2,
+  "corners_removed": 0
+ },
+ "death_calm/west/f1": {
+  "offset": [
+   -11,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.81",
+  "clipped_px": 0,
+  "cleaned_px": 7,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 116,
+  "thick_fixed": 7,
+  "thick_marked": 0,
+  "corners_removed": 2
+ },
+ "death_calm/west/f2": {
+  "offset": [
+   -11,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.81",
+  "clipped_px": 0,
+  "cleaned_px": 2,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 112,
+  "thick_fixed": 5,
+  "thick_marked": 6,
+  "corners_removed": 2
+ },
+ "death_calm/west/f3": {
+  "offset": [
+   -11,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.81",
+  "clipped_px": 0,
+  "cleaned_px": 1,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 90,
+  "thick_fixed": 3,
+  "thick_marked": 7,
+  "corners_removed": 2
+ },
+ "death_calm/west/start_shift": [
+  0,
+  0
+ ],
+ "death_calm/west/sword": {
+  "idle_len": 11.6,
+  "after": [
+   6.8,
+   12.4,
+   3.2,
+   12.4
+  ]
+ },
+ "death_calm/south-west/f0": {
+  "offset": [
+   -4,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.84",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 121,
+  "thick_fixed": 0,
+  "thick_marked": 2,
+  "corners_removed": 0
+ },
+ "death_calm/south-west/f1": {
+  "offset": [
+   -4,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.84",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 121,
+  "thick_fixed": 10,
+  "thick_marked": 1,
+  "corners_removed": 0
+ },
+ "death_calm/south-west/f2": {
+  "offset": [
+   -4,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.84",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 67,
+  "thick_fixed": 9,
+  "thick_marked": 2,
+  "corners_removed": 3
+ },
+ "death_calm/south-west/f3": {
+  "offset": [
+   -4,
+   -2
+  ],
+  "snap": [
+   0,
+   0
+  ],
+  "align": "IoU 0.84",
+  "clipped_px": 0,
+  "cleaned_px": 0,
+  "sun_gold_px": 0,
+  "specks_px": 0,
+  "missing_fixed": 44,
+  "thick_fixed": 6,
+  "thick_marked": 6,
+  "corners_removed": 10
+ },
+ "death_calm/south-west/start_shift": [
+  0,
+  0
+ ],
+ "death_calm/south-west/sword": {
+  "idle_len": 11.6,
+  "after": [
+   13.7,
+   11.6,
+   0.0,
+   6.0
+  ]
+ }
+}
