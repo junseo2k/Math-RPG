@@ -74,7 +74,13 @@ public class RoomManager : MonoBehaviour, IRewindable
         if (cam)
         {
             cam.orthographic = true;
-            cam.orthographicSize = 6f;
+            // 640×360을 정수배(1080p = 3배)로: 카메라 크기·위치를 픽셀 격자에 맞춰 타일 틈 제거. ArtSpecification 1-2
+            var ppc = cam.GetComponent<UnityEngine.Rendering.Universal.PixelPerfectCamera>();
+            if (!ppc) ppc = cam.gameObject.AddComponent<UnityEngine.Rendering.Universal.PixelPerfectCamera>();
+            ppc.assetsPPU = 32;
+            ppc.refResolutionX = 640;
+            ppc.refResolutionY = 360;
+            ppc.gridSnapping = UnityEngine.Rendering.Universal.PixelPerfectCamera.GridSnapping.UpscaleRenderTexture;
             follow = cam.GetComponent<CameraFollow>();
             if (!follow) follow = cam.gameObject.AddComponent<CameraFollow>();
             follow.Target = player.transform;
@@ -223,6 +229,7 @@ public class RoomManager : MonoBehaviour, IRewindable
         Terrain("WallT", new Vector2(0f, halfH + 0.5f), new Vector2(layout.Length, 1f));
         Terrain("WallB", new Vector2(0f, -halfH - 0.5f), new Vector2(layout.Length, 1f));
         foreach (var (center, size) in layout.Blocks) Terrain("Block", center, size);
+        RoomDecor.Build(layout, room);
 
         player.transform.position = layout.Entrance;
         playerBody.linearVelocity = Vector2.zero;
