@@ -160,3 +160,8 @@
 - 한 일: idle_calm 머리카락 구간을 정수리 6줄 → 26줄로 넓힘(정수리만 안쪽 제한, `crown_rows`). 피격 N은 대기 N의 머리카락 흔들림을 가져옴(`HAIR_FROM_FINAL`). idle·hurt·death 다시 조립(sheet_clip 모두 종료 코드 0), 게임 그림 24장 다시 내보냄(납품과 픽셀 일치, idle 첫 프레임 = 피격 끝 = 쓰러짐 시작). EditMode 6/6, 게임 화면 `Docs/QA/Screens/idle_fullhair_ingame_*`
 - 남은 일: 미커밋
 - 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/{idle_calm,hurt_calm,death_calm}*`, `09_idle_calm/`, `10_death_calm/`, `11_hurt_calm/`, `Assets/Resources/Art/chr_player_{idle,hurt,death}_*.png`, `Docs/QA/Screens/idle_fullhair_*`
+
+## 2026-10-29 동·서 얼굴 일그러짐 수정
+- 한 일: `freeze_body` 머리카락 구간에서 피부와 주변 1px을 뺌(넓힌 머리카락 구간이 얼굴 옆선을 덮었음). idle·hurt·death 다시 조립(sheet_clip 모두 종료 코드 0), 게임 그림 다시 내보냄(납품과 픽셀 일치, 이음 프레임 일치). EditMode 6/6, 화면 `Docs/QA/Screens/idle_face_ew_ingame_zoom_grid_20261029.png`
+- 남은 일: 미커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/*_calm*`, `09_idle_calm/`, `10_death_calm/`, `11_hurt_calm/`, `Assets/Resources/Art/chr_player_{idle,hurt,death}_*.png`, `Docs/QA/Screens/idle_face_*`
