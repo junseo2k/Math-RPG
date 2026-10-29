@@ -155,3 +155,8 @@
 - 한 일: `export_unity.py`에서 hurt를 hurt_calm(외곽선 없음)으로 바꿔 `chr_player_hurt_*` 8장 교체(납품 시트와 픽셀 일치). hurt 16fps → 6fps(코드 + 씬, 씬 변경은 그 한 줄뿐). EditMode 6/6, 콘솔 오류 0, 플레이 화면 `Docs/QA/Screens/hurt_calm_ingame_20261029.png`
 - 남은 일: 피격 0.67초와 경직 시간(hitStun) 비교 안 함. verify.ps1 미실행(에디터 열림). 미커밋
 - 바꾼 파일: `ArtSource/PixelLab/Player/tools/export_unity.py`, `Assets/Resources/Art/chr_player_hurt_*.png`, `Assets/Scripts/Progression/RoomManager.cs`, `Assets/Scenes/VerticalSlice.unity`, `Docs/QA/Screens/hurt_calm_ingame*`
+
+## 2026-10-29 대기 머리카락 전체 흔들림 + 피격 N 머리카락
+- 한 일: idle_calm 머리카락 구간을 정수리 6줄 → 26줄로 넓힘(정수리만 안쪽 제한, `crown_rows`). 피격 N은 대기 N의 머리카락 흔들림을 가져옴(`HAIR_FROM_FINAL`). idle·hurt·death 다시 조립(sheet_clip 모두 종료 코드 0), 게임 그림 24장 다시 내보냄(납품과 픽셀 일치, idle 첫 프레임 = 피격 끝 = 쓰러짐 시작). EditMode 6/6, 게임 화면 `Docs/QA/Screens/idle_fullhair_ingame_*`
+- 남은 일: 미커밋
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/{idle_calm,hurt_calm,death_calm}*`, `09_idle_calm/`, `10_death_calm/`, `11_hurt_calm/`, `Assets/Resources/Art/chr_player_{idle,hurt,death}_*.png`, `Docs/QA/Screens/idle_fullhair_*`
