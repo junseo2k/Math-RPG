@@ -37,5 +37,5 @@ ML/data/
 /[Aa]ssets/_Recovery.meta
 
 # Claude 훅 자동 테스트 결과·표시 파일
-TestResults-EditMode.*
+TestResults-EditMode*
 .claude/.unity-tests-*
