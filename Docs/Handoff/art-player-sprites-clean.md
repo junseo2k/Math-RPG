@@ -200,3 +200,8 @@
 - 한 일: `export_unity.py` run → run_calm(외곽선 없음, 클립 골라 내보내기 인자). `chr_player_run_*` 8장 교체(납품 시트와 픽셀 일치). run 6fps: `RoomManager.cs` 기본값 + VerticalSlice 씬(Unity MCP로 값 변경·저장). verify.ps1 6/6 통과, 종료 코드 0(리포트 `TestResults-EditMode.xml`, 빈 필드 1개는 보고만). 게임 화면 `Docs/QA/Screens/run_calm_ingame_w_20261031.png`
 - 남은 일: 다른 방향 게임 화면 캡처는 W만 함. 상체 프레임마다 갑옷 모양 차이, 폭 초과 17프레임, 작은 보폭. 커밋 안 함
 - 바꾼 파일: `ArtSource/PixelLab/Player/tools/export_unity.py`, `Assets/Resources/Art/chr_player_run_*.png`, `Assets/Scripts/Progression/RoomManager.cs`, `Assets/Scenes/VerticalSlice.unity`, `Docs/QA/Screens/run_calm_ingame_w_20261031.png`
+
+## 2026-10-31 이미지 제작 스킬과 Pixel Brief 생성기 정비
+- 한 일: 프로젝트 스킬 `.claude/skills/pixel-art/SKILL.md`(생성기 명세 → PixelLab 생성 → process/sheet_clip → 확인 → 게임 반영 절차와 함정). 빌드 입력 되살리기·정리 `tools/build_env.sh restore|clean`, `sheet_clip.py`가 보조선 이미지 `<클립>_guides_x4.png`를 만듦, `gif_preview.py sheets <클립> <폴더>`로 8방향 GIF·idle 비교 GIF. 생성기(`~/.codex/.../pixel-brief/index.html`, 이전본 `index.before-2026-10-31.html`): 플레이어 프리셋을 외곽선 0·20°·광원 60°·몸통 0px·간격 4px로, "망토·무기 최대 영역 예외" 체크, 바닥선 기준점 문구, 명암·광원은 목표값(눈 확인) 표시, PixelLab 동작 참조 불가 안내, Claude Code 지시문 첫 줄에 /pixel-art 안내. 브라우저로 프롬프트 출력·화면 배치 확인
+- 남은 일: 커밋 안 함. 생성기는 브라우저에 저장된 이전 입력이 있으면 프리셋을 다시 골라야 새 기본값이 적용됨
+- 바꾼 파일: `.claude/skills/pixel-art/SKILL.md`, `ArtSource/PixelLab/Player/tools/{build_env.sh,sheet_clip.py,gif_preview.py}`, `12_run_calm/preview/`(idle_vs_run_x3.gif → run_calm_vs_idle_x3.gif, guides 다시 생성)

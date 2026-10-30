@@ -4,6 +4,8 @@
   python gif_preview.py hair [folder] # 09_idle_calm/preview/idle_calm_hair_x3.gif: <folder> (default hair_gen) on top vs current below, E..SE
   python gif_preview.py outline   # 09_idle_calm/preview/idle_calm_outline_x3.gif: with (top) / without (bottom) outer outline, E..SE
   python gif_preview.py all       # 09_idle_calm/preview/idle_calm_all_x4.gif: 8 directions, E NE N NW / W SW S SE
+  python gif_preview.py sheets <clip> <folder>   # any delivered clip (<folder>/<n>_<dir>.png, 0 or 4px gap):
+      <folder>/preview/<clip>_all_x4.gif (E NE N NW / W SW S SE) + <clip>_vs_idle_x3.gif (game idle above, clip below)
 """
 import os, struct, sys
 import numpy as np
@@ -56,6 +58,13 @@ def write_gif(path, imgs, delay_cs):
     print(path, f'{w}x{h}', len(imgs), 'frames')
 
 
+def strip_frames(path):
+    """Frames of a delivery sheet: 64px cells, 4px gap if the width says so, outer padding 0."""
+    s = read_png(path)
+    gap = 4 if (s.shape[1] + 4) % 68 == 0 else 0
+    return [P.on_bg(s[:, i * (64 + gap):i * (64 + gap) + 64]) for i in range((s.shape[1] + gap) // (64 + gap))]
+
+
 def grid(rows, k=4):
     return [upscale(P.stack_rows([np.concatenate([r[i] for r in row], 1) for row in rows]), k) for i in range(4)]
 
@@ -63,6 +72,22 @@ def grid(rows, k=4):
 if __name__ == '__main__':
     delay = round(100 / P.CLIPS['idle_calm'][1])   # 6fps -> 17 cs (GIF steps are 1/100 s)
     os.makedirs(os.path.join(OUT, 'preview'), exist_ok=True)
+    if sys.argv[1] == 'sheets':
+        clip, folder = sys.argv[2], os.path.join(P.ROOT, sys.argv[3])
+        os.makedirs(os.path.join(folder, 'preview'), exist_ok=True)
+        cells = [strip_frames(os.path.join(folder, f'{n}_{d}.png')) for n, d in enumerate(DIRS)]
+        n, cs = max(len(c) for c in cells), round(100 / P.CLIPS[clip][1])
+        rows = [cells[:4], cells[4:]]
+        write_gif(os.path.join(folder, 'preview', f'{clip}_all_x4.gif'),
+                  [upscale(P.stack_rows([np.concatenate([c[i % len(c)] for c in row], 1) for row in rows]), 4) for i in range(n)], cs)
+        art = os.path.join(P.ROOT, '..', '..', '..', 'Assets', 'Resources', 'Art')
+        short = {'east': 'e', 'north-east': 'ne', 'north': 'n', 'north-west': 'nw', 'west': 'w',
+                 'south-west': 'sw', 'south': 's', 'south-east': 'se'}
+        idle = [strip_frames(os.path.join(art, f'chr_player_idle_{short[d]}.png')) for d in DIRS]
+        write_gif(os.path.join(folder, 'preview', f'{clip}_vs_idle_x3.gif'),   # both at the clip's fps
+                  [upscale(P.stack_rows([np.concatenate([c[i % len(c)] for c in idle], 1),
+                                         np.concatenate([c[i % len(c)] for c in cells], 1)]), 3) for i in range(n)], cs)
+        sys.exit(0)
     if sys.argv[1] == 'compare':
         rows = [[frames(os.path.join(OUT, sub, f'{n}_{d}.png')) for n, d in enumerate(DIRS)] for sub in ('regen', '')]
         write_gif(os.path.join(OUT, 'preview', 'idle_calm_compare_x3.gif'), grid(rows, 3), delay)
