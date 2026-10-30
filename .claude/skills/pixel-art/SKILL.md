@@ -25,7 +25,10 @@ user-invocable: true
 - 시작 그림 = **끝 그림 = 게임 idle 첫 프레임**(`Assets/Resources/Art/chr_player_idle_<방향>.png`의 0~63px, 외곽선 없음). base64는 `python -c "import run_skeleton as R; print(R.png_b64(R.frames('idle','<방향>')[0]))"`(tools에서).
   - 끝을 고정하지 않으면 방향이 돌거나 칼이 왼손으로 바뀐다(2026-10-30). 끝나는 자세가 idle이 아닌 동작(쓰러짐 등)은 그 자세 그림을 끝으로 준다.
 - 동작 문구에 방향 유지·칼은 오른손·원래 자세로 돌아옴을 넣는다. 예: `running in place, keeps facing <dir> the whole time, ..., sword stays in the right hand pointing down, cape fluttering behind, returns to the start pose`.
-- **북서쪽 하나로 먼저 시험** → 기존 그림과 나란한 비교 이미지를 사용자에게 보내고 승인 → 나머지 7방향은 같은 `animation_group_id`로 한 번에 넣는다.
+- **사용자가 준 이미지의 방향(보통 남쪽) 하나로 먼저 시험** → 기존 그림·사용자 이미지와 나란한 비교 이미지를 보내고 승인 → 나머지 7방향은 같은 `animation_group_id`로 한 번에 넣는다. 이미지가 없으면 남쪽으로 시험한다(2026-10-31 사용자).
+- 사용자 이미지 쓰는 법(먼저 크기·배경·외곽선을 열어 확인하고 어떻게 쓸지 알린다):
+  - 이 캐릭터의 64px 스프라이트이고 동작 중 한 자세 → 그 방향의 끝 그림(`end_frame`) 또는 중간 핵심 자세로. 크기가 다르면 정수배로만 줄이고, 안 맞으면 키 자세로 쓰지 않는다.
+  - 일반 그림·콘셉트 → 자세와 분위기를 동작 문구로 옮기고, 결과 비교용으로만 쓴다. 생성 입력으로 넣지 않는다(외형이 idle과 어긋남).
 - 결과 받기: `get_character` 출력이 길어 파일로 저장되면 그 파일에서 그룹의 애니메이션 id를 찾고 `echo "<id> <방향>" | sh tools/fetch_clean.sh <클립> <프레임+1>` → `01_raw/clean/<클립>/<방향>/frame_XX.png`(0번 = 시작 그림). id 목록은 `01_raw/<클립>_jobs.txt`에 남긴다.
 - 탈락본은 `01_raw/trials/<클립>_<사유>/`로 옮긴다. 지우지 않는다.
 
