@@ -94,6 +94,18 @@ def main():
         P.write_apng(os.path.join(OUT, 'preview', f'{CLIP}_{d}_x4.png'), [upscale(P.on_bg(f), 4) for f in frames], FPS)
         rows.append(np.concatenate([P.on_bg(f) for f in frames], 1))
     write_png(os.path.join(OUT, 'preview', f'{CLIP}_all_x4.png'), upscale(P.stack_rows(rows), 4))
+    # guide overlay (x4): grey = 4px margin, blue = ground line y=56 and centre x=32, red = MAX_W x MAX_H box on the anchor
+    g = upscale(P.stack_rows(rows), 4).copy()
+    for r in range(len(rows)):
+        for c in range(rows[r].shape[1] // 64):
+            y0, x0 = r * 64 * 4, c * 64 * 4
+            for v in (MARGIN, 63 - MARGIN):
+                g[y0 + v * 4, x0:x0 + 256] = g[y0:y0 + 256, x0 + v * 4] = [120, 120, 120, 255]
+            g[y0 + 56 * 4, x0:x0 + 256] = g[y0:y0 + 256, x0 + 32 * 4] = [60, 120, 255, 255]
+            bx, by = x0 + (32 - MAX_W // 2) * 4, y0 + (56 - MAX_H) * 4
+            g[by:by + MAX_H * 4, bx] = g[by:by + MAX_H * 4, bx + MAX_W * 4] = [230, 60, 60, 255]
+            g[by, bx:bx + MAX_W * 4] = g[by + MAX_H * 4 - 1, bx:bx + MAX_W * 4] = [230, 60, 60, 255]
+    write_png(os.path.join(OUT, 'preview', f'{CLIP}_guides_x4.png'), g)
     ncol = len(np.unique(np.concatenate(allpx), axis=0))
     if ncol > 16: fails.append(f'{ncol} colours > 16')
     if not alpha <= {0, 255}: fails.append(f'alpha values {sorted(alpha)}')
