@@ -87,6 +87,11 @@
       "frames": 4,
       "fps": 6,
       "loop": false
+    },
+    "run_calm": {
+      "frames": 8,
+      "fps": 6,
+      "loop": true
     }
   },
   "attack_phases": {
