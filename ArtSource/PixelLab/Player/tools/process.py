@@ -22,7 +22,8 @@ CLIPS = {  # name: (frames, fps, loop, frames dropped from raw start)
     'idle_breath': (4, 6, True, 1),   # breathing idle from right-hand start poses (08_idle_breath, 2026-10-29)
     'idle_calm': (4, 6, True, 1),     # still guard idle, only hair tips + cape hem sway (09_idle_calm, 2026-10-29)
     'death_calm': (4, 6, False, 1),   # forward collapse from the in-game idle, outline-free delivery (10_death_calm, 2026-10-29)
-    'hurt_calm': (4, 6, False, 1)}    # recoil and recover to the in-game idle, outline-free delivery (11_hurt_calm, 2026-10-29)
+    'hurt_calm': (4, 6, False, 1),    # recoil and recover to the in-game idle, outline-free delivery (11_hurt_calm, 2026-10-29)
+    'run_calm': (8, 6, True, 1)}      # in-place run, v3 start = end = in-game idle, 0px body bob, outline-free (12_run_calm, 2026-10-30)
 # standing poses that clips are aligned to: right-hand sword versions (W/NW/SE edited, S flipped; user, 2026-10-29)
 ROTATIONS = 'idle_breath_start'
 SIZE, ANCHOR = 64, (32, 56)       # anchor = ground contact; feet bottom pixel row = 55
@@ -62,7 +63,7 @@ PLANTED = {'hurt': None, 'death': [0], 'death_calm': [0], 'hurt_calm': None, 'id
 PICK = {'death_calm': [0, 2, 3, 4]}
 # (clip it is taken from, frame index): that frame becomes the exact in-game idle frame and the other frames take the
 # same integer shift; hurt_calm ends on it (recovered), death_calm opens on it
-ALIGN_TO = {'death_calm': ('idle_calm', 0), 'hurt_calm': ('idle_calm', -1)}
+ALIGN_TO = {'death_calm': ('idle_calm', 0), 'hurt_calm': ('idle_calm', -1), 'run_calm': ('idle_calm', -1)}
 TRIM_ABOVE_IDLE = set()   # was {'hurt_calm'}: it cut N's lifted head flat; N is regenerated as a push-back instead (user, 2026-10-29)
 SNAP_MAX = 2   # px; larger drift is a real pose change, not generation noise
 
@@ -77,7 +78,7 @@ MIRROR = {'idle_alert': ['south'], 'run': ['south'], 'attack': ['south'], 'dodge
           'hurt': ['south'], 'death': ['south']}   # all clips right-handed (user, 2026-10-29)
 
 # head/torso height pinned to the standing pose; dodge/death drop the body on purpose, run keeps its stride bob (user, 2026-10-29)
-STABLE = ('idle_breath', 'idle_calm', 'attack', 'hurt', 'hurt_calm')
+STABLE = ('idle_breath', 'idle_calm', 'attack', 'hurt', 'hurt_calm', 'run_calm')   # run_calm: spec asks 0px bob (2026-10-30)
 STABLE_MAX = 4   # px; a larger difference is a real pose change (raised arm, lean), not generation bob
 
 
@@ -103,6 +104,14 @@ HAIR_FROM_CLIP = {'idle_calm': {'east': 'idle_hair', 'north-east': 'idle_hair3',
 # frozen body/head reference: the right-hand start poses, NW head = mirrored NE head (head_from) (user, 2026-10-29)
 REF_FROM = {'idle_calm': 'idle_hair_start'}
 HEAD_ROWS = 11
+# whole cape + blade sway on top of the generated run (user, 2026-10-30): cape px at the hem, blade degrees
+SWAY = {'run_calm': dict(amp=2.0, spread=0.1, lag=0.6, power=1.5, blade=15)}
+# NW sees the cape from behind: the whole cape swings, not just the hem (user, 2026-10-30)
+SWAY_DIR = {('run_calm', 'north-west'): dict(amp=3.0, power=0.7),
+            ('run_calm', 'west'): dict(blade=None)}   # W holds the blade across the body: redrawing it doubled the blade
+# upper body holds the idle's x like the other clips (S head/torso drifted 1px; user, 2026-10-30)
+PIN_SIDE = ('run_calm',)
+NO_BLADE = {('run_calm', 'north')}   # idle N shows no blade; the generated one poked up over the head
 
 
 def steel_mask(img):
@@ -151,16 +160,12 @@ DARK_STEEL, LIGHT_STEEL, TIP_STEEL = (0x6b, 0x73, 0x6b), (0xbb, 0xbe, 0xbe), (0x
 LIGHT_DIR = np.array([-0.5, 0.866])   # (dy, dx) toward the 60-degree light, screen up-right
 
 
-def fix_sword(f, length, pal):
-    """Redraw the blade at the idle blade's length and 2px width: same hilt point and angle, dark core + light edge
-    on the light side + tip pixel (death_calm, user 2026-10-29). Blades already within the idle size stay as drawn."""
+def blade_axis(f, pal):
+    """(blade pixels, hilt point, unit direction hilt->tip) of the steel on the silhouette edge, or None."""
     parts = blade_parts(f)
     if not parts:
-        return f
+        return None
     c = np.concatenate(parts)
-    cur = blade_len(f)
-    if cur <= length + 1 and len(c) <= 2.5 * cur:
-        return f
     mean = c.mean(0)
     v = np.linalg.svd(c - mean)[2][0]                      # blade axis (dy, dx)
     t = (c - mean) @ v
@@ -171,7 +176,13 @@ def fix_sword(f, length, pal):
         return body[max(y - 2, 0):y + 3, max(x - 2, 0):x + 3].sum()
     hilt = max(ends, key=grip)
     d = (ends[1] - ends[0]) if hilt is ends[0] else (ends[0] - ends[1])
-    d = d / np.linalg.norm(d)
+    n = np.linalg.norm(d)
+    return c, hilt, (d / n if n else np.array([1.0, 0.0]))
+
+
+def draw_blade(f, c, hilt, d, length, pal):
+    """Erase blade pixels c (and their floating outline), then draw a 2px blade of `length` from hilt along d
+    (dark core + light edge on the light side + tip pixel). length 0 only erases."""
     n = np.array([-d[1], d[0]])
     n = n if n @ LIGHT_DIR >= 0 else -n
     out = f.copy()
@@ -194,6 +205,65 @@ def fix_sword(f, length, pal):
         if i < steps - 1 and 0 <= ly < SIZE and 0 <= lx < SIZE and not (out[ly, lx, :3] == DARK_STEEL).all():
             out[ly, lx] = [*LIGHT_STEEL, 255]
     return outline(out, pal)[0]
+
+
+def fix_sword(f, length, pal):
+    """Redraw the blade at the idle blade's length and 2px width: same hilt point and angle, dark core + light edge
+    on the light side + tip pixel (death_calm, user 2026-10-29). Blades already within the idle size stay as drawn."""
+    ax = blade_axis(f, pal)
+    if ax is None:
+        return f
+    cur = blade_len(f)
+    if cur <= length + 1 and len(ax[0]) <= 2.5 * cur:
+        return f
+    return draw_blade(f, *ax, length, pal)
+
+
+def sway_blade(frames, length, pal, deg, hide=False):
+    """Swing every blade about its hilt by deg*sin(2*pi*i/n) at the idle length (run_calm, user 2026-10-30).
+    A broken blade (< 60% of length) takes the direction of the nearest frame with a whole one; hide only erases."""
+    axes = [blade_axis(f, pal) for f in frames]
+    whole = [i for i, a in enumerate(axes) if a is not None and blade_len(frames[i]) >= 0.6 * length]
+    out = []
+    for i, (f, ax) in enumerate(zip(frames, axes)):
+        if ax is None:
+            out.append(f); continue
+        c, hilt, d = ax
+        if i not in whole and whole:   # a broken fragment's ends are unreliable: take hilt and direction from a neighbour
+            _, hilt, d = axes[min(whole, key=lambda j: min(abs(j - i), len(frames) - abs(j - i)))]
+        # a blade pasted from the start pose may start beside the moved hand: snap the hilt onto the nearest hand/arm
+        # pixel (gold or skin, not cape, steel or outline) so it never floats (NW f5, user 2026-10-30)
+        cc = f[..., :3].astype(int)
+        hand = (f[..., 3] > 0) & ~steel_mask(f) & ~cape_px(f) & (lum(cc) > 90)
+        hand[c[:, 0], c[:, 1]] = False
+        if hand.any():
+            ys, xs = np.nonzero(hand)
+            k = int(np.argmin((ys - hilt[0]) ** 2 + (xs - hilt[1]) ** 2))
+            if (ys[k] - hilt[0]) ** 2 + (xs[k] - hilt[1]) ** 2 > 2:
+                hilt = np.array([ys[k], xs[k]], float)
+        t0 = np.radians(deg) * np.sin(2 * np.pi * i / len(frames))
+        def fit(r):   # longest blade (<= length) whose tip + outline stays above the ground row and inside the margin
+            k = int(round(length))
+            while k > 0:
+                ty, tx = np.round(hilt + r * (k + 1)).astype(int)
+                if ty < ANCHOR[1] - 1 and 4 <= tx < SIZE - 4:
+                    break
+                k -= 1
+            return k
+        # swing the other way (or not at all) when the tip would pass the ground or the canvas margin; a hilt held
+        # low (W) keeps the longest blade that fits
+        rots = [np.array([d[0] * np.cos(t) - d[1] * np.sin(t), d[0] * np.sin(t) + d[1] * np.cos(t)]) for t in (t0, -t0, 0.0)]
+        r = max(rots, key=fit)
+        if not hide:   # cape flap left on the far side of the redrawn blade (NW f2) reads as a second blade edge
+            ys, xs = np.nonzero(cape_px(f) | ((f[..., 3] > 0) & (lum(f[..., :3]) < 45)))
+            q = np.stack([ys, xs], 1) - hilt
+            along, side = q @ r, q @ np.array([-r[1], r[0]])
+            body_side = np.sign((np.argwhere(f[..., 3] > 0).mean(0) - hilt) @ np.array([-r[1], r[0]]))
+            far = (along > -1) & (along < fit(r)) & (side * body_side < -1) & (np.abs(side) <= 4)
+            f = f.copy()
+            f[ys[far], xs[far]] = 0
+        out.append(draw_blade(f, c, hilt, r, 0 if hide else fit(r), pal))
+    return out
 
 
 def lost_sword(f, ref):
@@ -233,6 +303,38 @@ def pin_head(f, top, pal):
     else:                                        # head too high: lower, dropping |k| rows above the seam
         out[-k:seam] = f[:seam + k]
         out[:-k] = 0
+    return outline(out, pal)[0]
+
+
+def drop_lone_px(f, pal):
+    """Pixels that stand alone once the outer outline is stripped (old blade tip / cape crumbs, SE run 2026-10-30)."""
+    a = f[..., 3] > 0
+    p = np.pad(a, 1)
+    ring = a & ~(p[:-2, 1:-1] & p[2:, 1:-1] & p[1:-1, :-2] & p[1:-1, 2:]) & (f[..., :3] == pal[0]).all(-1)
+    core = np.pad(a & ~ring, 1)
+    n8 = sum(core[1 + dy:core.shape[0] - 1 + dy, 1 + dx:core.shape[1] - 1 + dx]
+             for dy in (-1, 0, 1) for dx in (-1, 0, 1) if dy or dx)
+    lone = a & ~ring & (n8 == 0)
+    if not lone.any():
+        return f
+    out = f.copy()
+    out[grow(lone, 1) & ring | lone] = 0   # the speck and its own outline ring
+    return outline(out, pal)[0]
+
+
+def pin_side(f, ref, pal):
+    """Shift everything above mid-body sideways so the head (non-cape px of the top HEAD_ROWS rows) sits at ref's x;
+    legs stay. Horizontal twin of pin_head."""
+    def head_x(im):
+        t = body_top(im)
+        m = (im[..., 3] > 0) & ~cape_px(im) & ~(im[..., :3] == pal[0]).all(-1)
+        return np.nonzero(m[t:t + HEAD_ROWS])[1].mean()
+    k = int(round(head_x(ref) - head_x(f)))
+    if k == 0 or abs(k) > STABLE_MAX:
+        return f
+    seam = (body_top(f) + ANCHOR[1]) // 2
+    out = f.copy()
+    out[:seam] = np.roll(f[:seam], k, 1)
     return outline(out, pal)[0]
 
 
@@ -320,19 +422,21 @@ def mirror_frames(frames):
     return [np.roll(f, s, 1) for f in flipped]
 
 
-def cape_flutter(img, th, amp=2.0, spread=0.0, lag=0.6):
+def cape_flutter(img, th, amp=2.0, spread=0.0, lag=0.6, power=1.5, min_row=10):
     """Bend the cape below the shoulders at phase th: rows move sideways by sin*amp and widen by cos*spread,
     both growing toward the hem (0 at the shoulders), resampled nearest so the palette and outline survive.
     lag (radians at the hem) delays lower rows so the hem trails the shoulders."""
     c = img[..., :3].astype(int)
     red = (img[..., 3] > 0) & (c[..., 0] > c[..., 1] + 40) & (c[..., 0] > 60)
-    rows = np.nonzero(red.sum(1) >= 10)[0]
+    rows = np.nonzero(red.sum(1) >= min_row)[0]
     top, hem = rows.min(), rows.max() + 1          # +1: outline row under the hem
     out = img.copy()
     xs = np.arange(img.shape[1])
     for y in range(top, hem + 1):
-        w = ((y - top) / (hem - top)) ** 1.5
+        w = ((y - top) / (hem - top)) ** power   # power < 1.5: the upper cape moves too
         cols = np.nonzero(img[y, :, 3] > 0)[0]
+        if not len(cols):   # cape-only layers have gaps
+            continue
         cx = (cols.min() + cols.max()) / 2
         s, f = np.sin(th - lag * w), np.cos(th - lag * w)
         src = np.round(cx + (xs - cx - s * amp * w) / (1 + f * spread * w)).astype(int)
@@ -341,6 +445,46 @@ def cape_flutter(img, th, amp=2.0, spread=0.0, lag=0.6):
         row[ok] = img[y, src[ok]]
         out[y] = row
     return out
+
+
+def sway_cape(f, th, pal, amp, spread, lag, power=1.5):
+    """Whole cape swings at phase th (cape_flutter on a cape-only layer): the cape and its dark folds move, the body
+    stays; the moved cape goes back under the body, then the outline is redrawn (run_calm, user 2026-10-30)."""
+    oc = pal[0]
+    a = f[..., 3] > 0
+    p = np.pad(a, 1)
+    ring = a & ~(p[:-2, 1:-1] & p[2:, 1:-1] & p[1:-1, :-2] & p[1:-1, 2:]) & (f[..., :3] == oc).all(-1)
+    g = f.copy()
+    g[ring] = 0
+    red = cape_px(g)
+    if (red.sum(1) >= 10).sum() < 3:
+        return f
+    dark = (g[..., 3] > 0) & (lum(g[..., :3]) < 45)
+    # red cloth worn on the body (tabard, scarf) has body px within 6px on both sides: it stays, only the drape
+    # that hangs free moves (W torso lost pixels where the tabard slid away, user 2026-10-30)
+    body = (g[..., 3] > 0) & ~red & ~dark
+    W6 = 6
+    pb = np.pad(body, ((0, 0), (W6, W6)))
+    left = np.zeros_like(body); right = np.zeros_like(body)
+    for k in range(1, W6 + 1):
+        left |= pb[:, W6 - k:W6 - k + body.shape[1]]
+        right |= pb[:, W6 + k:W6 + k + body.shape[1]]
+    free = red & ~(left & right)
+    if (free.sum(1) >= 3).sum() < 3:   # a narrow side-view drape (W) still swings
+        return f
+    cape = free | (dark & grow(free, 1) & ~grow(red & ~free, 1))   # fold lines along the free drape move with it
+    layer = np.zeros_like(g)
+    layer[cape] = g[cape]
+    moved = cape_flutter(layer, th, amp=amp, spread=spread, lag=lag, power=power, min_row=3)
+    out = g.copy()
+    out[cape] = 0
+    under = (moved[..., 3] > 0) & (out[..., 3] == 0)
+    out[under] = moved[under]
+    # a pixel the drape left that still has opaque px on both sides in its row is inside the figure: keep the old one
+    o = out[..., 3] > 0
+    hole = ~o & (g[..., 3] > 0) & np.maximum.accumulate(o, 1) & np.maximum.accumulate(o[:, ::-1], 1)[:, ::-1]
+    out[hole] = g[hole]
+    return drop_fragments(outline(out, pal)[0], max_px=4, gap=0)[0]
 
 
 def place(img, dx, dy):
@@ -819,7 +963,8 @@ def cmd_build(only=None):
             else:
                 # only NW loses the blade; a falling body can't take the standing pose's blade
                 # hurt_calm stays close to the idle pose, so any direction that drops the blade gets it back
-                lost = [i for i, f in enumerate(out) if (d == 'north-west' or clip == 'hurt_calm') and clip != 'death_calm'
+                # run_calm: v3 hides the blade in most frames; user chose restoring it over a re-roll (2026-10-30)
+                lost = [i for i, f in enumerate(out) if (d == 'north-west' or clip in ('hurt_calm', 'run_calm')) and clip != 'death_calm'
                         and lost_sword(f, reff)]
                 for i in lost:
                     out[i] = paste_sword([out[i]], reff, pal)[0]
@@ -827,6 +972,20 @@ def cmd_build(only=None):
                     report.append(f'{clip}/{d}: sword restored from start pose in f{lost}')
             if clip in STABLE:
                 out = [pin_head(f, body_top(bf), pal) for f in out]
+            if clip in PIN_SIDE:
+                idle = read_png(os.path.join(FINAL, ALIGN_TO[clip][0], f'{d}.png'))[:, :SIZE]
+                out = [pin_side(f, idle, pal) for f in out]
+            if clip in SWAY:
+                sw = dict(SWAY[clip], **SWAY_DIR.get((clip, d), {}))
+                out = [sway_cape(f, 2 * np.pi * i / len(out), pal, sw['amp'], sw['spread'], sw['lag'], sw['power'])
+                       for i, f in enumerate(out)]
+                lens = [blade_len(read_png(os.path.join(FINAL, ALIGN_TO[clip][0], f'{n}.png'))[:, :SIZE]) for n in DIRS]
+                if sw['blade'] is not None:
+                    out = sway_blade(out, float(np.median([v for v in lens if v >= 4])), pal, sw['blade'], (clip, d) in NO_BLADE)
+                # 1px cape specks the sway leaves below the hem (with their outline ring ~9px; feet islands are larger)
+                out = [drop_fragments(f, max_px=12, gap=0)[0] for f in out]
+                out = [drop_lone_px(f, pal) for f in out]
+                log[f'{clip}/{d}/sway'] = dict(blade=[round(blade_len(f), 1) for f in out])
             if clip in FREEZE and d in FREEZE_DIRS.get(clip, DIRS):
                 fref = out[ALIGN_TO[clip][1]] if clip in ALIGN_TO else reff   # aligned clips freeze to the game idle
                 hair = [None] * len(out)

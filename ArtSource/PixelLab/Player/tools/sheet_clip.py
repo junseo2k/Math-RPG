@@ -15,8 +15,9 @@ DIRS = ['east', 'north-east', 'north', 'north-west', 'west', 'south-west', 'sout
 PAD = int(sys.argv[3]) if len(sys.argv) > 3 else 1
 GAP = int(sys.argv[4]) if len(sys.argv) > 4 else 0
 FPS, MARGIN, MAX_W, MAX_H = P.CLIPS[CLIP][1], 4, 36, 48
-NO_OUTLINE = {'death_calm', 'hurt_calm'}   # delivered like the game idle: outer 1px outline stripped (export_unity.strip_outline)
+NO_OUTLINE = {'death_calm', 'hurt_calm', 'run_calm'}   # delivered like the game idle: outer 1px outline stripped (export_unity.strip_outline)
 FALLS = {'death', 'death_calm'}   # only the start pose is anchored; the body moves as it falls
+STRIDES = {'run_calm'}   # feet move with the stride: the torso is anchored instead (body_top range must be 0)
 
 
 def edge_of(f):
@@ -82,11 +83,12 @@ def main():
             # feet stay where the standing pose (same direction) has them; in death only the start pose is anchored
             if CLIP in NO_OUTLINE:   # the standing pose is compared outline-free too
                 home = P.planted_feet(strip(read_png(os.path.join(P.FINAL, 'rotations', f'{d}.png')), oc))
-            if anc != home and (CLIP not in FALLS or i == 0): fails.append(f'{d} f{i}: anchor {anc} != standing {home}')
+            if anc != home and CLIP not in STRIDES and (CLIP not in FALLS or i == 0): fails.append(f'{d} f{i}: anchor {anc} != standing {home}')
             if not ok: fails.append(f'{d} f{i}: silhouette edge not 1px outline colour')
             fr.append(dict(w=w, h=h, margin=m, anchor=list(anc), body_top=body_top, outline_ok=ok))
             allpx.append(f[a][:, :3])
         bt = [x['body_top'] for x in fr]
+        if CLIP in STRIDES and max(bt) != min(bt): fails.append(f'{d}: body_top range {max(bt) - min(bt)} px (spec 0)')
         rep[d] = dict(file=f'{n}_{d}.png', size=[s.shape[1], s.shape[0]], frames=FRAMES, frame=fr,
                       body_top_range=max(bt) - min(bt))
         P.write_apng(os.path.join(OUT, 'preview', f'{CLIP}_{d}_x4.png'), [upscale(P.on_bg(f), 4) for f in frames], FPS)

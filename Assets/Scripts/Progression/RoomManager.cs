@@ -31,7 +31,7 @@ public class RoomManager : MonoBehaviour, IRewindable
     [SerializeField] AnimSpeed[] playerAnimSpeeds =
     {
         new() { state = "idle", fps = 6f },
-        new() { state = "run", fps = 12f },
+        new() { state = "run", fps = 6f },
         new() { state = "attack", fps = 12f },
         new() { state = "dash", fps = 12f },
         new() { state = "hurt", fps = 6f },

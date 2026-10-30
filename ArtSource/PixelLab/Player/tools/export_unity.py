@@ -8,13 +8,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FINAL = os.path.join(HERE, '..', '02_final')
 ART = os.path.join(HERE, '..', '..', '..', '..', 'Assets', 'Resources', 'Art')
 STATES = {'idle_calm': 'idle',   # body-frozen guard idle replaces the breathing idle (user, 2026-10-29)
-          'run': 'run', 'attack': 'attack', 'dodge': 'dash',
+          'run_calm': 'run',     # in-place run from the in-game idle, cape/blade sway (user, 2026-10-30)
+          'attack': 'attack', 'dodge': 'dash',
           'hurt_calm': 'hurt',     # recoil-and-recover from the in-game idle replaces the old hurt (user, 2026-10-29)
           'death_calm': 'death'}   # forward collapse from the in-game idle replaces the 6-frame death (user, 2026-10-29)
 DIRS = {'south': 's', 'south-east': 'se', 'east': 'e', 'north-east': 'ne',
         'north': 'n', 'north-west': 'nw', 'west': 'w', 'south-west': 'sw'}
 # game copy without the outer 1px silhouette outline; 02_final keeps it (user, 2026-10-29)
-NO_OUTLINE = {'idle_calm', 'death_calm', 'hurt_calm'}
+NO_OUTLINE = {'idle_calm', 'death_calm', 'hurt_calm', 'run_calm'}
 
 
 def strip_outline(src, dst):
@@ -27,8 +28,12 @@ def strip_outline(src, dst):
     write_png(dst, img)
 
 if __name__ == '__main__':
+    import sys
+    only = sys.argv[1:]   # e.g. run_calm: export just these clips (02_final may hold only some of them)
     n = 0
     for clip, state in STATES.items():
+        if only and clip not in only:
+            continue
         for d, short in DIRS.items():
             src, dst = os.path.join(FINAL, clip, f'{d}.png'), os.path.join(ART, f'chr_player_{state}_{short}.png')
             if clip in NO_OUTLINE:

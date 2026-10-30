@@ -165,3 +165,38 @@
 - 한 일: `freeze_body` 머리카락 구간에서 피부와 주변 1px을 뺌(넓힌 머리카락 구간이 얼굴 옆선을 덮었음). idle·hurt·death 다시 조립(sheet_clip 모두 종료 코드 0), 게임 그림 다시 내보냄(납품과 픽셀 일치, 이음 프레임 일치). EditMode 6/6, 화면 `Docs/QA/Screens/idle_face_ew_ingame_zoom_grid_20261029.png`
 - 남은 일: 미커밋
 - 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/*_calm*`, `09_idle_calm/`, `10_death_calm/`, `11_hurt_calm/`, `Assets/Resources/Art/chr_player_{idle,hurt,death}_*.png`, `Docs/QA/Screens/idle_face_*`
+
+## 2026-10-30 달리기(run_calm) 시험 생성 — 북서쪽 2회 모두 탈락
+- 한 일: PixelLab 도구 확인(잔여 961 생성). ① `animate_with_skeleton_v3`: 게임 run 8프레임에서 `POST /v2/estimate-skeleton`으로 자세를 뽑고, 몸통 중심을 idle에 맞춰 상하 0px로 옮겨 게임 idle NW f0에 입힘(3생성) → 검 사라짐, 몸이 서쪽으로 돌고 망토가 옆으로 날림. ② `animate_character` v3, 시작 = 게임 idle NW f0, 8프레임(1생성, 그룹 `3ca5ec0e…`) → f5부터 검이 왼손으로 바뀌고 몸이 돌아감, 반복 연결 안 됨. 스켈레톤 도구 `tools/run_skeleton.py`(estimate/keypoints/fetch), 추정 결과 `12_run_calm/skeleton/`
+- 남은 일: 생성 방식 결정 필요(사용자). 시트·검사 미진행. 커밋 안 함
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/run_skeleton.py`, `12_run_calm/skeleton/`, `01_raw/trials/{run_calm_skel,run_calm_v3}/`
+
+## 2026-10-30 달리기(run_calm) 8방향 납품본
+- 한 일: 사용자 결정으로 v3 시작=끝=게임 idle f0 고정, 방향당 1생성(그룹 `c9d07e98…`, 북서 시험 포함 총 8). `process.py`에 `run_calm`(8f 6fps 반복, 끝 프레임을 게임 idle에 정렬, 몸통 고정, 빠진 검 붙이기), `sheet_clip.py`에 외곽선 없음·`STRIDES`(발 대신 몸통 높이 0 검사). sheet_clip 종료 코드 0, 16색, 알파 0/255, body_top 범위 0, 끝 프레임 = 게임 idle. 기록 `ArtSource/PixelLab/Player/12_run_calm/README.md`
+- 남은 일: N f0~f5 칼날이 머리 위로 솟음, E f1 칼날 끊김, 보폭 작음, 폭 36 초과 25프레임, NW 여백 3px. 게임 미반영. 빌드에 필요한 `idle_breath_start`·`02_final/idle_calm`은 a5e5566에서 지워져 빌드 때만 잠시 되살렸다가 다시 지움. 커밋 안 함
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/{process.py,sheet_clip.py,run_skeleton.py}`, `01_raw/clean/run_calm/`, `01_raw/run_calm_jobs.txt`, `02_final/{run_calm/,run_calm_sheet.png,sprite_spec.json}`, `12_run_calm/`
+
+## 2026-10-30 달리기 망토·칼 흔들림
+- 한 일: 사용자 요청으로 망토 전체를 8프레임 한 주기로 좌우로 흔들고(`sway_cape`, 망토만 떼어 `cape_flutter` 후 몸 뒤로 합침), 칼은 손잡이 축 ±15° 회전 + idle 길이로 다시 그림(`sway_blade`, 바닥·여백 넘으면 반대로/짧게). N 칼날 지움, E f1 끊긴 칼은 이웃 프레임 방향으로. `fix_sword`를 `blade_axis`·`draw_blade`로 나눔(동작 같음), `cape_flutter` 빈 줄 건너뜀. sheet_clip 종료 코드 0, 16색, 알파 0/255, 몸통 0px, 여백 미달 0
+- 남은 일: 폭 36 초과 20프레임(망토), 보폭 작음, 재생 화면 눈 확인 안 함, 게임 미반영, 커밋 안 함
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/run_calm/`, `12_run_calm/`
+
+## 2026-10-30 달리기 NW 망토 전체 흔들림·상체 좌우 고정
+- 한 일: `cape_flutter`에 가중 지수 `power` 추가(기본 1.5 그대로), NW만 아랫단 3px·지수 0.7(`SWAY_DIR`). `pin_side`로 허리 위를 게임 idle 머리 x에 맞춤(S 머리 1.1→0.5px). sheet_clip 종료 코드 0, GIF `12_run_calm/preview/run_calm_all_x4.gif`
+- 남은 일: NW f2 칼 위치 어색, NW f5·f6 발 옆 점, 폭 초과 20프레임, 게임 미반영, 커밋 안 함
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/run_calm/`, `12_run_calm/`
+
+## 2026-10-30 달리기 NW 칼·점 정리
+- 한 일: `sway_blade`에서 떨어진 손잡이를 손에 붙이고 칼 바깥쪽 망토 조각을 지움. 망토 아래 작은 조각·외딴 1px 점 제거(`drop_lone_px`). 외딴 점 0개, sheet_clip 종료 코드 0, GIF 갱신
+- 남은 일: 폭 초과 17프레임, 보폭 작음, 게임 미반영, 커밋 안 함
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/run_calm/`, `12_run_calm/`
+
+## 2026-10-30 달리기 W 몸통 구멍 수정
+- 한 일: `sway_cape`가 몸 위 천은 고정하고 늘어진 망토만 흔들도록 바꾸고, 빈 칸 메우기 추가. W 칼 다시 그리기 끔. sheet_clip 종료 코드 0, GIF 갱신(`run_calm_all_x4.gif`, `idle_vs_run_x3.gif`)
+- 남은 일: 생성이 프레임마다 갑옷·어깨·허리띠를 조금씩 다르게 그려 상체가 어색함 → 상체 고정 여부 사용자 결정 대기. 게임 미반영, 커밋 안 함
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/process.py`, `02_final/run_calm/`, `12_run_calm/`
+
+## 2026-10-31 달리기(run_calm) 게임 반영
+- 한 일: `export_unity.py` run → run_calm(외곽선 없음, 클립 골라 내보내기 인자). `chr_player_run_*` 8장 교체(납품 시트와 픽셀 일치). run 6fps: `RoomManager.cs` 기본값 + VerticalSlice 씬(Unity MCP로 값 변경·저장). verify.ps1 6/6 통과, 종료 코드 0(리포트 `TestResults-EditMode.xml`, 빈 필드 1개는 보고만). 게임 화면 `Docs/QA/Screens/run_calm_ingame_w_20261031.png`
+- 남은 일: 다른 방향 게임 화면 캡처는 W만 함. 상체 프레임마다 갑옷 모양 차이, 폭 초과 17프레임, 작은 보폭. 커밋 안 함
+- 바꾼 파일: `ArtSource/PixelLab/Player/tools/export_unity.py`, `Assets/Resources/Art/chr_player_run_*.png`, `Assets/Scripts/Progression/RoomManager.cs`, `Assets/Scenes/VerticalSlice.unity`, `Docs/QA/Screens/run_calm_ingame_w_20261031.png`
