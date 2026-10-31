@@ -205,3 +205,8 @@
 - 한 일: 프로젝트 스킬 `.claude/skills/pixel-art/SKILL.md`(생성기 명세 → PixelLab 생성 → process/sheet_clip → 확인 → 게임 반영 절차와 함정). 빌드 입력 되살리기·정리 `tools/build_env.sh restore|clean`, `sheet_clip.py`가 보조선 이미지 `<클립>_guides_x4.png`를 만듦, `gif_preview.py sheets <클립> <폴더>`로 8방향 GIF·idle 비교 GIF. 생성기(`~/.codex/.../pixel-brief/index.html`, 이전본 `index.before-2026-10-31.html`): 플레이어 프리셋을 외곽선 0·20°·광원 60°·몸통 0px·간격 4px로, "망토·무기 최대 영역 예외" 체크, 바닥선 기준점 문구, 명암·광원은 목표값(눈 확인) 표시, PixelLab 동작 참조 불가 안내, Claude Code 지시문 첫 줄에 /pixel-art 안내. 브라우저로 프롬프트 출력·화면 배치 확인
 - 남은 일: 커밋 안 함. 생성기는 브라우저에 저장된 이전 입력이 있으면 프리셋을 다시 골라야 새 기본값이 적용됨
 - 바꾼 파일: `.claude/skills/pixel-art/SKILL.md`, `ArtSource/PixelLab/Player/tools/{build_env.sh,sheet_clip.py,gif_preview.py}`, `12_run_calm/preview/`(idle_vs_run_x3.gif → run_calm_vs_idle_x3.gif, guides 다시 생성)
+
+## 2026-10-31 공격·회피 외곽선 통일
+- 한 일: 6개 동작 평가에서 attack·dash만 바깥 1px 검은 외곽선이 있고 발이 y=55(나머지는 54)인 것을 확인. 게임 PNG `chr_player_{attack,dash}_*` 16장에 `export_unity.strip_outline`을 직접 적용(`02_final/attack`·`dodge`가 비어 있어 내보내기로는 다시 만들 수 없음). `NO_OUTLINE`에 attack·dodge 추가. 결과: 어두운 픽셀 19~42% → 5~29%(idle·run과 같은 범위), 발 y=54, 16색 이하. 바닥선 보조선 시트로 눈 확인
+- 남은 일: 게임 화면 캡처 안 함. 회피 N f5·f6 깨진 픽셀, 회피 SW f3~f5 발 52(2px 뜸)는 그대로. 공격 N 칼 안 보임, 회피 W·NW 칼 치켜듦, 피격 재제작은 평가만 함. 커밋 안 함
+- 바꾼 파일: `Assets/Resources/Art/chr_player_{attack,dash}_*.png`, `ArtSource/PixelLab/Player/tools/export_unity.py`

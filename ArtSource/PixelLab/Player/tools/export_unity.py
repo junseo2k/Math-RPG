@@ -15,7 +15,7 @@ STATES = {'idle_calm': 'idle',   # body-frozen guard idle replaces the breathing
 DIRS = {'south': 's', 'south-east': 'se', 'east': 'e', 'north-east': 'ne',
         'north': 'n', 'north-west': 'nw', 'west': 'w', 'south-west': 'sw'}
 # game copy without the outer 1px silhouette outline; 02_final keeps it (user, 2026-10-29)
-NO_OUTLINE = {'idle_calm', 'death_calm', 'hurt_calm', 'run_calm'}
+NO_OUTLINE = {'idle_calm', 'death_calm', 'hurt_calm', 'run_calm', 'attack', 'dodge'}   # attack/dodge added 2026-10-31 (user)
 
 
 def strip_outline(src, dst):
