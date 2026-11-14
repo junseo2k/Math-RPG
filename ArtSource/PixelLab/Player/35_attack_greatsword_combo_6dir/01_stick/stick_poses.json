@@ -1,0 +1,9310 @@
+{
+ "cell": 104,
+ "pivot": [
+  52,
+  94
+ ],
+ "fps": 16,
+ "frames": [
+  8,
+  8,
+  10
+ ],
+ "note": "좌표는 104 셀 화면 좌표. angle: 자루→검끝, 오른쪽 0° 위 90°",
+ "north-east": [
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.4,
+    56.8
+   ],
+   "shL": [
+    48.5,
+    63.2
+   ],
+   "footL": [
+    51.3,
+    92.2
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    56.5,
+    73.3
+   ],
+   "tip": [
+    78.6,
+    51.6
+   ],
+   "handR": [
+    57.6,
+    72.3
+   ],
+   "handL": [
+    55.4,
+    74.4
+   ],
+   "angle": 44.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.3,
+    57.8
+   ],
+   "shL": [
+    47.9,
+    64.6
+   ],
+   "footL": [
+    51.3,
+    92.2
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    56.7,
+    74.4
+   ],
+   "tip": [
+    74.1,
+    49.0
+   ],
+   "handR": [
+    57.6,
+    73.1
+   ],
+   "handL": [
+    55.9,
+    75.6
+   ],
+   "angle": 55.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "sword",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.2,
+    57.8
+   ],
+   "shL": [
+    47.3,
+    65.1
+   ],
+   "footL": [
+    51.3,
+    92.2
+   ],
+   "footR": [
+    53.4,
+    96.1
+   ],
+   "grip": [
+    56.2,
+    74.1
+   ],
+   "tip": [
+    68.9,
+    49.4
+   ],
+   "handR": [
+    56.9,
+    72.9
+   ],
+   "handL": [
+    55.6,
+    75.4
+   ],
+   "angle": 62.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.4,
+    59.9
+   ],
+   "shL": [
+    49.1,
+    66.0
+   ],
+   "footL": [
+    54.1,
+    90.8
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    59.8,
+    77.5
+   ],
+   "tip": [
+    77.6,
+    67.0
+   ],
+   "handR": [
+    60.7,
+    77.0
+   ],
+   "handL": [
+    58.9,
+    78.1
+   ],
+   "angle": 30.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armL",
+    "medal",
+    "armR",
+    "torso",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 4,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.5,
+    59.9
+   ],
+   "shL": [
+    50.7,
+    65.6
+   ],
+   "footL": [
+    54.1,
+    90.8
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    53.4,
+    77.5
+   ],
+   "tip": [
+    26.0,
+    88.3
+   ],
+   "handR": [
+    52.0,
+    78.0
+   ],
+   "handL": [
+    54.8,
+    76.9
+   ],
+   "angle": 201.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armL",
+    "medal",
+    "armR",
+    "torso",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.0
+   ],
+   "head": [
+    52.5,
+    58.9
+   ],
+   "shL": [
+    50.3,
+    64.7
+   ],
+   "footL": [
+    53.4,
+    91.2
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    51.3,
+    75.2
+   ],
+   "tip": [
+    25.2,
+    73.5
+   ],
+   "handR": [
+    50.0,
+    75.1
+   ],
+   "handL": [
+    52.6,
+    75.3
+   ],
+   "angle": 176.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    52.5,
+    58.4
+   ],
+   "shL": [
+    50.3,
+    64.2
+   ],
+   "footL": [
+    53.4,
+    91.2
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    51.3,
+    74.7
+   ],
+   "tip": [
+    25.2,
+    73.0
+   ],
+   "handR": [
+    50.0,
+    74.6
+   ],
+   "handL": [
+    52.6,
+    74.8
+   ],
+   "angle": 176.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.5,
+    57.9
+   ],
+   "shL": [
+    50.3,
+    63.7
+   ],
+   "footL": [
+    53.4,
+    91.2
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    51.3,
+    74.2
+   ],
+   "tip": [
+    25.2,
+    72.5
+   ],
+   "handR": [
+    50.0,
+    74.1
+   ],
+   "handL": [
+    52.6,
+    74.3
+   ],
+   "angle": 176.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.5,
+    57.9
+   ],
+   "shL": [
+    50.3,
+    63.7
+   ],
+   "footL": [
+    53.4,
+    91.2
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    51.3,
+    74.2
+   ],
+   "tip": [
+    25.2,
+    72.5
+   ],
+   "handR": [
+    50.0,
+    74.1
+   ],
+   "handL": [
+    52.6,
+    74.3
+   ],
+   "angle": 176.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit2",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.5,
+    59.9
+   ],
+   "shL": [
+    50.3,
+    65.7
+   ],
+   "footL": [
+    53.4,
+    91.2
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    50.6,
+    80.6
+   ],
+   "tip": [
+    25.2,
+    99
+   ],
+   "handR": [
+    49.4,
+    81.6
+   ],
+   "handL": [
+    51.7,
+    79.5
+   ],
+   "angle": 216.0,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit2",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.4,
+    57.8
+   ],
+   "shL": [
+    48.5,
+    64.2
+   ],
+   "footL": [
+    53.4,
+    91.2
+   ],
+   "footR": [
+    54.8,
+    94.7
+   ],
+   "grip": [
+    57.7,
+    69.9
+   ],
+   "tip": [
+    74.8,
+    43.5
+   ],
+   "handR": [
+    58.5,
+    68.6
+   ],
+   "handL": [
+    56.8,
+    71.2
+   ],
+   "angle": 57.0,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armL",
+    "medal",
+    "armR",
+    "torso",
+    "cape"
+   ],
+   "hit": "hit2",
+   "frame": 3,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.3,
+    56.8
+   ],
+   "shL": [
+    47.9,
+    63.6
+   ],
+   "footL": [
+    53.4,
+    91.2
+   ],
+   "footR": [
+    54.8,
+    94.7
+   ],
+   "grip": [
+    55.5,
+    63.6
+   ],
+   "tip": [
+    64.0,
+    33.1
+   ],
+   "handR": [
+    56.0,
+    62.1
+   ],
+   "handL": [
+    55.1,
+    65.2
+   ],
+   "angle": 74.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit2",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.3,
+    56.8
+   ],
+   "shL": [
+    47.9,
+    63.6
+   ],
+   "footL": [
+    52.7,
+    91.5
+   ],
+   "footR": [
+    54.1,
+    95.1
+   ],
+   "grip": [
+    54.1,
+    67.4
+   ],
+   "tip": [
+    64.0,
+    36.8
+   ],
+   "handR": [
+    54.6,
+    65.8
+   ],
+   "handL": [
+    53.6,
+    68.9
+   ],
+   "angle": 72.2,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "sword",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit2",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.3,
+    56.8
+   ],
+   "shL": [
+    47.9,
+    63.6
+   ],
+   "footL": [
+    52.7,
+    91.5
+   ],
+   "footR": [
+    54.1,
+    95.1
+   ],
+   "grip": [
+    53.4,
+    66.7
+   ],
+   "tip": [
+    61.9,
+    36.1
+   ],
+   "handR": [
+    53.8,
+    65.2
+   ],
+   "handL": [
+    53.0,
+    68.2
+   ],
+   "angle": 74.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "sword",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit2",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.3,
+    56.8
+   ],
+   "shL": [
+    47.9,
+    63.6
+   ],
+   "footL": [
+    52.7,
+    91.5
+   ],
+   "footR": [
+    54.1,
+    95.1
+   ],
+   "grip": [
+    52.0,
+    63.7
+   ],
+   "tip": [
+    45.6,
+    38.3
+   ],
+   "handR": [
+    51.7,
+    62.4
+   ],
+   "handL": [
+    52.3,
+    65.0
+   ],
+   "angle": 104.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "sword",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit2",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.3,
+    56.8
+   ],
+   "shL": [
+    47.9,
+    63.6
+   ],
+   "footL": [
+    52.7,
+    91.5
+   ],
+   "footR": [
+    54.1,
+    95.1
+   ],
+   "grip": [
+    52.0,
+    63.7
+   ],
+   "tip": [
+    45.6,
+    38.3
+   ],
+   "handR": [
+    51.7,
+    62.4
+   ],
+   "handL": [
+    52.3,
+    65.0
+   ],
+   "angle": 104.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "sword",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit2",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.3,
+    56.8
+   ],
+   "shL": [
+    47.9,
+    63.6
+   ],
+   "footL": [
+    52.7,
+    91.5
+   ],
+   "footR": [
+    54.1,
+    95.1
+   ],
+   "grip": [
+    52.0,
+    63.7
+   ],
+   "tip": [
+    45.6,
+    38.3
+   ],
+   "handR": [
+    51.7,
+    62.4
+   ],
+   "handL": [
+    52.3,
+    65.0
+   ],
+   "angle": 104.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "sword",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    52.4,
+    60.8
+   ],
+   "shL": [
+    48.8,
+    67.1
+   ],
+   "footL": [
+    54.8,
+    90.5
+   ],
+   "footR": [
+    54.1,
+    95.1
+   ],
+   "grip": [
+    58.4,
+    75.5
+   ],
+   "tip": [
+    75.3,
+    85.0
+   ],
+   "handR": [
+    59.2,
+    76.0
+   ],
+   "handL": [
+    57.5,
+    75.0
+   ],
+   "angle": 330.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armL",
+    "medal",
+    "armR",
+    "torso",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 2,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    81.0
+   ],
+   "head": [
+    52.4,
+    61.8
+   ],
+   "shL": [
+    48.8,
+    68.1
+   ],
+   "footL": [
+    54.8,
+    90.5
+   ],
+   "footR": [
+    54.1,
+    95.1
+   ],
+   "grip": [
+    59.1,
+    81.2
+   ],
+   "tip": [
+    78.8,
+    82.2
+   ],
+   "handR": [
+    60.1,
+    81.2
+   ],
+   "handL": [
+    58.1,
+    81.1
+   ],
+   "angle": 357.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armL",
+    "medal",
+    "armR",
+    "torso",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    52.4,
+    60.8
+   ],
+   "shL": [
+    48.8,
+    67.1
+   ],
+   "footL": [
+    54.8,
+    90.5
+   ],
+   "footR": [
+    54.1,
+    95.1
+   ],
+   "grip": [
+    58.4,
+    81.5
+   ],
+   "tip": [
+    78.6,
+    80.4
+   ],
+   "handR": [
+    59.4,
+    81.5
+   ],
+   "handL": [
+    57.4,
+    81.6
+   ],
+   "angle": 3.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armL",
+    "medal",
+    "armR",
+    "torso",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    52.4,
+    60.8
+   ],
+   "shL": [
+    48.8,
+    67.1
+   ],
+   "footL": [
+    54.1,
+    90.8
+   ],
+   "footR": [
+    54.1,
+    95.1
+   ],
+   "grip": [
+    57.7,
+    80.9
+   ],
+   "tip": [
+    78.4,
+    76.7
+   ],
+   "handR": [
+    58.7,
+    80.7
+   ],
+   "handL": [
+    56.6,
+    81.1
+   ],
+   "angle": 11.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armL",
+    "medal",
+    "armR",
+    "torso",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.4,
+    59.8
+   ],
+   "shL": [
+    48.7,
+    66.1
+   ],
+   "footL": [
+    53.4,
+    91.2
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    57.7,
+    81.6
+   ],
+   "tip": [
+    80.8,
+    75.2
+   ],
+   "handR": [
+    58.8,
+    81.3
+   ],
+   "handL": [
+    56.5,
+    81.9
+   ],
+   "angle": 15.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.5
+   ],
+   "head": [
+    52.4,
+    59.3
+   ],
+   "shL": [
+    48.6,
+    65.7
+   ],
+   "footL": [
+    52.7,
+    91.5
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    57.7,
+    80.6
+   ],
+   "tip": [
+    80.8,
+    68.1
+   ],
+   "handR": [
+    58.8,
+    80.0
+   ],
+   "handL": [
+    56.5,
+    81.2
+   ],
+   "angle": 28.3,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    52.4,
+    58.3
+   ],
+   "shL": [
+    48.5,
+    64.7
+   ],
+   "footL": [
+    51.3,
+    92.2
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    57.4,
+    76.1
+   ],
+   "tip": [
+    79.2,
+    54.7
+   ],
+   "handR": [
+    58.5,
+    75.1
+   ],
+   "handL": [
+    56.4,
+    77.2
+   ],
+   "angle": 44.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.4,
+    56.8
+   ],
+   "shL": [
+    48.5,
+    63.2
+   ],
+   "footL": [
+    51.3,
+    92.2
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    56.5,
+    73.3
+   ],
+   "tip": [
+    78.6,
+    51.6
+   ],
+   "handR": [
+    57.6,
+    72.3
+   ],
+   "handL": [
+    55.4,
+    74.4
+   ],
+   "angle": 44.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 9,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.4,
+    56.8
+   ],
+   "shL": [
+    48.5,
+    63.2
+   ],
+   "footL": [
+    51.3,
+    92.2
+   ],
+   "footR": [
+    53.4,
+    95.4
+   ],
+   "grip": [
+    56.5,
+    73.3
+   ],
+   "tip": [
+    78.6,
+    51.6
+   ],
+   "handR": [
+    57.6,
+    72.3
+   ],
+   "handL": [
+    55.4,
+    74.4
+   ],
+   "angle": 44.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 10,
+   "visual_hit": false
+  }
+ ],
+ "north-west": [
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.6,
+    56.8
+   ],
+   "shL": [
+    48.5,
+    66.8
+   ],
+   "footL": [
+    48.5,
+    94.4
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    47.5,
+    73.4
+   ],
+   "tip": [
+    25.4,
+    51.6
+   ],
+   "handR": [
+    46.4,
+    72.3
+   ],
+   "handL": [
+    48.5,
+    74.4
+   ],
+   "angle": 135.3,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.6,
+    57.9
+   ],
+   "shL": [
+    49.1,
+    68.0
+   ],
+   "footL": [
+    48.5,
+    94.4
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    50.1,
+    72.9
+   ],
+   "tip": [
+    36.9,
+    45.5
+   ],
+   "handR": [
+    49.4,
+    71.6
+   ],
+   "handL": [
+    50.7,
+    74.3
+   ],
+   "angle": 115.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "cape",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.5,
+    57.9
+   ],
+   "shL": [
+    50.3,
+    68.3
+   ],
+   "footL": [
+    48.5,
+    94.4
+   ],
+   "footR": [
+    56.2,
+    93.3
+   ],
+   "grip": [
+    56.2,
+    69.9
+   ],
+   "tip": [
+    60.5,
+    36.7
+   ],
+   "handR": [
+    56.5,
+    68.2
+   ],
+   "handL": [
+    56.0,
+    71.5
+   ],
+   "angle": 82.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "armL",
+    "cape",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.7,
+    59.8
+   ],
+   "shL": [
+    47.9,
+    69.4
+   ],
+   "footL": [
+    45.6,
+    92.9
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    47.1,
+    76.1
+   ],
+   "tip": [
+    23.0,
+    68.7
+   ],
+   "handR": [
+    45.8,
+    75.7
+   ],
+   "handL": [
+    48.3,
+    76.5
+   ],
+   "angle": 162.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 4,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.9,
+    59.8
+   ],
+   "shL": [
+    47.2,
+    68.6
+   ],
+   "footL": [
+    45.6,
+    92.9
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    44.9,
+    80.3
+   ],
+   "tip": [
+    27.2,
+    99
+   ],
+   "handR": [
+    44.8,
+    81.6
+   ],
+   "handL": [
+    45.0,
+    79.0
+   ],
+   "angle": 226.6,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.0
+   ],
+   "head": [
+    51.8,
+    58.8
+   ],
+   "shL": [
+    47.3,
+    67.9
+   ],
+   "footL": [
+    46.3,
+    93.3
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    48.5,
+    77.4
+   ],
+   "tip": [
+    60.9,
+    82.4
+   ],
+   "handR": [
+    49.1,
+    77.6
+   ],
+   "handL": [
+    47.8,
+    77.1
+   ],
+   "angle": 338.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    51.8,
+    58.3
+   ],
+   "shL": [
+    47.3,
+    67.4
+   ],
+   "footL": [
+    46.3,
+    93.3
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    48.5,
+    76.9
+   ],
+   "tip": [
+    60.9,
+    81.9
+   ],
+   "handR": [
+    49.1,
+    77.1
+   ],
+   "handL": [
+    47.8,
+    76.6
+   ],
+   "angle": 338.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.8,
+    57.8
+   ],
+   "shL": [
+    47.3,
+    66.9
+   ],
+   "footL": [
+    46.3,
+    93.3
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    48.5,
+    76.4
+   ],
+   "tip": [
+    60.9,
+    81.4
+   ],
+   "handR": [
+    49.1,
+    76.6
+   ],
+   "handL": [
+    47.8,
+    76.1
+   ],
+   "angle": 338.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit1",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.8,
+    57.8
+   ],
+   "shL": [
+    47.3,
+    66.9
+   ],
+   "footL": [
+    46.3,
+    93.3
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    48.5,
+    76.4
+   ],
+   "tip": [
+    60.9,
+    81.4
+   ],
+   "handR": [
+    49.1,
+    76.6
+   ],
+   "handL": [
+    47.8,
+    76.1
+   ],
+   "angle": 338.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit2",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.8,
+    59.8
+   ],
+   "shL": [
+    47.3,
+    68.9
+   ],
+   "footL": [
+    46.3,
+    93.3
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    49.2,
+    82.7
+   ],
+   "tip": [
+    74.6,
+    99
+   ],
+   "handR": [
+    49.5,
+    84.2
+   ],
+   "handL": [
+    48.9,
+    81.2
+   ],
+   "angle": 327.3,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit2",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.6,
+    57.8
+   ],
+   "shL": [
+    48.5,
+    67.8
+   ],
+   "footL": [
+    46.3,
+    93.3
+   ],
+   "footR": [
+    53.4,
+    92.6
+   ],
+   "grip": [
+    47.8,
+    69.2
+   ],
+   "tip": [
+    43.5,
+    36.4
+   ],
+   "handR": [
+    47.5,
+    67.5
+   ],
+   "handL": [
+    48.0,
+    70.8
+   ],
+   "angle": 97.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit2",
+   "frame": 3,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.6,
+    56.9
+   ],
+   "shL": [
+    49.1,
+    67.0
+   ],
+   "footL": [
+    46.3,
+    93.3
+   ],
+   "footR": [
+    53.4,
+    92.6
+   ],
+   "grip": [
+    51.3,
+    62.2
+   ],
+   "tip": [
+    47.1,
+    29.5
+   ],
+   "handR": [
+    51.1,
+    60.6
+   ],
+   "handL": [
+    51.5,
+    63.9
+   ],
+   "angle": 97.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "armL",
+    "cape",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.6,
+    56.9
+   ],
+   "shL": [
+    49.1,
+    67.0
+   ],
+   "footL": [
+    47.1,
+    93.6
+   ],
+   "footR": [
+    54.1,
+    92.9
+   ],
+   "grip": [
+    52.7,
+    65.9
+   ],
+   "tip": [
+    47.2,
+    33.2
+   ],
+   "handR": [
+    52.4,
+    64.3
+   ],
+   "handL": [
+    53.0,
+    67.6
+   ],
+   "angle": 99.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "armL",
+    "cape",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.6,
+    56.9
+   ],
+   "shL": [
+    49.1,
+    67.0
+   ],
+   "footL": [
+    47.1,
+    93.6
+   ],
+   "footR": [
+    54.1,
+    92.9
+   ],
+   "grip": [
+    53.4,
+    65.3
+   ],
+   "tip": [
+    49.2,
+    32.6
+   ],
+   "handR": [
+    53.2,
+    63.7
+   ],
+   "handL": [
+    53.6,
+    66.9
+   ],
+   "angle": 97.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "armL",
+    "cape",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.6,
+    56.9
+   ],
+   "shL": [
+    49.1,
+    67.0
+   ],
+   "footL": [
+    47.1,
+    93.6
+   ],
+   "footR": [
+    54.1,
+    92.9
+   ],
+   "grip": [
+    53.4,
+    63.0
+   ],
+   "tip": [
+    59.8,
+    37.6
+   ],
+   "handR": [
+    53.7,
+    61.7
+   ],
+   "handL": [
+    53.1,
+    64.3
+   ],
+   "angle": 75.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "cape",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.6,
+    56.9
+   ],
+   "shL": [
+    49.1,
+    67.0
+   ],
+   "footL": [
+    47.1,
+    93.6
+   ],
+   "footR": [
+    54.1,
+    92.9
+   ],
+   "grip": [
+    53.4,
+    63.0
+   ],
+   "tip": [
+    59.8,
+    37.6
+   ],
+   "handR": [
+    53.7,
+    61.7
+   ],
+   "handL": [
+    53.1,
+    64.3
+   ],
+   "angle": 75.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "cape",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.6,
+    56.9
+   ],
+   "shL": [
+    49.1,
+    67.0
+   ],
+   "footL": [
+    47.1,
+    93.6
+   ],
+   "footR": [
+    54.1,
+    92.9
+   ],
+   "grip": [
+    53.4,
+    63.0
+   ],
+   "tip": [
+    59.8,
+    37.6
+   ],
+   "handR": [
+    53.7,
+    61.7
+   ],
+   "handL": [
+    53.1,
+    64.3
+   ],
+   "angle": 75.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "cape",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    51.7,
+    60.8
+   ],
+   "shL": [
+    48.2,
+    70.6
+   ],
+   "footL": [
+    44.9,
+    92.6
+   ],
+   "footR": [
+    54.1,
+    92.9
+   ],
+   "grip": [
+    47.1,
+    74.8
+   ],
+   "tip": [
+    30.1,
+    84.3
+   ],
+   "handR": [
+    46.2,
+    75.3
+   ],
+   "handL": [
+    47.9,
+    74.3
+   ],
+   "angle": 209.3,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 2,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    81.0
+   ],
+   "head": [
+    51.7,
+    61.8
+   ],
+   "shL": [
+    48.2,
+    71.6
+   ],
+   "footL": [
+    44.9,
+    92.6
+   ],
+   "footR": [
+    54.1,
+    92.9
+   ],
+   "grip": [
+    46.3,
+    80.5
+   ],
+   "tip": [
+    26.6,
+    81.5
+   ],
+   "handR": [
+    45.4,
+    80.5
+   ],
+   "handL": [
+    47.3,
+    80.4
+   ],
+   "angle": 182.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    51.7,
+    60.8
+   ],
+   "shL": [
+    48.2,
+    70.6
+   ],
+   "footL": [
+    44.9,
+    92.6
+   ],
+   "footR": [
+    54.1,
+    92.9
+   ],
+   "grip": [
+    47.1,
+    80.8
+   ],
+   "tip": [
+    26.8,
+    79.7
+   ],
+   "handR": [
+    46.0,
+    80.8
+   ],
+   "handL": [
+    48.1,
+    80.9
+   ],
+   "angle": 176.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    51.7,
+    60.8
+   ],
+   "shL": [
+    48.2,
+    70.6
+   ],
+   "footL": [
+    45.6,
+    92.9
+   ],
+   "footR": [
+    54.1,
+    92.9
+   ],
+   "grip": [
+    47.8,
+    80.2
+   ],
+   "tip": [
+    27.0,
+    76.0
+   ],
+   "handR": [
+    46.7,
+    80.0
+   ],
+   "handL": [
+    48.8,
+    80.4
+   ],
+   "angle": 168.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.7,
+    59.8
+   ],
+   "shL": [
+    48.3,
+    69.7
+   ],
+   "footL": [
+    46.3,
+    93.3
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    49.2,
+    80.2
+   ],
+   "tip": [
+    30.3,
+    71.6
+   ],
+   "handR": [
+    48.2,
+    79.7
+   ],
+   "handL": [
+    50.1,
+    80.6
+   ],
+   "angle": 155.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.5
+   ],
+   "head": [
+    51.7,
+    59.3
+   ],
+   "shL": [
+    48.3,
+    69.2
+   ],
+   "footL": [
+    47.1,
+    93.6
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    49.2,
+    79.2
+   ],
+   "tip": [
+    30.4,
+    64.5
+   ],
+   "handR": [
+    48.2,
+    78.4
+   ],
+   "handL": [
+    50.1,
+    79.9
+   ],
+   "angle": 141.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    51.6,
+    58.3
+   ],
+   "shL": [
+    48.5,
+    68.3
+   ],
+   "footL": [
+    48.5,
+    94.4
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    48.7,
+    75.1
+   ],
+   "tip": [
+    29.2,
+    52.5
+   ],
+   "handR": [
+    47.7,
+    74.0
+   ],
+   "handL": [
+    49.6,
+    76.2
+   ],
+   "angle": 130.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.6,
+    56.8
+   ],
+   "shL": [
+    48.5,
+    66.8
+   ],
+   "footL": [
+    48.5,
+    94.4
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    47.5,
+    73.4
+   ],
+   "tip": [
+    25.4,
+    51.6
+   ],
+   "handR": [
+    46.4,
+    72.3
+   ],
+   "handL": [
+    48.5,
+    74.4
+   ],
+   "angle": 135.3,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 9,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.6,
+    56.8
+   ],
+   "shL": [
+    48.5,
+    66.8
+   ],
+   "footL": [
+    48.5,
+    94.4
+   ],
+   "footR": [
+    54.8,
+    93.3
+   ],
+   "grip": [
+    47.5,
+    73.4
+   ],
+   "tip": [
+    25.4,
+    51.6
+   ],
+   "handR": [
+    46.4,
+    72.3
+   ],
+   "handL": [
+    48.5,
+    74.4
+   ],
+   "angle": 135.3,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal",
+    "cape"
+   ],
+   "hit": "hit3",
+   "frame": 10,
+   "visual_hit": false
+  }
+ ],
+ "west": [
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.5,
+    57.0
+   ],
+   "shL": [
+    52.0,
+    67.5
+   ],
+   "footL": [
+    50.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    49.5,
+    73.3
+   ],
+   "tip": [
+    27.4,
+    51.6
+   ],
+   "handR": [
+    48.5,
+    72.2
+   ],
+   "handL": [
+    50.6,
+    74.3
+   ],
+   "angle": 135.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "cape",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.5,
+    58.0
+   ],
+   "shL": [
+    52.9,
+    68.5
+   ],
+   "footL": [
+    50.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    49.3,
+    73.1
+   ],
+   "tip": [
+    32.2,
+    47.4
+   ],
+   "handR": [
+    48.4,
+    71.9
+   ],
+   "handL": [
+    50.1,
+    74.4
+   ],
+   "angle": 123.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "cape",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.5,
+    58.1
+   ],
+   "shL": [
+    54.1,
+    68.3
+   ],
+   "footL": [
+    50.0,
+    95.5
+   ],
+   "footR": [
+    54.0,
+    92.0
+   ],
+   "grip": [
+    52.0,
+    69.0
+   ],
+   "tip": [
+    46.0,
+    36.2
+   ],
+   "handR": [
+    51.7,
+    67.4
+   ],
+   "handL": [
+    52.3,
+    70.6
+   ],
+   "angle": 100.3,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "sword",
+    "armR",
+    "cape",
+    "armL",
+    "torso",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.5,
+    60.0
+   ],
+   "shL": [
+    51.1,
+    70.5
+   ],
+   "footL": [
+    46.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    43.0,
+    79.0
+   ],
+   "tip": [
+    13.4,
+    82.7
+   ],
+   "handR": [
+    41.5,
+    79.2
+   ],
+   "handL": [
+    44.5,
+    78.8
+   ],
+   "angle": 187.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "cape",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 4,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.6,
+    59.9
+   ],
+   "shL": [
+    49.5,
+    70.2
+   ],
+   "footL": [
+    46.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    46.0,
+    83.0
+   ],
+   "tip": [
+    69.8,
+    99
+   ],
+   "handR": [
+    46.9,
+    84.1
+   ],
+   "handL": [
+    45.1,
+    81.9
+   ],
+   "angle": 326.1,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "cape",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.0
+   ],
+   "head": [
+    51.5,
+    58.9
+   ],
+   "shL": [
+    49.9,
+    69.3
+   ],
+   "footL": [
+    47.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    50.0,
+    78.5
+   ],
+   "tip": [
+    77.3,
+    75.3
+   ],
+   "handR": [
+    51.4,
+    78.3
+   ],
+   "handL": [
+    48.6,
+    78.7
+   ],
+   "angle": 6.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "cape",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    51.5,
+    58.4
+   ],
+   "shL": [
+    49.9,
+    68.8
+   ],
+   "footL": [
+    47.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    50.0,
+    78.0
+   ],
+   "tip": [
+    77.3,
+    74.8
+   ],
+   "handR": [
+    51.4,
+    77.8
+   ],
+   "handL": [
+    48.6,
+    78.2
+   ],
+   "angle": 6.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "cape",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.5,
+    57.9
+   ],
+   "shL": [
+    49.9,
+    68.3
+   ],
+   "footL": [
+    47.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    50.0,
+    77.5
+   ],
+   "tip": [
+    77.3,
+    74.3
+   ],
+   "handR": [
+    51.4,
+    77.3
+   ],
+   "handL": [
+    48.6,
+    77.7
+   ],
+   "angle": 6.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "cape",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.5,
+    57.9
+   ],
+   "shL": [
+    49.9,
+    68.3
+   ],
+   "footL": [
+    47.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    50.0,
+    77.5
+   ],
+   "tip": [
+    77.3,
+    74.3
+   ],
+   "handR": [
+    51.4,
+    77.3
+   ],
+   "handL": [
+    48.6,
+    77.7
+   ],
+   "angle": 6.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "cape",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.5,
+    59.9
+   ],
+   "shL": [
+    49.9,
+    70.3
+   ],
+   "footL": [
+    47.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    51.0,
+    83.5
+   ],
+   "tip": [
+    78.7,
+    99
+   ],
+   "handR": [
+    52.0,
+    84.7
+   ],
+   "handL": [
+    50.0,
+    82.3
+   ],
+   "angle": 330.8,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "armR",
+    "torso",
+    "cape",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.5,
+    58.0
+   ],
+   "shL": [
+    52.0,
+    68.5
+   ],
+   "footL": [
+    47.0,
+    95.5
+   ],
+   "footR": [
+    51.0,
+    92.5
+   ],
+   "grip": [
+    45.0,
+    71.5
+   ],
+   "tip": [
+    29.8,
+    42.7
+   ],
+   "handR": [
+    44.2,
+    70.1
+   ],
+   "handL": [
+    45.8,
+    72.9
+   ],
+   "angle": 117.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "cape",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 3,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.5,
+    57.0
+   ],
+   "shL": [
+    52.9,
+    67.5
+   ],
+   "footL": [
+    47.0,
+    95.5
+   ],
+   "footR": [
+    51.0,
+    92.5
+   ],
+   "grip": [
+    49.0,
+    63.0
+   ],
+   "tip": [
+    40.0,
+    33.0
+   ],
+   "handR": [
+    48.6,
+    61.5
+   ],
+   "handL": [
+    49.4,
+    64.5
+   ],
+   "angle": 106.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "cape",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.5,
+    57.0
+   ],
+   "shL": [
+    52.9,
+    67.5
+   ],
+   "footL": [
+    48.0,
+    95.5
+   ],
+   "footR": [
+    52.0,
+    92.5
+   ],
+   "grip": [
+    51.0,
+    66.0
+   ],
+   "tip": [
+    40.2,
+    36.6
+   ],
+   "handR": [
+    50.5,
+    64.5
+   ],
+   "handL": [
+    51.5,
+    67.5
+   ],
+   "angle": 110.2,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "cape",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.5,
+    57.0
+   ],
+   "shL": [
+    52.9,
+    67.5
+   ],
+   "footL": [
+    48.0,
+    95.5
+   ],
+   "footR": [
+    52.0,
+    92.5
+   ],
+   "grip": [
+    52.0,
+    65.0
+   ],
+   "tip": [
+    43.0,
+    35.0
+   ],
+   "handR": [
+    51.6,
+    63.5
+   ],
+   "handL": [
+    52.4,
+    66.5
+   ],
+   "angle": 106.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "cape",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.5,
+    57.0
+   ],
+   "shL": [
+    52.9,
+    67.5
+   ],
+   "footL": [
+    48.0,
+    95.5
+   ],
+   "footR": [
+    52.0,
+    92.5
+   ],
+   "grip": [
+    53.0,
+    62.5
+   ],
+   "tip": [
+    62.0,
+    33.9
+   ],
+   "handR": [
+    53.5,
+    61.1
+   ],
+   "handL": [
+    52.5,
+    63.9
+   ],
+   "angle": 72.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "cape",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.5,
+    57.0
+   ],
+   "shL": [
+    52.9,
+    67.5
+   ],
+   "footL": [
+    48.0,
+    95.5
+   ],
+   "footR": [
+    52.0,
+    92.5
+   ],
+   "grip": [
+    53.0,
+    62.5
+   ],
+   "tip": [
+    62.0,
+    33.9
+   ],
+   "handR": [
+    53.5,
+    61.1
+   ],
+   "handL": [
+    52.5,
+    63.9
+   ],
+   "angle": 72.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "cape",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.5,
+    57.0
+   ],
+   "shL": [
+    52.9,
+    67.5
+   ],
+   "footL": [
+    48.0,
+    95.5
+   ],
+   "footR": [
+    52.0,
+    92.5
+   ],
+   "grip": [
+    53.0,
+    62.5
+   ],
+   "tip": [
+    62.0,
+    33.9
+   ],
+   "handR": [
+    53.5,
+    61.1
+   ],
+   "handL": [
+    52.5,
+    63.9
+   ],
+   "angle": 72.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "cape",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    51.5,
+    61.0
+   ],
+   "shL": [
+    51.6,
+    71.5
+   ],
+   "footL": [
+    45.0,
+    95.5
+   ],
+   "footR": [
+    52.0,
+    92.5
+   ],
+   "grip": [
+    44.0,
+    77.5
+   ],
+   "tip": [
+    20.0,
+    95.5
+   ],
+   "handR": [
+    42.8,
+    78.4
+   ],
+   "handL": [
+    45.2,
+    76.6
+   ],
+   "angle": 216.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "cape",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 2,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    81.0
+   ],
+   "head": [
+    51.5,
+    62.0
+   ],
+   "shL": [
+    51.6,
+    72.5
+   ],
+   "footL": [
+    45.0,
+    95.5
+   ],
+   "footR": [
+    52.0,
+    92.5
+   ],
+   "grip": [
+    43.0,
+    83.5
+   ],
+   "tip": [
+    15.0,
+    94.4
+   ],
+   "handR": [
+    41.6,
+    84.0
+   ],
+   "handL": [
+    44.4,
+    83.0
+   ],
+   "angle": 201.3,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "cape",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    51.5,
+    61.0
+   ],
+   "shL": [
+    51.6,
+    71.5
+   ],
+   "footL": [
+    45.0,
+    95.5
+   ],
+   "footR": [
+    52.0,
+    92.5
+   ],
+   "grip": [
+    44.0,
+    83.5
+   ],
+   "tip": [
+    15.4,
+    92.5
+   ],
+   "handR": [
+    42.6,
+    84.0
+   ],
+   "handL": [
+    45.4,
+    83.0
+   ],
+   "angle": 197.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "cape",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    51.5,
+    61.0
+   ],
+   "shL": [
+    51.6,
+    71.5
+   ],
+   "footL": [
+    46.0,
+    95.5
+   ],
+   "footR": [
+    52.0,
+    92.5
+   ],
+   "grip": [
+    45.0,
+    82.5
+   ],
+   "tip": [
+    15.6,
+    88.7
+   ],
+   "handR": [
+    43.5,
+    82.8
+   ],
+   "handL": [
+    46.5,
+    82.2
+   ],
+   "angle": 191.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "cape",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.5,
+    60.0
+   ],
+   "shL": [
+    51.7,
+    70.5
+   ],
+   "footL": [
+    47.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    46.0,
+    82.0
+   ],
+   "tip": [
+    16.3,
+    83.5
+   ],
+   "handR": [
+    44.5,
+    82.1
+   ],
+   "handL": [
+    47.5,
+    81.9
+   ],
+   "angle": 182.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "cape",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.5
+   ],
+   "head": [
+    51.5,
+    59.5
+   ],
+   "shL": [
+    51.8,
+    70.0
+   ],
+   "footL": [
+    48.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    46.0,
+    81.0
+   ],
+   "tip": [
+    16.3,
+    76.3
+   ],
+   "handR": [
+    44.5,
+    80.8
+   ],
+   "handL": [
+    47.5,
+    81.2
+   ],
+   "angle": 171.0,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "cape",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    51.5,
+    58.5
+   ],
+   "shL": [
+    52.0,
+    69.0
+   ],
+   "footL": [
+    50.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    47.8,
+    75.9
+   ],
+   "tip": [
+    23.2,
+    57.9
+   ],
+   "handR": [
+    46.6,
+    75.0
+   ],
+   "handL": [
+    49.0,
+    76.8
+   ],
+   "angle": 143.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "cape",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.5,
+    57.0
+   ],
+   "shL": [
+    52.0,
+    67.5
+   ],
+   "footL": [
+    50.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    49.5,
+    73.3
+   ],
+   "tip": [
+    27.4,
+    51.6
+   ],
+   "handR": [
+    48.5,
+    72.2
+   ],
+   "handL": [
+    50.6,
+    74.3
+   ],
+   "angle": 135.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "cape",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 9,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.5,
+    57.0
+   ],
+   "shL": [
+    52.0,
+    67.5
+   ],
+   "footL": [
+    50.0,
+    95.5
+   ],
+   "footR": [
+    53.0,
+    92.5
+   ],
+   "grip": [
+    49.5,
+    73.3
+   ],
+   "tip": [
+    27.4,
+    51.6
+   ],
+   "handR": [
+    48.5,
+    72.2
+   ],
+   "handL": [
+    50.6,
+    74.3
+   ],
+   "angle": 135.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "armR",
+    "sword",
+    "torso",
+    "cape",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 10,
+   "visual_hit": false
+  }
+ ],
+ "south-west": [
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.6,
+    57.2
+   ],
+   "shL": [
+    55.5,
+    66.8
+   ],
+   "footL": [
+    52.7,
+    95.8
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    56.4,
+    71.2
+   ],
+   "tip": [
+    78.6,
+    49.6
+   ],
+   "handR": [
+    57.5,
+    70.2
+   ],
+   "handL": [
+    55.3,
+    72.3
+   ],
+   "angle": 44.2,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.7,
+    58.2
+   ],
+   "shL": [
+    56.1,
+    67.4
+   ],
+   "footL": [
+    52.7,
+    95.8
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    51.7,
+    72.9
+   ],
+   "tip": [
+    56.5,
+    49.8
+   ],
+   "handR": [
+    52.0,
+    71.5
+   ],
+   "handL": [
+    51.4,
+    74.4
+   ],
+   "angle": 78.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "sword",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.8,
+    58.2
+   ],
+   "shL": [
+    56.7,
+    66.9
+   ],
+   "footL": [
+    52.7,
+    95.8
+   ],
+   "footR": [
+    50.6,
+    91.9
+   ],
+   "grip": [
+    47.8,
+    69.9
+   ],
+   "tip": [
+    35.1,
+    40.9
+   ],
+   "handR": [
+    47.1,
+    68.4
+   ],
+   "handL": [
+    48.4,
+    71.3
+   ],
+   "angle": 113.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "sword",
+    "armR",
+    "armL",
+    "torso",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.6,
+    60.1
+   ],
+   "shL": [
+    54.9,
+    70.0
+   ],
+   "footL": [
+    49.9,
+    97.2
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    44.2,
+    82.5
+   ],
+   "tip": [
+    26.4,
+    96.0
+   ],
+   "handR": [
+    43.3,
+    83.2
+   ],
+   "handL": [
+    45.1,
+    81.8
+   ],
+   "angle": 217.2,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "armR",
+    "medal",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit1",
+   "frame": 4,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.5,
+    60.1
+   ],
+   "shL": [
+    53.3,
+    70.4
+   ],
+   "footL": [
+    49.9,
+    97.2
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    50.6,
+    84.5
+   ],
+   "tip": [
+    78.0,
+    97.5
+   ],
+   "handR": [
+    52.0,
+    85.2
+   ],
+   "handL": [
+    49.2,
+    83.9
+   ],
+   "angle": 334.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "armR",
+    "medal",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit1",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.0
+   ],
+   "head": [
+    51.5,
+    59.1
+   ],
+   "shL": [
+    53.7,
+    69.3
+   ],
+   "footL": [
+    50.6,
+    96.8
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    52.7,
+    78.8
+   ],
+   "tip": [
+    78.8,
+    64.5
+   ],
+   "handR": [
+    54.0,
+    78.1
+   ],
+   "handL": [
+    51.4,
+    79.5
+   ],
+   "angle": 28.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    51.5,
+    58.6
+   ],
+   "shL": [
+    53.7,
+    68.8
+   ],
+   "footL": [
+    50.6,
+    96.8
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    52.7,
+    78.3
+   ],
+   "tip": [
+    78.8,
+    64.0
+   ],
+   "handR": [
+    54.0,
+    77.6
+   ],
+   "handL": [
+    51.4,
+    79.0
+   ],
+   "angle": 28.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.5,
+    58.1
+   ],
+   "shL": [
+    53.7,
+    68.3
+   ],
+   "footL": [
+    50.6,
+    96.8
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    52.7,
+    77.8
+   ],
+   "tip": [
+    78.8,
+    63.5
+   ],
+   "handR": [
+    54.0,
+    77.1
+   ],
+   "handL": [
+    51.4,
+    78.5
+   ],
+   "angle": 28.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.5,
+    58.1
+   ],
+   "shL": [
+    53.7,
+    68.3
+   ],
+   "footL": [
+    50.6,
+    96.8
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    52.7,
+    77.8
+   ],
+   "tip": [
+    78.8,
+    63.5
+   ],
+   "handR": [
+    54.0,
+    77.1
+   ],
+   "handL": [
+    51.4,
+    78.5
+   ],
+   "angle": 28.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.5,
+    60.1
+   ],
+   "shL": [
+    53.7,
+    70.3
+   ],
+   "footL": [
+    50.6,
+    96.8
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    53.4,
+    83.4
+   ],
+   "tip": [
+    76.6,
+    98.2
+   ],
+   "handR": [
+    54.6,
+    84.2
+   ],
+   "handL": [
+    52.3,
+    82.7
+   ],
+   "angle": 327.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.6,
+    58.2
+   ],
+   "shL": [
+    55.5,
+    67.8
+   ],
+   "footL": [
+    50.6,
+    96.8
+   ],
+   "footR": [
+    49.2,
+    93.3
+   ],
+   "grip": [
+    46.3,
+    74.1
+   ],
+   "tip": [
+    29.2,
+    52.0
+   ],
+   "handR": [
+    45.5,
+    73.0
+   ],
+   "handL": [
+    47.2,
+    75.2
+   ],
+   "angle": 127.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "armR",
+    "medal",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit2",
+   "frame": 3,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.7,
+    57.2
+   ],
+   "shL": [
+    56.1,
+    66.4
+   ],
+   "footL": [
+    50.6,
+    96.8
+   ],
+   "footR": [
+    49.2,
+    93.3
+   ],
+   "grip": [
+    48.5,
+    64.4
+   ],
+   "tip": [
+    40.0,
+    38.0
+   ],
+   "handR": [
+    48.0,
+    63.0
+   ],
+   "handL": [
+    48.9,
+    65.7
+   ],
+   "angle": 107.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.7,
+    57.2
+   ],
+   "shL": [
+    56.1,
+    66.4
+   ],
+   "footL": [
+    51.3,
+    96.5
+   ],
+   "footR": [
+    49.9,
+    92.9
+   ],
+   "grip": [
+    49.9,
+    66.6
+   ],
+   "tip": [
+    40.0,
+    41.6
+   ],
+   "handR": [
+    49.4,
+    65.4
+   ],
+   "handL": [
+    50.4,
+    67.9
+   ],
+   "angle": 111.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "sword",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.7,
+    57.2
+   ],
+   "shL": [
+    56.1,
+    66.4
+   ],
+   "footL": [
+    51.3,
+    96.5
+   ],
+   "footR": [
+    49.9,
+    92.9
+   ],
+   "grip": [
+    50.6,
+    65.3
+   ],
+   "tip": [
+    42.1,
+    38.9
+   ],
+   "handR": [
+    50.2,
+    64.0
+   ],
+   "handL": [
+    51.0,
+    66.6
+   ],
+   "angle": 107.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "sword",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.7,
+    57.2
+   ],
+   "shL": [
+    56.1,
+    66.4
+   ],
+   "footL": [
+    51.3,
+    96.5
+   ],
+   "footR": [
+    49.9,
+    92.9
+   ],
+   "grip": [
+    52.0,
+    62.3
+   ],
+   "tip": [
+    58.4,
+    30.5
+   ],
+   "handR": [
+    52.3,
+    60.7
+   ],
+   "handL": [
+    51.7,
+    63.9
+   ],
+   "angle": 78.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "sword",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.7,
+    57.2
+   ],
+   "shL": [
+    56.1,
+    66.4
+   ],
+   "footL": [
+    51.3,
+    96.5
+   ],
+   "footR": [
+    49.9,
+    92.9
+   ],
+   "grip": [
+    52.0,
+    62.3
+   ],
+   "tip": [
+    58.4,
+    30.5
+   ],
+   "handR": [
+    52.3,
+    60.7
+   ],
+   "handL": [
+    51.7,
+    63.9
+   ],
+   "angle": 78.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "sword",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.7,
+    57.2
+   ],
+   "shL": [
+    56.1,
+    66.4
+   ],
+   "footL": [
+    51.3,
+    96.5
+   ],
+   "footR": [
+    49.9,
+    92.9
+   ],
+   "grip": [
+    52.0,
+    62.3
+   ],
+   "tip": [
+    58.4,
+    30.5
+   ],
+   "handR": [
+    52.3,
+    60.7
+   ],
+   "handL": [
+    51.7,
+    63.9
+   ],
+   "angle": 78.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "sword",
+    "torso",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    51.6,
+    61.2
+   ],
+   "shL": [
+    55.2,
+    70.9
+   ],
+   "footL": [
+    49.2,
+    97.5
+   ],
+   "footR": [
+    49.9,
+    92.9
+   ],
+   "grip": [
+    45.6,
+    80.5
+   ],
+   "tip": [
+    20.2,
+    99
+   ],
+   "handR": [
+    44.8,
+    81.8
+   ],
+   "handL": [
+    46.5,
+    79.2
+   ],
+   "angle": 216.1,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "armR",
+    "medal",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 2,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    81.0
+   ],
+   "head": [
+    51.6,
+    62.2
+   ],
+   "shL": [
+    55.2,
+    71.9
+   ],
+   "footL": [
+    49.2,
+    97.5
+   ],
+   "footR": [
+    49.9,
+    92.9
+   ],
+   "grip": [
+    44.9,
+    86.8
+   ],
+   "tip": [
+    19.0,
+    99
+   ],
+   "handR": [
+    43.9,
+    87.9
+   ],
+   "handL": [
+    45.9,
+    85.8
+   ],
+   "angle": 205.1,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "armR",
+    "medal",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    51.6,
+    61.2
+   ],
+   "shL": [
+    55.2,
+    70.9
+   ],
+   "footL": [
+    49.2,
+    97.5
+   ],
+   "footR": [
+    49.9,
+    92.9
+   ],
+   "grip": [
+    45.6,
+    86.5
+   ],
+   "tip": [
+    20.8,
+    99
+   ],
+   "handR": [
+    44.6,
+    87.4
+   ],
+   "handL": [
+    46.6,
+    85.5
+   ],
+   "angle": 206.7,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "armR",
+    "medal",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    51.6,
+    61.2
+   ],
+   "shL": [
+    55.2,
+    70.9
+   ],
+   "footL": [
+    49.9,
+    97.2
+   ],
+   "footR": [
+    49.9,
+    92.9
+   ],
+   "grip": [
+    46.3,
+    85.1
+   ],
+   "tip": [
+    23.7,
+    99
+   ],
+   "handR": [
+    45.3,
+    85.9
+   ],
+   "handL": [
+    47.4,
+    84.3
+   ],
+   "angle": 211.5,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "armR",
+    "medal",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.6,
+    60.2
+   ],
+   "shL": [
+    55.3,
+    69.9
+   ],
+   "footL": [
+    50.6,
+    96.8
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    46.3,
+    84.4
+   ],
+   "tip": [
+    23.2,
+    96.9
+   ],
+   "handR": [
+    45.2,
+    85.0
+   ],
+   "handL": [
+    47.5,
+    83.8
+   ],
+   "angle": 208.3,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.5
+   ],
+   "head": [
+    51.6,
+    59.7
+   ],
+   "shL": [
+    55.4,
+    69.3
+   ],
+   "footL": [
+    51.3,
+    96.5
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    46.3,
+    83.4
+   ],
+   "tip": [
+    23.2,
+    89.7
+   ],
+   "handR": [
+    45.2,
+    83.7
+   ],
+   "handL": [
+    47.5,
+    83.1
+   ],
+   "angle": 195.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    51.6,
+    58.7
+   ],
+   "shL": [
+    55.5,
+    68.3
+   ],
+   "footL": [
+    52.7,
+    95.8
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    51.0,
+    76.1
+   ],
+   "tip": [
+    51.5,
+    63.2
+   ],
+   "handR": [
+    51.1,
+    74.6
+   ],
+   "handL": [
+    51.0,
+    77.6
+   ],
+   "angle": 88.0,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.6,
+    57.2
+   ],
+   "shL": [
+    55.5,
+    66.8
+   ],
+   "footL": [
+    52.7,
+    95.8
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    56.4,
+    71.2
+   ],
+   "tip": [
+    78.6,
+    49.6
+   ],
+   "handR": [
+    57.5,
+    70.2
+   ],
+   "handL": [
+    55.3,
+    72.3
+   ],
+   "angle": 44.2,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 9,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    51.6,
+    57.2
+   ],
+   "shL": [
+    55.5,
+    66.8
+   ],
+   "footL": [
+    52.7,
+    95.8
+   ],
+   "footR": [
+    50.6,
+    92.6
+   ],
+   "grip": [
+    56.4,
+    71.2
+   ],
+   "tip": [
+    78.6,
+    49.6
+   ],
+   "handR": [
+    57.5,
+    70.2
+   ],
+   "handL": [
+    55.3,
+    72.3
+   ],
+   "angle": 44.2,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit3",
+   "frame": 10,
+   "visual_hit": false
+  }
+ ],
+ "south": [
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.0,
+    57.2
+   ],
+   "shL": [
+    57.0,
+    65.0
+   ],
+   "footL": [
+    55.0,
+    95.0
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    53.2,
+    72.1
+   ],
+   "tip": [
+    73.9,
+    49.0
+   ],
+   "handR": [
+    54.2,
+    71.0
+   ],
+   "handL": [
+    52.2,
+    73.2
+   ],
+   "angle": 48.2,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "medal",
+    "armR",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit1",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.1,
+    58.2
+   ],
+   "shL": [
+    56.9,
+    65.6
+   ],
+   "footL": [
+    55.0,
+    95.0
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    50.6,
+    74.3
+   ],
+   "tip": [
+    58.0,
+    52.3
+   ],
+   "handR": [
+    51.1,
+    72.9
+   ],
+   "handL": [
+    50.1,
+    75.7
+   ],
+   "angle": 71.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit1",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.2,
+    58.2
+   ],
+   "shL": [
+    56.5,
+    64.9
+   ],
+   "footL": [
+    55.0,
+    95.0
+   ],
+   "footR": [
+    48.0,
+    93.0
+   ],
+   "grip": [
+    46.0,
+    72.0
+   ],
+   "tip": [
+    34.1,
+    48.1
+   ],
+   "handR": [
+    45.4,
+    70.8
+   ],
+   "handL": [
+    46.6,
+    73.2
+   ],
+   "angle": 116.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit1",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.9,
+    60.2
+   ],
+   "shL": [
+    56.9,
+    68.4
+   ],
+   "footL": [
+    55.0,
+    97.0
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    50.0,
+    84.5
+   ],
+   "tip": [
+    58.7,
+    99
+   ],
+   "handR": [
+    50.2,
+    85.3
+   ],
+   "handL": [
+    49.8,
+    83.7
+   ],
+   "angle": 300.9,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "medal",
+    "armR",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit1",
+   "frame": 4,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.8,
+    60.2
+   ],
+   "shL": [
+    56.3,
+    69.2
+   ],
+   "footL": [
+    55.0,
+    97.0
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    56.0,
+    84.0
+   ],
+   "tip": [
+    76.9,
+    87.0
+   ],
+   "handR": [
+    57.0,
+    84.1
+   ],
+   "handL": [
+    55.0,
+    83.9
+   ],
+   "angle": 351.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "armR",
+    "medal",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit1",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.0
+   ],
+   "head": [
+    51.8,
+    59.2
+   ],
+   "shL": [
+    56.5,
+    68.1
+   ],
+   "footL": [
+    55.0,
+    96.5
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    55.0,
+    78.0
+   ],
+   "tip": [
+    64.6,
+    56.4
+   ],
+   "handR": [
+    55.5,
+    76.9
+   ],
+   "handL": [
+    54.5,
+    79.1
+   ],
+   "angle": 66.0,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    51.8,
+    58.7
+   ],
+   "shL": [
+    56.5,
+    67.6
+   ],
+   "footL": [
+    55.0,
+    96.5
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    55.0,
+    77.5
+   ],
+   "tip": [
+    64.6,
+    55.9
+   ],
+   "handR": [
+    55.5,
+    76.4
+   ],
+   "handL": [
+    54.5,
+    78.6
+   ],
+   "angle": 66.0,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.8,
+    58.2
+   ],
+   "shL": [
+    56.5,
+    67.1
+   ],
+   "footL": [
+    55.0,
+    96.5
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    55.0,
+    77.0
+   ],
+   "tip": [
+    64.6,
+    55.4
+   ],
+   "handR": [
+    55.5,
+    75.9
+   ],
+   "handL": [
+    54.5,
+    78.1
+   ],
+   "angle": 66.0,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit1",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    51.8,
+    58.2
+   ],
+   "shL": [
+    56.5,
+    67.1
+   ],
+   "footL": [
+    55.0,
+    96.5
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    55.0,
+    77.0
+   ],
+   "tip": [
+    64.6,
+    55.4
+   ],
+   "handR": [
+    55.5,
+    75.9
+   ],
+   "handL": [
+    54.5,
+    78.1
+   ],
+   "angle": 66.0,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    51.8,
+    60.2
+   ],
+   "shL": [
+    56.5,
+    69.1
+   ],
+   "footL": [
+    55.0,
+    96.5
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    55.0,
+    82.5
+   ],
+   "tip": [
+    66.9,
+    90.0
+   ],
+   "handR": [
+    55.6,
+    82.9
+   ],
+   "handL": [
+    54.4,
+    82.1
+   ],
+   "angle": 328.0,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "armR",
+    "torso",
+    "sword",
+    "armL",
+    "medal"
+   ],
+   "hit": "hit2",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.0,
+    58.2
+   ],
+   "shL": [
+    57.0,
+    66.0
+   ],
+   "footL": [
+    55.0,
+    96.5
+   ],
+   "footR": [
+    49.0,
+    94.5
+   ],
+   "grip": [
+    51.0,
+    75.5
+   ],
+   "tip": [
+    41.9,
+    58.8
+   ],
+   "handR": [
+    50.5,
+    74.7
+   ],
+   "handL": [
+    51.5,
+    76.3
+   ],
+   "angle": 118.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "medal",
+    "armR",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit2",
+   "frame": 3,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.1,
+    57.2
+   ],
+   "shL": [
+    56.9,
+    64.6
+   ],
+   "footL": [
+    55.0,
+    96.5
+   ],
+   "footR": [
+    49.0,
+    94.5
+   ],
+   "grip": [
+    50.0,
+    65.5
+   ],
+   "tip": [
+    47.0,
+    41.5
+   ],
+   "handR": [
+    49.9,
+    64.3
+   ],
+   "handL": [
+    50.1,
+    66.7
+   ],
+   "angle": 97.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit2",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.1,
+    57.2
+   ],
+   "shL": [
+    56.9,
+    64.6
+   ],
+   "footL": [
+    55.0,
+    96.0
+   ],
+   "footR": [
+    49.0,
+    94.0
+   ],
+   "grip": [
+    50.0,
+    67.5
+   ],
+   "tip": [
+    46.9,
+    45.1
+   ],
+   "handR": [
+    49.8,
+    66.4
+   ],
+   "handL": [
+    50.2,
+    68.6
+   ],
+   "angle": 97.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit2",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.1,
+    57.2
+   ],
+   "shL": [
+    56.9,
+    64.6
+   ],
+   "footL": [
+    55.0,
+    96.0
+   ],
+   "footR": [
+    49.0,
+    94.0
+   ],
+   "grip": [
+    50.0,
+    66.0
+   ],
+   "tip": [
+    47.0,
+    42.0
+   ],
+   "handR": [
+    49.9,
+    64.8
+   ],
+   "handL": [
+    50.1,
+    67.2
+   ],
+   "angle": 97.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.1,
+    57.2
+   ],
+   "shL": [
+    56.9,
+    64.6
+   ],
+   "footL": [
+    55.0,
+    96.0
+   ],
+   "footR": [
+    49.0,
+    94.0
+   ],
+   "grip": [
+    51.0,
+    62.5
+   ],
+   "tip": [
+    51.0,
+    29.4
+   ],
+   "handR": [
+    51.0,
+    60.8
+   ],
+   "handL": [
+    51.0,
+    64.2
+   ],
+   "angle": 90.0,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "sword",
+    "armL",
+    "medal",
+    "armR",
+    "torso"
+   ],
+   "hit": "hit2",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.1,
+    57.2
+   ],
+   "shL": [
+    56.9,
+    64.6
+   ],
+   "footL": [
+    55.0,
+    96.0
+   ],
+   "footR": [
+    49.0,
+    94.0
+   ],
+   "grip": [
+    51.0,
+    62.5
+   ],
+   "tip": [
+    51.0,
+    29.4
+   ],
+   "handR": [
+    51.0,
+    60.8
+   ],
+   "handL": [
+    51.0,
+    64.2
+   ],
+   "angle": 90.0,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "sword",
+    "armL",
+    "medal",
+    "armR",
+    "torso"
+   ],
+   "hit": "hit2",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.1,
+    57.2
+   ],
+   "shL": [
+    56.9,
+    64.6
+   ],
+   "footL": [
+    55.0,
+    96.0
+   ],
+   "footR": [
+    49.0,
+    94.0
+   ],
+   "grip": [
+    51.0,
+    62.5
+   ],
+   "tip": [
+    51.0,
+    29.4
+   ],
+   "handR": [
+    51.0,
+    60.8
+   ],
+   "handL": [
+    51.0,
+    64.2
+   ],
+   "angle": 90.0,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "sword",
+    "armL",
+    "medal",
+    "armR",
+    "torso"
+   ],
+   "hit": "hit3",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    52.0,
+    61.2
+   ],
+   "shL": [
+    57.0,
+    69.2
+   ],
+   "footL": [
+    55.0,
+    97.5
+   ],
+   "footR": [
+    49.0,
+    94.0
+   ],
+   "grip": [
+    51.0,
+    82.0
+   ],
+   "tip": [
+    26.3,
+    99
+   ],
+   "handR": [
+    51.0,
+    83.5
+   ],
+   "handL": [
+    51.0,
+    80.5
+   ],
+   "angle": 214.5,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "medal",
+    "armR",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 2,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    81.0
+   ],
+   "head": [
+    52.0,
+    62.2
+   ],
+   "shL": [
+    57.0,
+    70.2
+   ],
+   "footL": [
+    55.0,
+    97.5
+   ],
+   "footR": [
+    49.0,
+    94.0
+   ],
+   "grip": [
+    51.0,
+    88.5
+   ],
+   "tip": [
+    28.5,
+    99
+   ],
+   "handR": [
+    51.0,
+    89.7
+   ],
+   "handL": [
+    51.0,
+    87.3
+   ],
+   "angle": 205.0,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "medal",
+    "armR",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    52.0,
+    61.2
+   ],
+   "shL": [
+    57.0,
+    69.2
+   ],
+   "footL": [
+    55.0,
+    97.5
+   ],
+   "footR": [
+    49.0,
+    94.0
+   ],
+   "grip": [
+    51.0,
+    88.0
+   ],
+   "tip": [
+    30.4,
+    99
+   ],
+   "handR": [
+    51.0,
+    89.2
+   ],
+   "handL": [
+    51.0,
+    86.8
+   ],
+   "angle": 208.1,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "medal",
+    "armR",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    52.0,
+    61.2
+   ],
+   "shL": [
+    57.0,
+    69.2
+   ],
+   "footL": [
+    55.0,
+    97.0
+   ],
+   "footR": [
+    49.0,
+    94.0
+   ],
+   "grip": [
+    51.0,
+    86.5
+   ],
+   "tip": [
+    34.3,
+    99
+   ],
+   "handR": [
+    51.0,
+    87.5
+   ],
+   "handL": [
+    51.0,
+    85.5
+   ],
+   "angle": 216.8,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "medal",
+    "armR",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.0,
+    60.2
+   ],
+   "shL": [
+    57.0,
+    68.1
+   ],
+   "footL": [
+    55.0,
+    96.5
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    50.0,
+    86.0
+   ],
+   "tip": [
+    37.4,
+    99
+   ],
+   "handR": [
+    49.8,
+    86.9
+   ],
+   "handL": [
+    50.2,
+    85.1
+   ],
+   "angle": 225.8,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "medal",
+    "armR",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.5
+   ],
+   "head": [
+    52.0,
+    59.7
+   ],
+   "shL": [
+    57.0,
+    67.6
+   ],
+   "footL": [
+    55.0,
+    96.0
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    50.0,
+    85.0
+   ],
+   "tip": [
+    46.9,
+    96.7
+   ],
+   "handR": [
+    49.8,
+    85.6
+   ],
+   "handL": [
+    50.2,
+    84.4
+   ],
+   "angle": 255.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "medal",
+    "armR",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    52.0,
+    58.8
+   ],
+   "shL": [
+    57.0,
+    66.5
+   ],
+   "footL": [
+    55.0,
+    95.0
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    51.1,
+    77.6
+   ],
+   "tip": [
+    59.9,
+    66.4
+   ],
+   "handR": [
+    52.0,
+    76.4
+   ],
+   "handL": [
+    50.2,
+    78.7
+   ],
+   "angle": 51.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "medal",
+    "armR",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.0,
+    57.2
+   ],
+   "shL": [
+    57.0,
+    65.0
+   ],
+   "footL": [
+    55.0,
+    95.0
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    53.2,
+    72.1
+   ],
+   "tip": [
+    73.9,
+    49.0
+   ],
+   "handR": [
+    54.2,
+    71.0
+   ],
+   "handL": [
+    52.2,
+    73.2
+   ],
+   "angle": 48.2,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "medal",
+    "armR",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 9,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.0,
+    57.2
+   ],
+   "shL": [
+    57.0,
+    65.0
+   ],
+   "footL": [
+    55.0,
+    95.0
+   ],
+   "footR": [
+    49.0,
+    93.5
+   ],
+   "grip": [
+    53.2,
+    72.1
+   ],
+   "tip": [
+    73.9,
+    49.0
+   ],
+   "handR": [
+    54.2,
+    71.0
+   ],
+   "handL": [
+    52.2,
+    73.2
+   ],
+   "angle": 48.2,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "torso",
+    "medal",
+    "armR",
+    "armL",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 10,
+   "visual_hit": false
+  }
+ ],
+ "south-east": [
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.4,
+    57.2
+   ],
+   "shL": [
+    55.5,
+    63.2
+   ],
+   "footL": [
+    55.5,
+    93.6
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    47.6,
+    71.2
+   ],
+   "tip": [
+    25.4,
+    49.6
+   ],
+   "handR": [
+    46.5,
+    70.2
+   ],
+   "handL": [
+    48.7,
+    72.3
+   ],
+   "angle": 135.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit1",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.4,
+    58.1
+   ],
+   "shL": [
+    54.9,
+    64.0
+   ],
+   "footL": [
+    55.5,
+    93.6
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    49.4,
+    74.4
+   ],
+   "tip": [
+    40.4,
+    53.3
+   ],
+   "handR": [
+    48.9,
+    73.0
+   ],
+   "handL": [
+    50.0,
+    75.7
+   ],
+   "angle": 113.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "cape",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit1",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.5,
+    58.1
+   ],
+   "shL": [
+    53.7,
+    63.7
+   ],
+   "footL": [
+    55.5,
+    93.6
+   ],
+   "footR": [
+    47.8,
+    94.7
+   ],
+   "grip": [
+    47.8,
+    74.1
+   ],
+   "tip": [
+    43.5,
+    53.6
+   ],
+   "handR": [
+    47.5,
+    73.1
+   ],
+   "handL": [
+    48.0,
+    75.1
+   ],
+   "angle": 101.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "cape",
+    "armL",
+    "torso",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit1",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.3,
+    60.2
+   ],
+   "shL": [
+    56.1,
+    66.6
+   ],
+   "footL": [
+    58.4,
+    95.1
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    56.9,
+    83.9
+   ],
+   "tip": [
+    81.0,
+    94.3
+   ],
+   "handR": [
+    58.2,
+    84.4
+   ],
+   "handL": [
+    55.7,
+    83.4
+   ],
+   "angle": 336.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit1",
+   "frame": 4,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.1,
+    60.2
+   ],
+   "shL": [
+    56.8,
+    67.4
+   ],
+   "footL": [
+    58.4,
+    95.1
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    59.1,
+    81.7
+   ],
+   "tip": [
+    61.2,
+    79.9
+   ],
+   "handR": [
+    59.2,
+    81.6
+   ],
+   "handL": [
+    59.0,
+    81.8
+   ],
+   "angle": 40.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit1",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.0
+   ],
+   "head": [
+    52.2,
+    59.2
+   ],
+   "shL": [
+    56.7,
+    66.1
+   ],
+   "footL": [
+    57.7,
+    94.7
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    55.5,
+    76.6
+   ],
+   "tip": [
+    43.1,
+    55.6
+   ],
+   "handR": [
+    54.9,
+    75.6
+   ],
+   "handL": [
+    56.2,
+    77.7
+   ],
+   "angle": 120.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit1",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    52.2,
+    58.7
+   ],
+   "shL": [
+    56.7,
+    65.6
+   ],
+   "footL": [
+    57.7,
+    94.7
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    55.5,
+    76.1
+   ],
+   "tip": [
+    43.1,
+    55.1
+   ],
+   "handR": [
+    54.9,
+    75.1
+   ],
+   "handL": [
+    56.2,
+    77.2
+   ],
+   "angle": 120.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit1",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.2,
+    58.2
+   ],
+   "shL": [
+    56.7,
+    65.1
+   ],
+   "footL": [
+    57.7,
+    94.7
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    55.5,
+    75.6
+   ],
+   "tip": [
+    43.1,
+    54.6
+   ],
+   "handR": [
+    54.9,
+    74.6
+   ],
+   "handL": [
+    56.2,
+    76.7
+   ],
+   "angle": 120.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit1",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.2,
+    58.2
+   ],
+   "shL": [
+    56.7,
+    65.1
+   ],
+   "footL": [
+    57.7,
+    94.7
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    55.5,
+    75.6
+   ],
+   "tip": [
+    43.1,
+    54.6
+   ],
+   "handR": [
+    54.9,
+    74.6
+   ],
+   "handL": [
+    56.2,
+    76.7
+   ],
+   "angle": 120.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.2,
+    60.2
+   ],
+   "shL": [
+    56.7,
+    67.1
+   ],
+   "footL": [
+    57.7,
+    94.7
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    54.8,
+    81.3
+   ],
+   "tip": [
+    48.5,
+    87.6
+   ],
+   "handR": [
+    54.5,
+    81.6
+   ],
+   "handL": [
+    55.1,
+    81.0
+   ],
+   "angle": 224.9,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "armL",
+    "sword",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.4,
+    58.2
+   ],
+   "shL": [
+    55.5,
+    64.2
+   ],
+   "footL": [
+    57.7,
+    94.7
+   ],
+   "footR": [
+    50.6,
+    95.4
+   ],
+   "grip": [
+    56.2,
+    74.8
+   ],
+   "tip": [
+    60.5,
+    59.2
+   ],
+   "handR": [
+    56.5,
+    74.0
+   ],
+   "handL": [
+    56.0,
+    75.6
+   ],
+   "angle": 74.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit2",
+   "frame": 3,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.4,
+    57.1
+   ],
+   "shL": [
+    54.9,
+    63.0
+   ],
+   "footL": [
+    57.7,
+    94.7
+   ],
+   "footR": [
+    50.6,
+    95.4
+   ],
+   "grip": [
+    52.7,
+    65.8
+   ],
+   "tip": [
+    56.9,
+    41.5
+   ],
+   "handR": [
+    52.9,
+    64.6
+   ],
+   "handL": [
+    52.5,
+    67.0
+   ],
+   "angle": 80.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "cape",
+    "armL",
+    "torso",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.4,
+    57.1
+   ],
+   "shL": [
+    54.9,
+    63.0
+   ],
+   "footL": [
+    56.9,
+    94.4
+   ],
+   "footR": [
+    49.9,
+    95.1
+   ],
+   "grip": [
+    51.3,
+    68.1
+   ],
+   "tip": [
+    56.8,
+    45.2
+   ],
+   "handR": [
+    51.6,
+    66.9
+   ],
+   "handL": [
+    51.0,
+    69.2
+   ],
+   "angle": 76.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "cape",
+    "armL",
+    "torso",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.4,
+    57.1
+   ],
+   "shL": [
+    54.9,
+    63.0
+   ],
+   "footL": [
+    56.9,
+    94.4
+   ],
+   "footR": [
+    49.9,
+    95.1
+   ],
+   "grip": [
+    50.6,
+    66.7
+   ],
+   "tip": [
+    54.8,
+    42.5
+   ],
+   "handR": [
+    50.8,
+    65.5
+   ],
+   "handL": [
+    50.4,
+    67.9
+   ],
+   "angle": 80.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "cape",
+    "armL",
+    "torso",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.4,
+    57.1
+   ],
+   "shL": [
+    54.9,
+    63.0
+   ],
+   "footL": [
+    56.9,
+    94.4
+   ],
+   "footR": [
+    49.9,
+    95.1
+   ],
+   "grip": [
+    50.6,
+    63.0
+   ],
+   "tip": [
+    44.2,
+    31.2
+   ],
+   "handR": [
+    50.3,
+    61.4
+   ],
+   "handL": [
+    50.9,
+    64.6
+   ],
+   "angle": 101.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "cape",
+    "armL",
+    "sword",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.4,
+    57.1
+   ],
+   "shL": [
+    54.9,
+    63.0
+   ],
+   "footL": [
+    56.9,
+    94.4
+   ],
+   "footR": [
+    49.9,
+    95.1
+   ],
+   "grip": [
+    50.6,
+    63.0
+   ],
+   "tip": [
+    44.2,
+    31.2
+   ],
+   "handR": [
+    50.3,
+    61.4
+   ],
+   "handL": [
+    50.9,
+    64.6
+   ],
+   "angle": 101.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "cape",
+    "armL",
+    "sword",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.4,
+    57.1
+   ],
+   "shL": [
+    54.9,
+    63.0
+   ],
+   "footL": [
+    56.9,
+    94.4
+   ],
+   "footR": [
+    49.9,
+    95.1
+   ],
+   "grip": [
+    50.6,
+    63.0
+   ],
+   "tip": [
+    44.2,
+    31.2
+   ],
+   "handR": [
+    50.3,
+    61.4
+   ],
+   "handL": [
+    50.9,
+    64.6
+   ],
+   "angle": 101.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "cape",
+    "armL",
+    "sword",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit3",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    52.3,
+    61.2
+   ],
+   "shL": [
+    55.8,
+    67.4
+   ],
+   "footL": [
+    59.1,
+    95.4
+   ],
+   "footR": [
+    49.9,
+    95.1
+   ],
+   "grip": [
+    56.9,
+    81.2
+   ],
+   "tip": [
+    82.9,
+    99
+   ],
+   "handR": [
+    57.8,
+    82.5
+   ],
+   "handL": [
+    56.1,
+    79.9
+   ],
+   "angle": 325.5,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 2,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    81.0
+   ],
+   "head": [
+    52.3,
+    62.2
+   ],
+   "shL": [
+    55.8,
+    68.4
+   ],
+   "footL": [
+    59.1,
+    95.4
+   ],
+   "footR": [
+    49.9,
+    95.1
+   ],
+   "grip": [
+    57.7,
+    87.5
+   ],
+   "tip": [
+    83.9,
+    99
+   ],
+   "handR": [
+    58.6,
+    88.6
+   ],
+   "handL": [
+    56.7,
+    86.5
+   ],
+   "angle": 336.4,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    52.3,
+    61.2
+   ],
+   "shL": [
+    55.8,
+    67.4
+   ],
+   "footL": [
+    59.1,
+    95.4
+   ],
+   "footR": [
+    49.9,
+    95.1
+   ],
+   "grip": [
+    56.9,
+    87.2
+   ],
+   "tip": [
+    82.2,
+    99
+   ],
+   "handR": [
+    58.0,
+    88.1
+   ],
+   "handL": [
+    55.9,
+    86.2
+   ],
+   "angle": 334.9,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    52.3,
+    61.2
+   ],
+   "shL": [
+    55.8,
+    67.4
+   ],
+   "footL": [
+    58.4,
+    95.1
+   ],
+   "footR": [
+    49.9,
+    95.1
+   ],
+   "grip": [
+    56.2,
+    85.8
+   ],
+   "tip": [
+    79.3,
+    99
+   ],
+   "handR": [
+    57.3,
+    86.7
+   ],
+   "handL": [
+    55.2,
+    85.0
+   ],
+   "angle": 330.3,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.3,
+    60.2
+   ],
+   "shL": [
+    55.7,
+    66.3
+   ],
+   "footL": [
+    57.7,
+    94.7
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    54.8,
+    85.8
+   ],
+   "tip": [
+    74.7,
+    99
+   ],
+   "handR": [
+    55.8,
+    86.6
+   ],
+   "handL": [
+    53.9,
+    85.1
+   ],
+   "angle": 326.5,
+   "tip_lifted_for_margin": true,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.5
+   ],
+   "head": [
+    52.3,
+    59.7
+   ],
+   "shL": [
+    55.7,
+    65.8
+   ],
+   "footL": [
+    56.9,
+    94.4
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    54.8,
+    84.8
+   ],
+   "tip": [
+    73.6,
+    93.3
+   ],
+   "handR": [
+    55.8,
+    85.3
+   ],
+   "handL": [
+    53.9,
+    84.4
+   ],
+   "angle": 335.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    52.4,
+    58.7
+   ],
+   "shL": [
+    55.5,
+    64.7
+   ],
+   "footL": [
+    55.5,
+    93.6
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    50.9,
+    77.2
+   ],
+   "tip": [
+    48.2,
+    65.4
+   ],
+   "handR": [
+    50.5,
+    75.7
+   ],
+   "handL": [
+    51.2,
+    78.7
+   ],
+   "angle": 102.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.4,
+    57.2
+   ],
+   "shL": [
+    55.5,
+    63.2
+   ],
+   "footL": [
+    55.5,
+    93.6
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    47.6,
+    71.2
+   ],
+   "tip": [
+    25.4,
+    49.6
+   ],
+   "handR": [
+    46.5,
+    70.2
+   ],
+   "handL": [
+    48.7,
+    72.3
+   ],
+   "angle": 135.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 9,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.4,
+    57.2
+   ],
+   "shL": [
+    55.5,
+    63.2
+   ],
+   "footL": [
+    55.5,
+    93.6
+   ],
+   "footR": [
+    49.2,
+    94.7
+   ],
+   "grip": [
+    47.6,
+    71.2
+   ],
+   "tip": [
+    25.4,
+    49.6
+   ],
+   "handR": [
+    46.5,
+    70.2
+   ],
+   "handL": [
+    48.7,
+    72.3
+   ],
+   "angle": 135.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "cape",
+    "medal",
+    "torso",
+    "armL",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit3",
+   "frame": 10,
+   "visual_hit": false
+  }
+ ],
+ "east": [
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.5,
+    57.0
+   ],
+   "shL": [
+    52.0,
+    62.5
+   ],
+   "footL": [
+    54.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    54.5,
+    73.3
+   ],
+   "tip": [
+    76.6,
+    51.6
+   ],
+   "handR": [
+    55.5,
+    72.2
+   ],
+   "handL": [
+    53.4,
+    74.3
+   ],
+   "angle": 44.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "cape",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit1",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.5,
+    58.0
+   ],
+   "shL": [
+    51.1,
+    63.5
+   ],
+   "footL": [
+    54.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    54.7,
+    75.1
+   ],
+   "tip": [
+    71.8,
+    52.4
+   ],
+   "handR": [
+    55.6,
+    73.9
+   ],
+   "handL": [
+    53.8,
+    76.3
+   ],
+   "angle": 53.2,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "cape",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit1",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.5,
+    57.9
+   ],
+   "shL": [
+    49.9,
+    63.7
+   ],
+   "footL": [
+    54.0,
+    92.5
+   ],
+   "footR": [
+    50.0,
+    96.0
+   ],
+   "grip": [
+    52.0,
+    75.0
+   ],
+   "tip": [
+    58.0,
+    54.1
+   ],
+   "handR": [
+    52.3,
+    74.0
+   ],
+   "handL": [
+    51.7,
+    76.0
+   ],
+   "angle": 74.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "torso",
+    "armL",
+    "cape",
+    "armR",
+    "sword"
+   ],
+   "hit": "hit1",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.5,
+    60.0
+   ],
+   "shL": [
+    52.9,
+    65.5
+   ],
+   "footL": [
+    58.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    61.0,
+    81.0
+   ],
+   "tip": [
+    90.6,
+    80.3
+   ],
+   "handR": [
+    62.5,
+    81.0
+   ],
+   "handL": [
+    59.5,
+    81.0
+   ],
+   "angle": 1.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "cape",
+    "torso",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit1",
+   "frame": 4,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.4,
+    60.1
+   ],
+   "shL": [
+    54.5,
+    65.8
+   ],
+   "footL": [
+    58.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    58.0,
+    79.0
+   ],
+   "tip": [
+    40.1,
+    80.5
+   ],
+   "handR": [
+    57.1,
+    79.1
+   ],
+   "handL": [
+    58.9,
+    78.9
+   ],
+   "angle": 184.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "cape",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit1",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.0
+   ],
+   "head": [
+    52.5,
+    59.1
+   ],
+   "shL": [
+    54.1,
+    64.7
+   ],
+   "footL": [
+    57.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    54.0,
+    75.5
+   ],
+   "tip": [
+    26.7,
+    62.7
+   ],
+   "handR": [
+    52.6,
+    74.9
+   ],
+   "handL": [
+    55.4,
+    76.1
+   ],
+   "angle": 154.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "cape",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit1",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    52.5,
+    58.6
+   ],
+   "shL": [
+    54.1,
+    64.2
+   ],
+   "footL": [
+    57.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    54.0,
+    75.0
+   ],
+   "tip": [
+    26.7,
+    62.2
+   ],
+   "handR": [
+    52.6,
+    74.4
+   ],
+   "handL": [
+    55.4,
+    75.6
+   ],
+   "angle": 154.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "cape",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit1",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.5,
+    58.1
+   ],
+   "shL": [
+    54.1,
+    63.7
+   ],
+   "footL": [
+    57.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    54.0,
+    74.5
+   ],
+   "tip": [
+    26.7,
+    61.7
+   ],
+   "handR": [
+    52.6,
+    73.9
+   ],
+   "handL": [
+    55.4,
+    75.1
+   ],
+   "angle": 154.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "cape",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit1",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.5,
+    58.1
+   ],
+   "shL": [
+    54.1,
+    63.7
+   ],
+   "footL": [
+    57.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    54.0,
+    74.5
+   ],
+   "tip": [
+    26.7,
+    61.7
+   ],
+   "handR": [
+    52.6,
+    73.9
+   ],
+   "handL": [
+    55.4,
+    75.1
+   ],
+   "angle": 154.8,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "cape",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.5,
+    60.1
+   ],
+   "shL": [
+    54.1,
+    65.7
+   ],
+   "footL": [
+    57.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    53.0,
+    80.5
+   ],
+   "tip": [
+    32.1,
+    92.4
+   ],
+   "handR": [
+    52.0,
+    81.1
+   ],
+   "handL": [
+    54.0,
+    79.9
+   ],
+   "angle": 209.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "sword",
+    "cape",
+    "torso",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 2,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.0
+   ],
+   "head": [
+    52.5,
+    58.0
+   ],
+   "shL": [
+    52.0,
+    63.5
+   ],
+   "footL": [
+    57.0,
+    92.5
+   ],
+   "footR": [
+    53.0,
+    95.5
+   ],
+   "grip": [
+    59.0,
+    72.5
+   ],
+   "tip": [
+    74.2,
+    52.8
+   ],
+   "handR": [
+    59.8,
+    71.5
+   ],
+   "handL": [
+    58.2,
+    73.5
+   ],
+   "angle": 52.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "cape",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 3,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.5,
+    57.0
+   ],
+   "shL": [
+    51.1,
+    62.5
+   ],
+   "footL": [
+    57.0,
+    92.5
+   ],
+   "footR": [
+    53.0,
+    95.5
+   ],
+   "grip": [
+    55.0,
+    65.0
+   ],
+   "tip": [
+    64.0,
+    38.0
+   ],
+   "handR": [
+    55.4,
+    63.7
+   ],
+   "handL": [
+    54.6,
+    66.3
+   ],
+   "angle": 71.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "cape",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.5,
+    57.0
+   ],
+   "shL": [
+    51.1,
+    62.5
+   ],
+   "footL": [
+    56.0,
+    92.5
+   ],
+   "footR": [
+    52.0,
+    95.5
+   ],
+   "grip": [
+    53.0,
+    68.0
+   ],
+   "tip": [
+    63.8,
+    41.7
+   ],
+   "handR": [
+    53.5,
+    66.7
+   ],
+   "handL": [
+    52.5,
+    69.3
+   ],
+   "angle": 67.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "cape",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.5,
+    57.0
+   ],
+   "shL": [
+    51.1,
+    62.5
+   ],
+   "footL": [
+    56.0,
+    92.5
+   ],
+   "footR": [
+    52.0,
+    95.5
+   ],
+   "grip": [
+    52.0,
+    67.0
+   ],
+   "tip": [
+    61.0,
+    40.0
+   ],
+   "handR": [
+    52.4,
+    65.7
+   ],
+   "handL": [
+    51.6,
+    68.3
+   ],
+   "angle": 71.6,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "cape",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.5,
+    57.0
+   ],
+   "shL": [
+    51.1,
+    62.5
+   ],
+   "footL": [
+    56.0,
+    92.5
+   ],
+   "footR": [
+    52.0,
+    95.5
+   ],
+   "grip": [
+    51.0,
+    63.5
+   ],
+   "tip": [
+    42.0,
+    34.9
+   ],
+   "handR": [
+    50.5,
+    62.1
+   ],
+   "handL": [
+    51.5,
+    64.9
+   ],
+   "angle": 107.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "cape",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.5,
+    57.0
+   ],
+   "shL": [
+    51.1,
+    62.5
+   ],
+   "footL": [
+    56.0,
+    92.5
+   ],
+   "footR": [
+    52.0,
+    95.5
+   ],
+   "grip": [
+    51.0,
+    63.5
+   ],
+   "tip": [
+    42.0,
+    34.9
+   ],
+   "handR": [
+    50.5,
+    62.1
+   ],
+   "handL": [
+    51.5,
+    64.9
+   ],
+   "angle": 107.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "cape",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit2",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.5,
+    57.0
+   ],
+   "shL": [
+    51.1,
+    62.5
+   ],
+   "footL": [
+    56.0,
+    92.5
+   ],
+   "footR": [
+    52.0,
+    95.5
+   ],
+   "grip": [
+    51.0,
+    63.5
+   ],
+   "tip": [
+    42.0,
+    34.9
+   ],
+   "handR": [
+    50.5,
+    62.1
+   ],
+   "handL": [
+    51.5,
+    64.9
+   ],
+   "angle": 107.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "cape",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit3",
+   "frame": 1,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    52.5,
+    61.0
+   ],
+   "shL": [
+    52.4,
+    66.5
+   ],
+   "footL": [
+    59.0,
+    92.5
+   ],
+   "footR": [
+    52.0,
+    95.5
+   ],
+   "grip": [
+    60.0,
+    78.5
+   ],
+   "tip": [
+    84.0,
+    96.5
+   ],
+   "handR": [
+    61.2,
+    79.4
+   ],
+   "handL": [
+    58.8,
+    77.6
+   ],
+   "angle": 323.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "cape",
+    "torso",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit3",
+   "frame": 2,
+   "visual_hit": true
+  },
+  {
+   "hip": [
+    52.0,
+    81.0
+   ],
+   "head": [
+    52.5,
+    62.0
+   ],
+   "shL": [
+    52.4,
+    67.5
+   ],
+   "footL": [
+    59.0,
+    92.5
+   ],
+   "footR": [
+    52.0,
+    95.5
+   ],
+   "grip": [
+    61.0,
+    84.5
+   ],
+   "tip": [
+    89.0,
+    95.4
+   ],
+   "handR": [
+    62.4,
+    85.0
+   ],
+   "handL": [
+    59.6,
+    84.0
+   ],
+   "angle": 338.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "cape",
+    "torso",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit3",
+   "frame": 3,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    52.5,
+    61.0
+   ],
+   "shL": [
+    52.4,
+    66.5
+   ],
+   "footL": [
+    59.0,
+    92.5
+   ],
+   "footR": [
+    52.0,
+    95.5
+   ],
+   "grip": [
+    60.0,
+    84.5
+   ],
+   "tip": [
+    88.6,
+    93.5
+   ],
+   "handR": [
+    61.4,
+    85.0
+   ],
+   "handL": [
+    58.6,
+    84.0
+   ],
+   "angle": 342.5,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "cape",
+    "torso",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit3",
+   "frame": 4,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    80.0
+   ],
+   "head": [
+    52.5,
+    61.0
+   ],
+   "shL": [
+    52.4,
+    66.5
+   ],
+   "footL": [
+    58.0,
+    92.5
+   ],
+   "footR": [
+    52.0,
+    95.5
+   ],
+   "grip": [
+    59.0,
+    83.5
+   ],
+   "tip": [
+    88.4,
+    89.7
+   ],
+   "handR": [
+    60.5,
+    83.8
+   ],
+   "handL": [
+    57.5,
+    83.2
+   ],
+   "angle": 348.1,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "cape",
+    "torso",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit3",
+   "frame": 5,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    79.0
+   ],
+   "head": [
+    52.5,
+    60.0
+   ],
+   "shL": [
+    52.3,
+    65.5
+   ],
+   "footL": [
+    57.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    58.0,
+    84.0
+   ],
+   "tip": [
+    87.7,
+    88.5
+   ],
+   "handR": [
+    59.5,
+    84.2
+   ],
+   "handL": [
+    56.5,
+    83.8
+   ],
+   "angle": 351.3,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "cape",
+    "torso",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit3",
+   "frame": 6,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    78.5
+   ],
+   "head": [
+    52.5,
+    59.5
+   ],
+   "shL": [
+    52.2,
+    65.0
+   ],
+   "footL": [
+    56.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    58.0,
+    83.0
+   ],
+   "tip": [
+    87.7,
+    81.4
+   ],
+   "handR": [
+    59.5,
+    82.9
+   ],
+   "handL": [
+    56.5,
+    83.1
+   ],
+   "angle": 3.0,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "cape",
+    "torso",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit3",
+   "frame": 7,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    77.5
+   ],
+   "head": [
+    52.5,
+    58.5
+   ],
+   "shL": [
+    52.0,
+    64.0
+   ],
+   "footL": [
+    54.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    56.2,
+    77.4
+   ],
+   "tip": [
+    80.8,
+    61.0
+   ],
+   "handR": [
+    57.5,
+    76.6
+   ],
+   "handL": [
+    55.0,
+    78.2
+   ],
+   "angle": 33.7,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "cape",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit3",
+   "frame": 8,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.5,
+    57.0
+   ],
+   "shL": [
+    52.0,
+    62.5
+   ],
+   "footL": [
+    54.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    54.5,
+    73.3
+   ],
+   "tip": [
+    76.6,
+    51.6
+   ],
+   "handR": [
+    55.5,
+    72.2
+   ],
+   "handL": [
+    53.4,
+    74.3
+   ],
+   "angle": 44.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "cape",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit3",
+   "frame": 9,
+   "visual_hit": false
+  },
+  {
+   "hip": [
+    52.0,
+    76.0
+   ],
+   "head": [
+    52.5,
+    57.0
+   ],
+   "shL": [
+    52.0,
+    62.5
+   ],
+   "footL": [
+    54.0,
+    92.5
+   ],
+   "footR": [
+    51.0,
+    95.5
+   ],
+   "grip": [
+    54.5,
+    73.3
+   ],
+   "tip": [
+    76.6,
+    51.6
+   ],
+   "handR": [
+    55.5,
+    72.2
+   ],
+   "handL": [
+    53.4,
+    74.3
+   ],
+   "angle": 44.4,
+   "tip_lifted_for_margin": false,
+   "draw_order_far_to_near": [
+    "medal",
+    "armL",
+    "torso",
+    "cape",
+    "sword",
+    "armR"
+   ],
+   "hit": "hit3",
+   "frame": 10,
+   "visual_hit": false
+  }
+ ]
+}

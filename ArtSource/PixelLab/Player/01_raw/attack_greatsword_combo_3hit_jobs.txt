@@ -1,0 +1,76 @@
+53e0dfd5-a8aa-404a-888f-708302b4a5e1 south group=a22b63d0-19c9-4427-9076-9d5e7b1c7912 pixminimax 24f
+967e4c3a-a08b-4d94-86f5-b39ef4241037 south
+a924e70a-d903-46e6-9d75-9783f9d2ce77 south v2 group=ecca3cfb-e5e5-4159-adb0-45181a3cc541 (v1 탈락: 잔상·옆돌기·칼 밖) (v2 탈락: 잔상 6프레임)
+96edd739-db26-4585-8efd-fd082d82e1b2 south
+8befe6b0-aace-4ca4-ac0e-f7eb624ad518 south v3 group=ca3b96e0-9cb7-4d2e-8e1f-255250b6ea25 pixminimax 24f
+40bd7f73-ae65-4fce-9d2d-e5d640ca2c98 south
+986ecfde-4512-4a08-9d6b-42e2adb23495 south hit1 v3 8f group=5cb6120b-bdd1-44c0-83cb-a3c2f051dcfa
+5f2cf8fb-febc-4bfa-99b2-1dda3104e227 south hit2 v3 8f group=c3df72af-23f1-4a45-8a8a-d7b8b08dcf10
+2334c765-3924-4349-802f-92af0bb025d7 south hit3 v3 8f group=ecc584fc-3385-4a15-ae34-619427afe8b6
+9a399fc0-fb71-449a-bad5-e08ef98ea1ac east hit1 v3 8f group=ec7222fc
+65b89f68-1197-42ae-806d-0f22956c9bb1 north-east hit1 v3 8f group=b491038f (탈락: 6~8 잔상 선)
+77671142-3f6b-4860-96ce-e9e29b0b4f3e north hit1 v3 8f group=170e5d0f
+24ad48d7-ff50-40f8-a852-a97dc8941694 north-west hit1 v3 8f group=4d499277 (탈락: 6~8 잔상 선)
+7ea4c45e-b73f-4601-8f60-f54c2ec35f2e west hit1 v3 8f group=12f8b2f1
+af3a1fdf-4da6-468b-81b6-501e720487b4 south-west hit1 v3 8f group=7b6e5eef
+56b7d539-d68a-4d84-b9e6-2e080e560cbb south-east hit1 v3 8f group=ee9a0b88
+93f8722d-0838-41f3-b4b5-cc1c6d10fcc2 north-east hit1 v3 8f group=83f0f336
+bfc3ff69-725c-4679-ab19-a37a7cda2bed north-west hit1 v3 8f group=9c7d7093 (탈락: 6~8 정면으로 돎)
+c3a2be7f-0759-4b86-8462-f1a44c74c1c8 east hit2 v3 8f group=4e3c6497
+4fd8e80c-f37e-4dcd-99f9-90307539178a north hit2 v3 8f group=26c5f2dd
+0795d042-f245-439a-b015-df1201797ce5 west hit2 v3 8f group=ac23419d
+a9f7aa16-d13e-416f-a148-1d1071ad84e1 south-west hit2 v3 8f group=2df2dd16
+f7eb8678-3c3d-4267-8006-ee003f733ad0 south-east hit2 v3 8f group=7d30424b
+44eba7c9-0fcb-40b8-a489-e9be2a309bab north-west hit1 v3 8f group=60c867aa
+f9a72d7d-0f7f-4760-bd36-2e9171242108 north-east hit2 v3 8f group=b07a36b6 (탈락: 정면으로 돎·칼 두 자루)
+45527750-5bde-4d70-9527-fc86ae258fd2 east hit3 v3 8f group=4cfa9455
+e168e212-c7ae-47d5-9b6b-d8eec767518c north hit3 v3 8f group=2752e332
+3fe41f88-8091-4e1c-bead-a4c79e4c41f2 west hit3 v3 8f group=06405551
+39da95f5-232d-459a-8525-45c6bb55c395 south-west hit3 v3 8f group=bc4a9a7a
+60383500-a6ba-4c6a-8fcc-89dd5e10270a south-east hit3 v3 8f group=c49d0bb1
+dfc6625a-928f-4528-b010-e4e0b34f773d north-east hit2 v3 8f group=a0d5adc2 (탈락: 정면으로 돎)
+b1b0ab0f-30d5-44f5-8745-924660fc2aec north-west hit2 v3 8f group=9cf0dca5
+9d925ad4-6e1d-4c5d-b500-2c2dc1fd09fa north-east hit2 v3 8f group=5613511a (탈락: 10~13 정면으로 돎)
+cc1998e9-cb98-4585-9ba0-75493866ec28 north-west hit3 v3 8f group=86c1b4f5
+05b27bc0-d392-484b-9ba9-7caa9b2d8c4b north-east hit2 v3 8f group=67201863
+6d5fcadf-b22b-420e-840d-96904ba33407 north-east hit3 v3 8f group=8fee52d7 (탈락: 17~20 정지·22~23 잔상)
+89bea286-e8ef-49cd-b370-c2150fadffa5 north-east hit3 v3 8f group=0e56f096
+5b0c2f4b-7fd4-4703-bbc4-c3b3798e1154 south-west
+7184721c-54f4-4ded-84c9-80b88f0b9db9 south-east
+5394f1f4-4920-4355-96e4-2863d2fb5167 west
+c49197fa-4ec8-4f23-933f-a58e0366cdc7 north
+25510708-0a98-49fd-999e-94d1b0c6b53e north-west
+3ab3344e-cf3f-4cfd-a7f3-af392b841772 north-east
+af3a1911-5f82-43e0-a48c-a98f2b03fee2 east
+# 11/03 big_v1 탈락: N·NE 몸 돎, E 2타 칼 멈춤, S 마지막 칼 위로, W·NW 검 어색 (SE·SW 유지, SE=기준)
+8875eaf6-71b8-4ed3-981a-3bc95c63e261 north big_v2 group=e215250f
+a37cd34d-d123-4c00-9ba0-1ee24bfd960f north-east big_v2 group=2389364b
+6c1ddb67-f572-4adc-8a6e-0f2839959f8b east big_v2 group=6a01458a
+cf137fca-9989-4d2f-a2f4-92f647bef813 south big_v2 group=36e4d1d7
+dd534cf7-a1c7-43a6-bf2a-d561fcfca645 west big_v2 group=f8c5d1c3
+30ef750c-9f0c-4c52-a00a-cfe8af8417bb north-west big_v2 group=94c937f3
+# 11/03 big_v2 N·NE 탈락: 몸 정면으로 돎
+39ed815c-f911-4264-8ff3-a7ba41334353 north big_v3 group=61834505
+9722918a-22d7-417c-9b3f-56514cf4127e north-east big_v3 group=cd180569
+# 11/03 big_v3 N·NE 탈락: N 6~11 정면, 둘 다 얼굴 깨짐
+f1ccafe9-35d9-404a-b4fa-998d6856098b north big_v4 group=1da97790
+07d7f376-eb70-405b-a620-623cfcdeab53 north-east big_v4 group=37ad870b
+# 11/03 big_v4 N·NE 탈락: N 4번 베는 듯(약2강1로), NE 5~8 몸 틀어짐
+2cff47b8-6080-4a82-b0ad-d3b44cc5fb67 north big_v5 group=13ad7716
+d3ce1e4f-5641-4b6f-8baa-c68367039687 north-east big_v5 group=a3aa6dde
+# 11/03 big_v5 N·NE: N 강타 칼끝 아래, NE 6~8 가슴
+f4adad5f-c094-4bdf-b709-f8d5c3bccfc3 north big_v6 group=fe0026e1
+e5b2a0b5-da17-4f01-be24-bc9f07564591 north-east big_v6 group=88b7053d
+00bfb6c8-491f-40fd-9b83-bdf3d98c4ac4 south b1 pixminimax 24f group=1f89fdec (2026-11-06)
+16dc6279-0342-4f29-9a39-0cfba825fc68 north b1 group=1f89fdec (2026-11-06)
+a35d6631-95fa-4691-9c3f-d25b1e7068bb north-west b1 group=1f89fdec (2026-11-06)
+61da92a3-6c4f-41a0-ba94-5c2002abfd96 west b1 group=1f89fdec (2026-11-06)
+184124c0-24a4-4cf6-86a5-452b339af792 south-east b1 group=1f89fdec (2026-11-06)
+703722ff-d973-4016-8105-d955fcd04c4f south-west b1 group=1f89fdec (2026-11-06)
+94578c7e-bf1f-41fe-b634-7973638bd4ce north-east b1 group=1f89fdec (2026-11-06)
+a32932ce-75e7-49f4-9f2c-db4af88c1aca east b1 group=1f89fdec (2026-11-06)
+438904a2-25f3-49a0-ae15-876d05682258 west b2 (2026-11-06)
+e79c33aa-037b-48df-8baf-d3132694768a north-west b2 (2026-11-06)
+80705eae-c278-48bc-b0dc-08caee9f1a75 south-east b2 (2026-11-06)
+4a3bf898-c985-4383-9d0d-267d2590e31a north-east b2 (2026-11-06)
+74abb15d-e7f5-477c-a6bb-6e30e2c4c433 east b2 (2026-11-06)

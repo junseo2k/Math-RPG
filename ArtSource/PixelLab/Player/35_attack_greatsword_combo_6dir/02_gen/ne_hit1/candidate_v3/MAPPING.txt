@@ -1,0 +1,9 @@
+f1 = candidate_v2/frame_00
+f2 = candidate_v2/frame_01
+f3 = candidate_v2/frame_02
+f4 = candidate_v2/frame_04
+f5 = candidate_v2/frame_05
+f6 = candidate_v2/frame_06
+f7 = candidate_v2/frame_07
+f8 = candidate_v2/frame_08
+생성 3 제외 (2026-11-13 사용자 결정). f1 = 입력 idle.

@@ -1,0 +1,231 @@
+{
+ "idle": "C:\\Users\\이준서\\Documents\\GitHub\\Math_RPG_Test\\ArtSource\\PixelLab\\Player\\16_idle_greatsword_pauldron_breath\\2_north_1.png",
+ "head_donor": "C:\\Users\\이준서\\Documents\\GitHub\\Math_RPG_Test\\ArtSource\\PixelLab\\Player\\12_run_calm\\2_north.png frame 2",
+ "run_shift": [
+  -1,
+  1
+ ],
+ "offset": [
+  16,
+  40
+ ],
+ "frames": {
+  "hit1_f5": {
+   "frame": 5,
+   "stage": "베기: 오른쪽으로",
+   "grip": [
+    53,
+    69
+   ],
+   "sword_angle": 12,
+   "foreshorten": 0.95,
+   "depth": "behind",
+   "tip": [
+    83.9,
+    62.4
+   ],
+   "pommel": [
+    47.1,
+    70.3
+   ],
+   "hand_A": [
+    55.0,
+    68.6
+   ],
+   "hand_B": [
+    51.0,
+    69.4
+   ],
+   "elbow_A": [
+    56.4,
+    77.5
+   ],
+   "elbow_B": [
+    46.4,
+    77.1
+   ],
+   "shoulder_A": [
+    53.4,
+    69
+   ],
+   "shoulder_B": [
+    42.4,
+    69
+   ],
+   "twist": 0.7,
+   "knee_bend": 1,
+   "feet": [
+    [
+     39,
+     93
+    ],
+    [
+     50,
+     93
+    ]
+   ],
+   "foot_centre": [
+    44.5,
+    93
+   ],
+   "source": "stick/coords.json",
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "lift": 0,
+   "head_shift": [
+    1,
+    1
+   ]
+  },
+  "hit2_f8": {
+   "frame": 8,
+   "stage": "끝: 양손·검 머리 위",
+   "grip": [
+    48,
+    51
+   ],
+   "sword_angle": 93,
+   "foreshorten": 0.65,
+   "depth": "over",
+   "tip": [
+    46.9,
+    29.4
+   ],
+   "pommel": [
+    48.2,
+    55.2
+   ],
+   "hand_A": [
+    47.9,
+    49.0
+   ],
+   "hand_B": [
+    48.1,
+    53.0
+   ],
+   "elbow_A": [
+    49.0,
+    57.9
+   ],
+   "elbow_B": [
+    48.1,
+    62.0
+   ],
+   "shoulder_A": [
+    53.0,
+    66
+   ],
+   "shoulder_B": [
+    40.0,
+    66
+   ],
+   "twist": 0.0,
+   "knee_bend": 0,
+   "feet": [
+    [
+     39,
+     93
+    ],
+    [
+     50,
+     93
+    ]
+   ],
+   "foot_centre": [
+    44.5,
+    93
+   ],
+   "source": "stick/slash02/coords.json",
+   "order": [
+    "feet",
+    "cape",
+    "arms",
+    "head",
+    "sword",
+    "hands"
+   ],
+   "lift": 2,
+   "head_shift": [
+    0,
+    0
+   ]
+  },
+  "hit3_f2": {
+   "frame": 2,
+   "stage": "내려치기(판정): 몸 앞으로",
+   "grip": [
+    49,
+    64
+   ],
+   "sword_angle": 88,
+   "foreshorten": 0.5,
+   "depth": "behind",
+   "tip": [
+    49.6,
+    47.4
+   ],
+   "pommel": [
+    48.9,
+    67.2
+   ],
+   "hand_A": [
+    49.1,
+    62.0
+   ],
+   "hand_B": [
+    48.9,
+    66.0
+   ],
+   "elbow_A": [
+    44.0,
+    69.4
+   ],
+   "elbow_B": [
+    47.6,
+    74.9
+   ],
+   "shoulder_A": [
+    53.0,
+    70
+   ],
+   "shoulder_B": [
+    40.0,
+    70
+   ],
+   "twist": 0.0,
+   "knee_bend": 2,
+   "feet": [
+    [
+     39,
+     93
+    ],
+    [
+     50,
+     93
+    ]
+   ],
+   "foot_centre": [
+    44.5,
+    93
+   ],
+   "source": "stick/slash03/coords.json",
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "lift": 0,
+   "head_shift": [
+    0,
+    2
+   ]
+  }
+ }
+}

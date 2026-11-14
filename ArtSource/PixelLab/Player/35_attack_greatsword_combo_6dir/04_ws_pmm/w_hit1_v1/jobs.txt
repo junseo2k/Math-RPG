@@ -1,0 +1,1 @@
+animate_image_pixminimax 88d21a9f-0f1f-4bc0-aae6-9b3b95a645d1 west low top-down fc8 no last frame 1gen 2026-11-13 (g0 = input)

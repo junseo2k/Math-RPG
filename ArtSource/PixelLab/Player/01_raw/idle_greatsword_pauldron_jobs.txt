@@ -1,0 +1,10 @@
+d72837d3-7ed5-4483-a256-baa15e5de2d6 south both-mask seed1 (reversed)
+6d76cad4-7003-4594-bb13-cb97a863d0fd south add viewer-right seed1
+1cce4bdc-7cb3-47af-ace8-1392c91ee1b3 south remove viewer-left seed1
+959150b6-23d0-4918-ac8b-1971b0e4fb89 e_del seed1
+0560ec8b-ec0f-465e-a65f-2d4d36d672ab ne_add seed1
+47e6bf5f-2ec6-48dd-abbd-f1f823b39295 ne_del seed1
+db58a8fe-891c-4703-b8f1-ace7a9ce7c8e n_add seed1
+b2c8961d-3288-48ab-a2e0-4e726aee3993 n_del seed1
+023a4b47-017c-4cc2-aa35-73210d611b52 se_add seed1
+287dfd64-81c0-4bf4-8d51-a17080727cc0 se_del seed1

@@ -1,0 +1,1 @@
+v7 = v6, f5만 inpaint 180° 결과(f5_angle/f5_inpaint180.png, job db1b0f33)로 교체 후 16색 정리 (2026-11-13 사용자 f5도 올리기)

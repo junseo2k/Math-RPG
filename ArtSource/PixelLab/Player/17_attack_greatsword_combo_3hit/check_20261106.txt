@@ -1,0 +1,11 @@
+east        b2 start/end idle diff 0/0  cut by 64 cell: 458 px in 17 frames  min margin 0  frames with margin<2: 18  feet offset -2..0
+north-east  b2 start/end idle diff 0/0  cut by 64 cell: 304 px in 10 frames  min margin 0  frames with margin<2: 18  feet offset 0..0
+north       b1 start/end idle diff 0/0  cut by 64 cell: 0 px in 0 frames  min margin 0  frames with margin<2: 8  feet offset 0..0
+north-west  b2 start/end idle diff 0/0  cut by 64 cell: 345 px in 14 frames  min margin 0  frames with margin<2: 16  feet offset 0..0
+west        b2 start/end idle diff 0/0  cut by 64 cell: 37 px in 5 frames  min margin 0  frames with margin<2: 18  feet offset 0..0
+south-west  b1 start/end idle diff 0/0  cut by 64 cell: 67 px in 8 frames  min margin 0  frames with margin<2: 14  feet offset -10..0
+south       b1 start/end idle diff 0/0  cut by 64 cell: 203 px in 9 frames  min margin 0  frames with margin<2: 9  feet offset -6..0
+south-east  b2 start/end idle diff 0/0  cut by 64 cell: 452 px in 18 frames  min margin 0  frames with margin<2: 19  feet offset -8..0
+visible RGB colors, all directions: 16 (limit 16), outside palette: 0
+total px cut by the 64 cell: 1866
+hard checks: PASS

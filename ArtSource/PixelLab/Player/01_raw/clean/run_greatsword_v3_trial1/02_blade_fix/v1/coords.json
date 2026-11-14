@@ -1,0 +1,85 @@
+{
+ "0": {
+  "guard": [
+   33.5,
+   34.5
+  ],
+  "angle": 45.0,
+  "old_len": 32.5,
+  "isolated_removed": 0
+ },
+ "1": {
+  "guard": [
+   35.5,
+   34.6
+  ],
+  "angle": 49.0,
+  "old_len": 31.2,
+  "isolated_removed": 0
+ },
+ "2": {
+  "guard": [
+   35.2,
+   34.1
+  ],
+  "angle": 52.4,
+  "old_len": 31.0,
+  "isolated_removed": 0,
+  "override": true
+ },
+ "3": {
+  "guard": [
+   35.0,
+   33.6
+  ],
+  "angle": 55.7,
+  "old_len": 30.5,
+  "isolated_removed": 0
+ },
+ "4": {
+  "guard": [
+   35.0,
+   32.7
+  ],
+  "angle": 56.3,
+  "old_len": 30.5,
+  "isolated_removed": 0
+ },
+ "5": {
+  "guard": [
+   35.4,
+   34.3
+  ],
+  "angle": 54.0,
+  "old_len": 31.4,
+  "isolated_removed": 0
+ },
+ "6": {
+  "guard": [
+   35.1,
+   35.0
+  ],
+  "angle": 49.7,
+  "old_len": 31.0,
+  "isolated_removed": 0,
+  "override": true
+ },
+ "7": {
+  "guard": [
+   34.8,
+   35.8
+  ],
+  "angle": 45.3,
+  "old_len": 31.8,
+  "isolated_removed": 0
+ },
+ "8": {
+  "guard": [
+   34.8,
+   34.8
+  ],
+  "angle": 45.2,
+  "old_len": 31.8,
+  "isolated_removed": 0
+ }
+}

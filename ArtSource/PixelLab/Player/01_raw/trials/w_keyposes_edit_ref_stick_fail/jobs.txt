@@ -1,0 +1,1 @@
+edit_image bcb3987b-7bfa-4949-9485-0a470a1a2c00 ref=w_idle_104 images=w_stick_08,w_stick_16 10gen 2026-11-13

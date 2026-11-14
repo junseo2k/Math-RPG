@@ -1,0 +1,15 @@
+c3ad35cb-1be2-451c-8779-c6dfe2d3a260 south
+4b34bbb7-00d2-4098-808f-35c91a6feae4 north
+c26b0a64-18cd-491f-9c40-f38c1385e063 north-east
+c11563f9-2d60-46c7-b630-d49dbd922e16 south-west
+a7bb1b71-cd0e-44a3-bbd6-8fcfe7a43582 west
+8e8a26fe-30d0-463e-9cae-92cc89fab34a north-west
+322f4a28-bf06-4a07-ba5e-8fc484f3aa05 south-east
+7d3f4173-e10f-4547-ae48-eb71768f655e east
+# retake 2026-10-31
+e3c810fc-e442-4fa7-ad44-8250aa3b5195 south-west
+540830c1-cb7a-4aa0-a944-c6d5c5e8f115 north-east
+df47534c-2a03-46d2-9052-650169f85008 east
+# retake 2 (body gap) 2026-10-31
+5a0dfb8c-c027-4535-afb4-010fbb4fa790 north-east
+8a2eb4e3-1e3e-4391-b747-1f3c22af104d north-west

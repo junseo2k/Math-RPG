@@ -1,0 +1,11 @@
+sheets 8, colours 16, alpha [0, 255]
+east WxH max 44 43 body_top range 0
+north-east WxH max 55 43 body_top range 0
+north WxH max 36 48 body_top range 0
+north-west WxH max 55 43 body_top range 0
+west WxH max 44 43 body_top range 0
+south-west WxH max 43 45 body_top range 0
+south WxH max 41 45 body_top range 0
+south-east WxH max 43 45 body_top range 0
+notes (size/margin, not failures): 0
+ALL PASS

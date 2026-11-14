@@ -1,0 +1,1 @@
+v6 = v5, f4만 inpaint 15° 결과(f4_angle/f4_inpaint15.png, job a76451f5)로 교체 후 16색 정리 (2026-11-13 사용자 15° 선택)

@@ -1,0 +1,15 @@
+# group 5305de4b-1893-4336-b8d3-2133144fded9 (idle_greatsword_pauldron_breath, v3 8f, start=end=15 교정본)
+# job south 6ec47507-bd9c-4187-8040-6025a7fef5d6
+9be98383-9f21-4c0b-8ae7-1dada134fd5c south
+# ^ south 1차 탈락: f1·f7 칼 사라짐 -> trials/idle_greatsword_pauldron_breath_sword_lost
+f549622c-7cdc-4cf0-b0da-3c895a569cb7 south
+bd7b5696-1a0d-47bb-9de9-b2de6d3a840e west
+24f9f8e4-1d43-4df1-9368-01641cd0bcc1 south-west
+da0f9e1d-95e4-4bda-a54d-228f814aaee0 east
+f0fcf4d4-3d10-44b4-9aed-d4cc022023de north
+71411c98-781d-4cfe-ac1c-11e69a8e6960 south-east
+da83b44c-d20a-452c-ac1f-5eaa53a9e20d north-west
+d1a176a7-f60b-44e5-bc32-a5c917444924 north-east
+# ^ east(da0f9e1d) 1차 탈락: f1 칼 사라짐·f2~3 칼 끊김 -> trials/idle_greatsword_pauldron_breath_sword_lost/east
+dea0ab2c-4419-411b-af6a-cd7e73cbde0b east
+# ^ east 2차 탈락: f1·f4·f5·f7·f8 칼 사라짐 -> trials/.../east2

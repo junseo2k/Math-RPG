@@ -1,0 +1,10 @@
+c22c8f4e-7095-4caa-bfef-911044822f75 job group=42c6f483-52d7-4c2f-96a6-54acda0dc21c v3 8f keep_first_frame=false
+b2cab3fe-a228-4b5c-9b3f-fba81f48ce2c east (v1 탈락: 뒷발 미끄러짐·칼 폭 변화)
+fa930efd-254c-4bb3-8267-fe2984fe11c6 job group=2a730a47-abf6-434b-acc2-22aa5c2c9968 v3 8f keep_first_frame=false
+947ea685-3a4a-4e24-ae3b-52c91a5f1716 east (v2 탈락: f7~8 정면·칼 뭉개짐·다리 벌어짐)
+0beed463-24fc-47e0-bf42-00e3b9921e06 job group=0e365916-b5e3-4d6e-a89d-a399d9179b07 v3 8f keep_first_frame=false end=end_f6_idlelegs
+88edc570-8b91-4ef6-911e-8682cb852c06 east
+f0f3f45e-0077-4a57-a6e3-cd4ea275c661 job group=90f550b0-5a5b-46ab-ab14-66bf36f71438 v3 8f fix end=end_left_key
+4a7865ef-b476-403a-885a-3a49bada6a93 east
+8d87e555-5a49-46dd-81d7-58fbfd7bba50 job group=2e13f613-871c-4055-bbd6-551292b2b755 v3 8f fix2 end=end_left_far
+0825168d-2c1a-447a-88ca-0504377e6ca3 east

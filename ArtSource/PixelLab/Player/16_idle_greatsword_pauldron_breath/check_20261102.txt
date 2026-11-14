@@ -1,0 +1,10 @@
+0_east         sheet 512x64 frames 8 alpha [0, 255] f0=ref True bbox max 45x44 margin min 6 feet(rows52-54) diff 0 head rise [0, 0, 1, 1, 1, 1, 0, 0]
+1_north-east   sheet 512x64 frames 8 alpha [0, 255] f0=ref False bbox max 55x44 margin min 4 feet(rows52-54) diff 0 head rise [0, 0, 1, 1, 1, 1, 0, 0]
+2_north        sheet 512x64 frames 8 alpha [0, 255] f0=ref True bbox max 36x49 margin min 6 feet(rows52-54) diff 0 head rise [0, 0, 1, 1, 1, 1, 0, 0]
+3_north-west   sheet 512x64 frames 8 alpha [0, 255] f0=ref True bbox max 55x44 margin min 4 feet(rows52-54) diff 0 head rise [0, 0, 1, 1, 1, 1, 0, 0]
+4_west         sheet 512x64 frames 8 alpha [0, 255] f0=ref True bbox max 45x44 margin min 7 feet(rows52-54) diff 0 head rise [0, 0, 1, 1, 1, 1, 0, 0]
+5_south-west   sheet 512x64 frames 8 alpha [0, 255] f0=ref True bbox max 44x46 margin min 4 feet(rows52-54) diff 0 head rise [0, 0, 1, 1, 1, 1, 0, 0]
+6_south        sheet 512x64 frames 8 alpha [0, 255] f0=ref True bbox max 42x46 margin min 8 feet(rows52-54) diff 0 head rise [0, 0, 1, 1, 1, 1, 0, 0]
+7_south-east   sheet 512x64 frames 8 alpha [0, 255] f0=ref True bbox max 44x46 margin min 5 feet(rows52-54) diff 0 head rise [0, 0, 1, 1, 1, 1, 0, 0]
+colors total 16
+exit 0

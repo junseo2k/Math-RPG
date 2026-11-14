@@ -1,0 +1,9 @@
+0: raw/frame_00.png
+1: raw/frame_01.png
+2: raw/frame_02.png
+3: inpaint_v1/frame_03_clean.png
+4: edit_v1_aligned/frame_04.png
+5: edit_v1_aligned/frame_05.png
+6: edit_v1_aligned/frame_06.png
+7: inpaint_v1/frame_07.png
+8: inpaint_v1/frame_08.png

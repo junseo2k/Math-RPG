@@ -1,0 +1,9 @@
+0bbe485b-a78a-405f-86ef-6c179bc0305c south
+28854394-a827-4735-ad24-d2ff253fec88 south
+8fafd246-40fc-49e9-844b-6928256cf840 north
+3282860b-0d3a-4d8e-b263-e832a559f520 west
+dcccfd97-45ab-46d4-b265-239c26a74298 north-west
+f1627385-1b7a-490e-8d14-7824efa4389e north-east
+0cc45be3-d095-4abe-8e0f-cf5dcd5d1b32 south-east
+52e3a6d4-e333-4d88-9a8d-0acc7de9f653 east
+302480ed-6c91-4f53-b21d-c6e9e02fb0e9 south-west

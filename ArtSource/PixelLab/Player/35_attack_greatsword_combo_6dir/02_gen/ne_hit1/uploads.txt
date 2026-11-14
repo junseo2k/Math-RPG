@@ -1,0 +1,7 @@
+input/start_ne_idle_104.png {"ref":"upload:c806e6bb-da4c-44c8-8587-49ade7b3678e","upload_id":"c806e6bb-da4c-44c8-8587-49ade7b3678e","width":104,"height":104,"n_frames":1,"expires_in_days":3}
+raw/frame_03.png {"ref":"upload:dbbad9d7-ef3c-404f-9e11-7d80f8955f7f","upload_id":"dbbad9d7-ef3c-404f-9e11-7d80f8955f7f","width":104,"height":104,"n_frames":1,"expires_in_days":3}
+raw/frame_04.png {"ref":"upload:70244023-083c-4935-9667-566948ad96a6","upload_id":"70244023-083c-4935-9667-566948ad96a6","width":104,"height":104,"n_frames":1,"expires_in_days":3}
+raw/frame_05.png {"ref":"upload:989656f5-dfbd-4c68-bff5-e09dd9110d5a","upload_id":"989656f5-dfbd-4c68-bff5-e09dd9110d5a","width":104,"height":104,"n_frames":1,"expires_in_days":3}
+raw/frame_06.png {"ref":"upload:56d0519d-a54f-4e42-b6ec-840a66c22425","upload_id":"56d0519d-a54f-4e42-b6ec-840a66c22425","width":104,"height":104,"n_frames":1,"expires_in_days":3}
+raw/frame_07.png {"ref":"upload:73323e8c-018a-4fd3-adb8-f821ea3bbec2","upload_id":"73323e8c-018a-4fd3-adb8-f821ea3bbec2","width":104,"height":104,"n_frames":1,"expires_in_days":3}
+raw/frame_08.png {"ref":"upload:838dccb2-b09f-44cf-958f-16756eedbb85","upload_id":"838dccb2-b09f-44cf-958f-16756eedbb85","width":104,"height":104,"n_frames":1,"expires_in_days":3}

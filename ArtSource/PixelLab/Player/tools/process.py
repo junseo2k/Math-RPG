@@ -23,7 +23,9 @@ CLIPS = {  # name: (frames, fps, loop, frames dropped from raw start)
     'idle_calm': (4, 6, True, 1),     # still guard idle, only hair tips + cape hem sway (09_idle_calm, 2026-10-29)
     'death_calm': (4, 6, False, 1),   # forward collapse from the in-game idle, outline-free delivery (10_death_calm, 2026-10-29)
     'hurt_calm': (4, 6, False, 1),    # recoil and recover to the in-game idle, outline-free delivery (11_hurt_calm, 2026-10-29)
-    'run_calm': (8, 6, True, 1)}      # in-place run, v3 start = end = in-game idle, 0px body bob, outline-free (12_run_calm, 2026-10-30)
+    'run_calm': (8, 6, True, 1),      # in-place run, v3 start = end = in-game idle, 0px body bob, outline-free (12_run_calm, 2026-10-30)
+    'idle_greatsword': (4, 6, True, 1),   # two-handed greatsword idle, built by greatsword.py (13_idle_greatsword, 2026-10-31)
+    'run_greatsword': (8, 6, True, 1)}    # two-handed greatsword run, built by greatsword.py (14_run_greatsword, 2026-10-31)
 # standing poses that clips are aligned to: right-hand sword versions (W/NW/SE edited, S flipped; user, 2026-10-29)
 ROTATIONS = 'idle_breath_start'
 SIZE, ANCHOR = 64, (32, 56)       # anchor = ground contact; feet bottom pixel row = 55

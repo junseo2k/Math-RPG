@@ -1,0 +1,307 @@
+{
+ "stick": "C:\\Users\\\uc774\uc900\uc11c\\Documents\\GitHub\\Math_RPG_Test\\ArtSource\\PixelLab\\Player\\34_attack_greatsword_combo_north\\stick_v2_body\\coords.json",
+ "frames": {
+  "h1_f1": {
+   "order": [
+    "idle"
+   ],
+   "head_shift": null
+  },
+  "h1_f2": {
+   "order": [
+    "feet",
+    "cape",
+    "head",
+    "sword",
+    "hands"
+   ],
+   "head_shift": [
+    -2,
+    0
+   ]
+  },
+  "h1_f3": {
+   "order": [
+    "feet",
+    "cape",
+    "head",
+    "sword",
+    "hands"
+   ],
+   "head_shift": [
+    -3,
+    1
+   ]
+  },
+  "h1_f4": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    0,
+    4
+   ]
+  },
+  "h1_f5": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    2,
+    4
+   ]
+  },
+  "h1_f6": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    3,
+    4
+   ]
+  },
+  "h1_f7": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    3,
+    1
+   ]
+  },
+  "h1_f8": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    3,
+    1
+   ]
+  },
+  "h2_f2": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    1,
+    6
+   ]
+  },
+  "h2_f3": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    0,
+    1
+   ]
+  },
+  "h2_f4": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    0,
+    -1
+   ]
+  },
+  "h2_f5": {
+   "order": [
+    "feet",
+    "cape",
+    "arms",
+    "head",
+    "sword",
+    "hands"
+   ],
+   "head_shift": [
+    0,
+    -1
+   ]
+  },
+  "h2_f6": {
+   "order": [
+    "feet",
+    "cape",
+    "arms",
+    "head",
+    "sword",
+    "hands"
+   ],
+   "head_shift": [
+    0,
+    0
+   ]
+  },
+  "h2_f7": {
+   "order": [
+    "feet",
+    "cape",
+    "arms",
+    "head",
+    "sword",
+    "hands"
+   ],
+   "head_shift": [
+    0,
+    0
+   ]
+  },
+  "h2_f8": {
+   "order": [
+    "feet",
+    "cape",
+    "arms",
+    "head",
+    "sword",
+    "hands"
+   ],
+   "head_shift": [
+    0,
+    0
+   ]
+  },
+  "h3_f2": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    0,
+    6
+   ]
+  },
+  "h3_f3": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    0,
+    10
+   ]
+  },
+  "h3_f4": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    0,
+    12
+   ]
+  },
+  "h3_f5": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    0,
+    10
+   ]
+  },
+  "h3_f6": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    0,
+    8
+   ]
+  },
+  "h3_f7": {
+   "order": [
+    "sword",
+    "hands",
+    "feet",
+    "cape",
+    "head"
+   ],
+   "head_shift": [
+    1,
+    4
+   ]
+  },
+  "h3_f8": {
+   "order": [
+    "feet",
+    "cape",
+    "head",
+    "sword",
+    "hands"
+   ],
+   "head_shift": [
+    1,
+    1
+   ]
+  },
+  "h3_f9": {
+   "order": [
+    "feet",
+    "cape",
+    "head",
+    "sword",
+    "hands"
+   ],
+   "head_shift": [
+    0,
+    0
+   ]
+  },
+  "h3_f10": {
+   "order": [
+    "idle"
+   ],
+   "head_shift": null
+  }
+ }
+}

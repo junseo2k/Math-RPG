@@ -1,0 +1,1 @@
+job 90c9ffc2-eda1-4d6a-9f3b-0e43dd3ba439 animate_with_skeleton_v3 west hit1 8f 3gen + estimate 83e0b858 0.1gen 2026-11-13

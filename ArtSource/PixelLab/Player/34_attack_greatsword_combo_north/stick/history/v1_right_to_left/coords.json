@@ -1,0 +1,504 @@
+{
+ "canvas": 96,
+ "pivot": [
+  48,
+  94
+ ],
+ "fps": 16,
+ "frames": 8,
+ "seconds": 0.5,
+ "tip_len": 33.3,
+ "support": "both feet planted",
+ "tip_moves": [
+  27.2,
+  38.1,
+  36.5,
+  42.0,
+  24.2,
+  4.2,
+  1.2
+ ],
+ "grip_moves": [
+  5.0,
+  5.0,
+  11.7,
+  9.2,
+  6.7,
+  1.4,
+  0.0
+ ],
+ "keys": [
+  {
+   "frame": 1,
+   "stage": "시작 = north idle 1프레임",
+   "grip": [
+    51,
+    69
+   ],
+   "sword_angle": 139,
+   "foreshorten": 1.0,
+   "depth": "over",
+   "tip": [
+    25.9,
+    47.2
+   ],
+   "pommel": [
+    55.8,
+    73.2
+   ],
+   "hand_A": [
+    49.5,
+    67.7
+   ],
+   "hand_B": [
+    52.5,
+    70.3
+   ],
+   "elbow_A": [
+    50.5,
+    76.6
+   ],
+   "elbow_B": [
+    45.1,
+    75.4
+   ],
+   "shoulder_A": [
+    53.0,
+    68
+   ],
+   "shoulder_B": [
+    40.0,
+    68
+   ],
+   "twist": 0.0,
+   "knee_bend": 0,
+   "feet": [
+    [
+     39,
+     93
+    ],
+    [
+     50,
+     93
+    ]
+   ],
+   "foot_centre": [
+    44.5,
+    93
+   ]
+  },
+  {
+   "frame": 2,
+   "stage": "준비: 양손을 오른쪽으로 당김",
+   "grip": [
+    55,
+    66
+   ],
+   "sword_angle": 100,
+   "foreshorten": 1.0,
+   "depth": "over",
+   "tip": [
+    49.2,
+    33.2
+   ],
+   "pommel": [
+    56.1,
+    72.3
+   ],
+   "hand_A": [
+    54.7,
+    64.0
+   ],
+   "hand_B": [
+    55.3,
+    68.0
+   ],
+   "elbow_A": [
+    62.1,
+    69.0
+   ],
+   "elbow_B": [
+    48.4,
+    73.7
+   ],
+   "shoulder_A": [
+    53.2,
+    68
+   ],
+   "shoulder_B": [
+    41.4,
+    68
+   ],
+   "twist": 0.4,
+   "knee_bend": 0,
+   "feet": [
+    [
+     39,
+     93
+    ],
+    [
+     50,
+     93
+    ]
+   ],
+   "foot_centre": [
+    44.5,
+    93
+   ]
+  },
+  {
+   "frame": 3,
+   "stage": "준비 끝: 칼끝 오른쪽",
+   "grip": [
+    59,
+    69
+   ],
+   "sword_angle": 40,
+   "foreshorten": 1.0,
+   "depth": "over",
+   "tip": [
+    84.5,
+    47.6
+   ],
+   "pommel": [
+    54.1,
+    73.1
+   ],
+   "hand_A": [
+    60.5,
+    67.7
+   ],
+   "hand_B": [
+    57.5,
+    70.3
+   ],
+   "elbow_A": [
+    58.4,
+    76.5
+   ],
+   "elbow_B": [
+    49.7,
+    74.8
+   ],
+   "shoulder_A": [
+    53.4,
+    69
+   ],
+   "shoulder_B": [
+    42.8,
+    69
+   ],
+   "twist": 0.8,
+   "knee_bend": 1,
+   "feet": [
+    [
+     39,
+     93
+    ],
+    [
+     50,
+     93
+    ]
+   ],
+   "foot_centre": [
+    44.5,
+    93
+   ]
+  },
+  {
+   "frame": 4,
+   "stage": "베기: 몸 앞 통과(판정)",
+   "grip": [
+    49,
+    63
+   ],
+   "sword_angle": 92,
+   "foreshorten": 0.6,
+   "depth": "behind",
+   "tip": [
+    48.3,
+    43.0
+   ],
+   "pommel": [
+    49.1,
+    66.8
+   ],
+   "hand_A": [
+    48.9,
+    61.0
+   ],
+   "hand_B": [
+    49.1,
+    65.0
+   ],
+   "elbow_A": [
+    57.9,
+    61.5
+   ],
+   "elbow_B": [
+    47.6,
+    73.9
+   ],
+   "shoulder_A": [
+    53.0,
+    69
+   ],
+   "shoulder_B": [
+    40.0,
+    69
+   ],
+   "twist": 0.0,
+   "knee_bend": 1,
+   "feet": [
+    [
+     39,
+     93
+    ],
+    [
+     50,
+     93
+    ]
+   ],
+   "foot_centre": [
+    44.5,
+    93
+   ]
+  },
+  {
+   "frame": 5,
+   "stage": "베기: 왼쪽으로",
+   "grip": [
+    42,
+    69
+   ],
+   "sword_angle": 168,
+   "foreshorten": 0.95,
+   "depth": "over",
+   "tip": [
+    11.1,
+    62.4
+   ],
+   "pommel": [
+    47.9,
+    70.3
+   ],
+   "hand_A": [
+    40.0,
+    68.6
+   ],
+   "hand_B": [
+    44.0,
+    69.4
+   ],
+   "elbow_A": [
+    45.0,
+    76.1
+   ],
+   "elbow_B": [
+    41.0,
+    77.9
+   ],
+   "shoulder_A": [
+    50.6,
+    69
+   ],
+   "shoulder_B": [
+    39.6,
+    69
+   ],
+   "twist": -0.7,
+   "knee_bend": 1,
+   "feet": [
+    [
+     39,
+     93
+    ],
+    [
+     50,
+     93
+    ]
+   ],
+   "foot_centre": [
+    44.5,
+    93
+   ]
+  },
+  {
+   "frame": 6,
+   "stage": "제동: 왼쪽 아래",
+   "grip": [
+    39,
+    75
+   ],
+   "sword_angle": 200,
+   "foreshorten": 1.0,
+   "depth": "over",
+   "tip": [
+    7.7,
+    86.4
+   ],
+   "pommel": [
+    45.0,
+    72.8
+   ],
+   "hand_A": [
+    37.1,
+    75.7
+   ],
+   "hand_B": [
+    40.9,
+    74.3
+   ],
+   "elbow_A": [
+    46.0,
+    77.1
+   ],
+   "elbow_B": [
+    31.9,
+    73.7
+   ],
+   "shoulder_A": [
+    49.9,
+    69
+   ],
+   "shoulder_B": [
+    39.6,
+    69
+   ],
+   "twist": -0.9,
+   "knee_bend": 1,
+   "feet": [
+    [
+     39,
+     93
+    ],
+    [
+     50,
+     93
+    ]
+   ],
+   "foot_centre": [
+    44.5,
+    93
+   ]
+  },
+  {
+   "frame": 7,
+   "stage": "제동",
+   "grip": [
+    38,
+    76
+   ],
+   "sword_angle": 206,
+   "foreshorten": 1.0,
+   "depth": "over",
+   "tip": [
+    8.1,
+    90.6
+   ],
+   "pommel": [
+    43.8,
+    73.2
+   ],
+   "hand_A": [
+    36.2,
+    76.9
+   ],
+   "hand_B": [
+    39.8,
+    75.1
+   ],
+   "elbow_A": [
+    45.2,
+    76.7
+   ],
+   "elbow_B": [
+    31.2,
+    72.4
+   ],
+   "shoulder_A": [
+    49.9,
+    69
+   ],
+   "shoulder_B": [
+    39.6,
+    69
+   ],
+   "twist": -0.9,
+   "knee_bend": 1,
+   "feet": [
+    [
+     39,
+     93
+    ],
+    [
+     50,
+     93
+    ]
+   ],
+   "foot_centre": [
+    44.5,
+    93
+   ]
+  },
+  {
+   "frame": 8,
+   "stage": "정착(양손 파지 유지)",
+   "grip": [
+    38,
+    76
+   ],
+   "sword_angle": 208,
+   "foreshorten": 1.0,
+   "depth": "over",
+   "tip": [
+    8.6,
+    91.6
+   ],
+   "pommel": [
+    43.7,
+    73.0
+   ],
+   "hand_A": [
+    36.2,
+    76.9
+   ],
+   "hand_B": [
+    39.8,
+    75.1
+   ],
+   "elbow_A": [
+    45.2,
+    76.7
+   ],
+   "elbow_B": [
+    31.2,
+    72.3
+   ],
+   "shoulder_A": [
+    49.9,
+    69
+   ],
+   "shoulder_B": [
+    39.6,
+    69
+   ],
+   "twist": -0.9,
+   "knee_bend": 1,
+   "feet": [
+    [
+     39,
+     93
+    ],
+    [
+     50,
+     93
+    ]
+   ],
+   "foot_centre": [
+    44.5,
+    93
+   ]
+  }
+ ]
+}

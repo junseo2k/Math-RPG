@@ -3,21 +3,59 @@ then re-open the files and check them. Exit 1 on any FAIL; report.json holds per
 
   python process.py build death && python sheet_clip.py death 06_death
   python sheet_clip.py idle_alert 07_idle_alert 0 4    # outer padding 0, 4px gap between frames
+  python sheet_clip.py run_greatsword 14_run_greatsword 0 4 --check   # Aseprite-edited sheets: check only, no rebuild
 """
 import json, os, sys
 import numpy as np
 import process as P
 from pngio import read_png, write_png, upscale
 
+# --check: only re-open and check the sheets already in <out> (hand-edited in Aseprite, 2026-10-31); nothing is rebuilt
+CHECK = '--check' in sys.argv
+if CHECK:
+    sys.argv.remove('--check')
 CLIP = sys.argv[1] if len(sys.argv) > 1 else 'hurt'
 OUT = os.path.join(P.ROOT, sys.argv[2] if len(sys.argv) > 2 else '05_hurt')
 DIRS = ['east', 'north-east', 'north', 'north-west', 'west', 'south-west', 'south', 'south-east']
 PAD = int(sys.argv[3]) if len(sys.argv) > 3 else 1
 GAP = int(sys.argv[4]) if len(sys.argv) > 4 else 0
 FPS, MARGIN, MAX_W, MAX_H = P.CLIPS[CLIP][1], 4, 36, 48
+if CLIP in ('idle_greatsword', 'run_greatsword'):   # the diagonal greatsword needs room: box 56x48 (user, 2026-10-31)
+    MAX_W = 56
 NO_OUTLINE = {'death_calm', 'hurt_calm', 'run_calm'}   # delivered like the game idle: outer 1px outline stripped (export_unity.strip_outline)
 FALLS = {'death', 'death_calm'}   # only the start pose is anchored; the body moves as it falls
 STRIDES = {'run_calm'}   # feet move with the stride: the torso is anchored instead (body_top range must be 0)
+NO_OUTLINE |= {'idle_greatsword', 'run_greatsword'}
+STRIDES |= {'run_greatsword'}
+# standing pose for the feet check: greatsword clips use their own two-handed base (greatsword.py base), 2026-10-31
+HOME = os.path.join(P.ROOT, '13_idle_greatsword', 'base') if 'greatsword' in CLIP else os.path.join(P.FINAL, 'rotations')
+# 5 drawn directions, W/NW/SW are the mirror of E/NE/SE (user 2026-10-31: less to draw and hand-edit). The mirrored
+# sheets are rewritten from the drawn ones on every run (also --check), so only the 5 drawn sheets are ever edited.
+# idle_greatsword left out: user hand-edited all 8 directions in Aseprite (2026-11-02), W/NW/SW are not mirrors any more
+MIRRORED = {'run_greatsword'}
+MIRROR_OF = {'west': 'east', 'north-west': 'north-east', 'south-west': 'south-east'}
+
+
+def mirror(f):
+    """Flip about the anchor column x=32 (pixel x -> 64 - x): a plain flip maps x -> 63 - x and would move the feet 1px."""
+    return np.roll(f[:, ::-1], 1, axis=1)
+
+
+def mirror_sheet(path_src, path_dst):
+    s = read_png(path_src)
+    k = (s.shape[1] - 2 * PAD + GAP) // (64 + GAP)
+    out = np.zeros_like(s)
+    for i in range(k):
+        x = PAD + i * (64 + GAP)
+        out[PAD:PAD + 64, x:x + 64] = mirror(s[PAD:PAD + 64, x:x + 64])
+    write_png(path_dst, out)
+
+
+def home_of(d):
+    # greatsword W/NW/SW poses come from the mirror even when hand-edited afterwards, so the feet stay at the mirrored spot
+    if 'greatsword' in CLIP and d in MIRROR_OF:
+        return mirror(read_png(os.path.join(HOME, f'{MIRROR_OF[d]}.png')))
+    return read_png(os.path.join(HOME, f'{d}.png'))
 
 
 def edge_of(f):
@@ -42,7 +80,7 @@ def outline_ok(f, oc):
 def main():
     os.makedirs(os.path.join(OUT, 'preview'), exist_ok=True)
     oc = P.load_palette()[0]
-    for n, d in enumerate(DIRS):
+    for n, d in enumerate([] if CHECK else DIRS):
         src = read_png(os.path.join(P.FINAL, CLIP, f'{d}.png'))
         FRAMES = src.shape[1] // 64   # per direction: STILL directions may have more frames
         sheet = np.zeros((64 + 2 * PAD, 64 * FRAMES + GAP * (FRAMES - 1) + 2 * PAD, 4), np.uint8)
@@ -51,6 +89,9 @@ def main():
             cell = src[:, 64 * i:64 * (i + 1)]
             sheet[PAD:PAD + 64, x:x + 64] = strip(cell, oc) if CLIP in NO_OUTLINE else cell
         write_png(os.path.join(OUT, f'{n}_{d}.png'), sheet)
+    if CLIP in MIRRORED:
+        for d, src in MIRROR_OF.items():
+            mirror_sheet(os.path.join(OUT, f'{DIRS.index(src)}_{src}.png'), os.path.join(OUT, f'{DIRS.index(d)}_{d}.png'))
     fails, notes, rep, allpx, alpha, rows = [], [], {}, [], set(), []
     for n, d in enumerate(DIRS):
         path = os.path.join(OUT, f'{n}_{d}.png')
@@ -66,7 +107,7 @@ def main():
             border[y:y + 64, x:x + 64] = False
         if s[border, 3].any(): fails.append(f'{d}: padding/gap not transparent')
         frames = [s[y:y + 64, x:x + 64] for y, x in cells]
-        home = P.planted_feet(read_png(os.path.join(P.FINAL, 'rotations', f'{d}.png')))
+        home = P.planted_feet(home_of(d))
         fr = []
         for i, f in enumerate(frames):
             a = f[..., 3] > 0
@@ -74,7 +115,9 @@ def main():
             w, h = int(xs[-1] - xs[0] + 1), int(ys[-1] - ys[0] + 1)
             m = dict(l=int(xs[0]), t=int(ys[0]), r=int(63 - xs[-1]), b=int(63 - ys[-1]))
             anc = P.planted_feet(f)
-            body_top = int(np.nonzero(a.sum(1) >= 6)[0][0])     # first row >= 6 px wide (hair spikes excluded)
+            # greatsword: the diagonal blade above the head is >= 6px wide too, so the head is measured without steel
+            bt = a & ~P.steel_mask(f) if 'greatsword' in CLIP else a
+            body_top = int(np.nonzero(bt.sum(1) >= 6)[0][0])     # first row >= 6 px wide (hair spikes excluded)
             ok = outline_ok(f, oc)
             # 2026-10-28: action clips may grow with the motion -> box/margin are notes; touching the canvas edge is a fail
             if w > MAX_W or h > MAX_H: notes.append(f'{d} f{i}: {w}x{h} > {MAX_W}x{MAX_H}')
@@ -82,7 +125,7 @@ def main():
             elif min(m.values()) < MARGIN: notes.append(f'{d} f{i}: margin {min(m.values())} < {MARGIN}')
             # feet stay where the standing pose (same direction) has them; in death only the start pose is anchored
             if CLIP in NO_OUTLINE:   # the standing pose is compared outline-free too
-                home = P.planted_feet(strip(read_png(os.path.join(P.FINAL, 'rotations', f'{d}.png')), oc))
+                home = P.planted_feet(strip(home_of(d), oc))
             if anc != home and CLIP not in STRIDES and (CLIP not in FALLS or i == 0): fails.append(f'{d} f{i}: anchor {anc} != standing {home}')
             if not ok: fails.append(f'{d} f{i}: silhouette edge not 1px outline colour')
             fr.append(dict(w=w, h=h, margin=m, anchor=list(anc), body_top=body_top, outline_ok=ok))

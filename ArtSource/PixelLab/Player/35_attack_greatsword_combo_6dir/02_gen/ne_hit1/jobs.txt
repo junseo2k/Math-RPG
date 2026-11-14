@@ -1,0 +1,9 @@
+6e24bbcf-b322-4b84-9e84-e81bdb0034aa animate_image_pixminimax ne hit1 frame_count=8 start=input/start_ne_idle_104.png end=none 2026-11-13
+70a8595f-4c17-48b8-b108-51b72b12d77f edit_image ref=NE idle frames raw03-05
+6841f6ec-4f53-4d1a-89cc-f16c9a924b20 edit_image ref=NE idle frames raw06-08
+fab1f836-488e-47e4-9eae-1a4daeadecf0 inpaint f3
+32740192-1a0d-490a-b21d-266870d79dd1 inpaint f4
+6031c204-c04e-4aa1-8ea8-4712b0a6d59d inpaint f7
+5875970d-071b-4caf-a475-434df8b2de28 inpaint f8
+a76451f5-a552-4ab1-8006-b71a18e5c5b0 inpaint f4 15deg rect mask (v5 f4)
+db1b0f33-2686-4bf2-bf46-8042a385e42b inpaint f5 180deg rect mask (v6 f5)
