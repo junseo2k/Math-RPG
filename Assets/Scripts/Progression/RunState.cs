@@ -7,6 +7,8 @@ public class RunState
 {
     public int stage;
     public int elapsedHours;
+    // 보스 방: 보스가 다음 정각을 막고 있어 시계가 X:59에 멈춤 (WorldLevelStructure 5절)
+    public bool clockHeld;
     public List<StartAbilityDef> choices = new();
     public StartAbilityDef selectedAbility;
 

@@ -30,7 +30,10 @@ public class GameFlow : MonoBehaviour
     public IReadOnlyList<StartAbilityDef> Choices => Run.choices;
     public IReadOnlyList<RewardOffer> Offers => Run.offers;
     public int Hour => (startHour + Run.elapsedHours) % 24;
-    public string TimeText => $"{Hour:00}:00";
+    public int Minute => Run.clockHeld ? 59 : 0;
+    public string TimeText => $"{Hour:00}:{Minute:00}";
+    // 시계판 위치(시간 단위, 분 포함)
+    public float DialHour => Hour + Minute / 60f;
     public int StageCount => (roomsPerBoss + 1) * bossCount;
     public bool IsBossStage => IsBossStageAt(Stage);
     public bool IsBossStageAt(int stage) => stage > 0 && stage % (roomsPerBoss + 1) == 0;
@@ -96,6 +99,8 @@ public class GameFlow : MonoBehaviour
 
         if (boss)
         {
+            // ponytail: 최종 보스(06시의 시종) 처치 후 05:59 유지 예외는 본편 12보스 때 추가
+            Run.clockHeld = false;
             AdvanceTime(hoursPerBoss);
             Rewards.AddShards(Rewards.BossShards);
             Run.rewardMessage += $"  기억 조각 +{Rewards.BossShards}";
@@ -194,6 +199,7 @@ public class GameFlow : MonoBehaviour
     void EnterStage(int stage)
     {
         Run.stage = stage;
+        Run.clockHeld = IsBossStage;
         if (IsBossStage)
         {
             while (Persistent.bossEncounters.Count <= BossIndex) Persistent.bossEncounters.Add(0);

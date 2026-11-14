@@ -47,6 +47,7 @@ public class HUD : MonoBehaviour
     DeferredDamage deferred;
 
     int shownElapsed = -1;
+    int shownMinutes = -1;
     float handFrom;
     float handTo;
     float turnStart;
@@ -193,23 +194,26 @@ public class HUD : MonoBehaviour
         }
     }
 
-    // 보스 처치로 시각이 전진하면 바늘이 돌고 "+1시간" 표시. 재탄생 등으로 되돌아가면 즉시 맞춤
+    // 보스 방 입장: 바늘이 X:59로 돌아 멈춤. 보스 처치: 정각이 되고 새 시각 표시. 재탄생 등으로 되돌아가면 즉시 맞춤
     void UpdateClock()
     {
         int elapsed = flow.Run.elapsedHours;
-        if (elapsed != shownElapsed)
+        int minutes = elapsed * 60 + flow.Minute;
+        if (minutes != shownMinutes)
         {
-            float target = -(flow.Hour % 12) * 30f;
-            bool advanced = shownElapsed >= 0 && elapsed > shownElapsed;
+            float target = -(flow.DialHour % 12f) * 30f;
+            bool advanced = shownMinutes >= 0 && minutes > shownMinutes;
             handFrom = advanced ? clockHand.localEulerAngles.z : target;
             handTo = target;
             turnStart = Time.time;
-            if (advanced)
+            if (advanced) SoundPlayer.Play("sfx_clock_advance");
+            if (advanced && elapsed > shownElapsed)
             {
                 plusStart = Time.time;
-                SoundPlayer.Play("sfx_clock_advance");
+                plusHour.text = flow.TimeText;
             }
             shownElapsed = elapsed;
+            shownMinutes = minutes;
         }
         float k = clockTurn > 0f ? Mathf.Clamp01((Time.time - turnStart) / clockTurn) : 1f;
         clockHand.localRotation = Quaternion.Euler(0f, 0f, Mathf.LerpAngle(handFrom, handTo, k));
