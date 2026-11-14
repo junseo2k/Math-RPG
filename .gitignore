@@ -39,3 +39,6 @@ ML/data/
 # Claude 훅 자동 테스트 결과·표시 파일
 TestResults-EditMode*
 .claude/.unity-tests-*
+
+# 효과음 후보 원본 (약 45MB, 게임용은 Assets/Resources/Audio, 기록은 ArtSource/Sound/README.md)
+/ArtSource/Sound/candidates/
