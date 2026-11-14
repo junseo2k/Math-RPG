@@ -51,24 +51,58 @@ public class SpriteAnimator : MonoBehaviour
 
     public void Release() => Begin(loopState, Mode.Loop);
 
+    // 지금 방향에 그 상태의 그림이 있는지(없으면 LoadFrames는 idle로 대신하므로 미리 확인)
+    public bool Has(string stateName) =>
+        !string.IsNullOrEmpty(BaseName) && direction != null &&
+        AssetLibrary.LoadFrames($"{BaseName}_{stateName}_{direction}", Mathf.Abs(transform.lossyScale.x)) != null;
+
+    // 히트스톱: 지금 프레임에서 seconds 동안 멈췄다가 같은 프레임부터 이어서 재생
+    float frozenUntil;
+    public void Freeze(float seconds)
+    {
+        if (seconds <= 0f) return;
+        float end = Time.time + seconds;
+        if (end <= frozenUntil) return;
+        startTime += end - Mathf.Max(frozenUntil, Time.time);
+        frozenUntil = end;
+    }
+
     public void Face(int dir)
     {
         if (dir != 0 && !directional) view.flipX = dir < 0;
     }
 
-    // 8방향 이름(s, sw, w, nw, n, ne, e, se). 재생 위치는 유지하고 그림만 바꾼다
+    // 방향 이름(s, w, n, e). 반복 상태는 재생 위치를 유지하고 그림만 바꾼다.
+    // 1회 재생(공격·피격) 중에는 기억만 했다가 다음 재생 시작 때 적용: 공격하며 움직이면
+    // 다른 방향 그림(그 방향 공격 그림이 없으면 대기 그림)으로 바뀌어 모션이 끊겼다 (2026-11-13)
+    string pendingDirection;
     public void SetDirection(string dir)
     {
+        if (mode != Mode.Loop && state != null)
+        {
+            pendingDirection = dir == direction ? null : dir;
+            return;
+        }
         if (dir == direction) return;
         direction = dir;
         if (state != null) LoadFrames();
     }
 
+    // 지금 재생 중인 프레임 번호(0부터). 반복 상태는 한 바퀴마다 0으로 돌아간다
+    public int FrameIndex { get; private set; }
+    public string State => state;
+
     void Begin(string next, Mode nextMode)
     {
+        if (pendingDirection != null)
+        {
+            direction = pendingDirection;
+            pendingDirection = null;
+        }
         state = next;
         mode = nextMode;
         startTime = Time.time;
+        frozenUntil = 0f;
         LoadFrames();
     }
 
@@ -76,6 +110,7 @@ public class SpriteAnimator : MonoBehaviour
     {
         frames = null;
         if (string.IsNullOrEmpty(BaseName)) return;
+        if (!view) view = GetComponent<SpriteRenderer>();   // 에디트 모드 테스트에선 Awake가 안 불림
         float scale = Mathf.Abs(transform.lossyScale.x);
         // 그 상태의 방향 그림이 아직 없으면 같은 방향의 대기 그림으로 대신한다
         if (direction != null)
@@ -92,6 +127,7 @@ public class SpriteAnimator : MonoBehaviour
 
     void Update()
     {
+        if (Time.time < frozenUntil) return;
         int index = Mathf.FloorToInt((Time.time - startTime) * CurrentFps);
         if (frames == null || frames.Length == 0)
         {
@@ -109,6 +145,7 @@ public class SpriteAnimator : MonoBehaviour
             }
             index = mode == Mode.Hold ? frames.Length - 1 : index % frames.Length;
         }
+        FrameIndex = index;
         view.sprite = frames[index];
     }
 }

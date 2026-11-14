@@ -30,9 +30,9 @@ public class RoomManager : MonoBehaviour, IRewindable
     [Header("플레이어 애니메이션 속도 (초당 프레임)")]
     [SerializeField] AnimSpeed[] playerAnimSpeeds =
     {
-        new() { state = "idle", fps = 6f },
+        new() { state = "idle", fps = 8f },   // 숨쉬기 idle 8프레임 = 1.00초 (2026-11-03)
         new() { state = "run", fps = 6f },
-        new() { state = "attack", fps = 12f },
+        new() { state = "attack", fps = 18f },   // f4 = 0.22초 = CombatBalance.sword.hitDelay (2026-10-31)
         new() { state = "dash", fps = 12f },
         new() { state = "hurt", fps = 6f },
         new() { state = "death", fps = 6f },

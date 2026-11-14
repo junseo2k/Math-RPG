@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// 탑다운 8방향 이동·마우스 조준·대시 회피·피격 반응. 규칙: Docs/SliceA/CombatDecisions.md 1장
+// 탑다운 8방향 이동(그림 4방향)·대시 회피·피격 반응. 규칙: Docs/SliceA/CombatDecisions.md 1장
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D), typeof(Health))]
 public class PlayerController : MonoBehaviour, IRewindable
 {
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour, IRewindable
     [Header("디버그")]
     [SerializeField] bool showDebug = true;
 
-    // 마우스 커서 쪽 단위 벡터. 공격·소환 방향
+    // 마지막 이동(WASD) 방향 단위 벡터. 공격·회피·그림 방향
     public Vector2 Aim { get; private set; } = Vector2.right;
     // 좌우 반전용 (-1/1)
     public int Facing => Aim.x < 0f ? -1 : 1;
@@ -121,14 +121,11 @@ public class PlayerController : MonoBehaviour, IRewindable
         if (flow) flow.RunReset -= Respawn;
     }
 
-    // 동쪽부터 반시계 방향, 45도 간격
-    static readonly string[] Directions = { "e", "ne", "n", "nw", "w", "sw", "s", "se" };
-
-    // 조준 방향을 8방향 그림 이름으로
+    // 그림은 4방향(2026-11-13). 대각선은 좌우 그림을 쓴다
     static string DirectionOf(Vector2 v)
     {
-        int i = Mathf.RoundToInt(Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg / 45f);
-        return Directions[(i % 8 + 8) % 8];
+        if (Mathf.Abs(v.x) >= Mathf.Abs(v.y)) return v.x < 0f ? "w" : "e";
+        return v.y < 0f ? "s" : "n";
     }
 
     // 애니메이션 상태: 대시 > 달리기 > 대기
@@ -138,6 +135,19 @@ public class PlayerController : MonoBehaviour, IRewindable
         anim.Face(Facing);
         anim.SetDirection(DirectionOf(Aim));
         anim.SetLoop(dashing ? "dash" : body.linearVelocity.sqrMagnitude > 0.01f ? "run" : "idle");
+        PlayFootstep();
+    }
+
+    // 달리기 그림에서 발이 땅에 닿는 프레임마다 발소리(2026-11-13, Kenney footstep_concrete 3종 중 무작위)
+    [SerializeField] int[] footstepFrames = { 0, 4 };
+    int lastRunFrame = -1;
+
+    void PlayFootstep()
+    {
+        int frame = anim.State == "run" ? anim.FrameIndex : -1;
+        if (frame != lastRunFrame && Array.IndexOf(footstepFrames, frame) >= 0)
+            SoundPlayer.Play("sfx_footstep_" + UnityEngine.Random.Range(0, 3), 1);
+        lastRunFrame = frame;
     }
 
     void Update()
@@ -163,24 +173,16 @@ public class PlayerController : MonoBehaviour, IRewindable
             return;
         }
 
-        UpdateAim();
         var move = new Vector2(
             (kb.dKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed ? 1f : 0f),
             (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f)).normalized;
+        // 이동 방향을 바라봄. 입력이 없으면 마지막 방향 유지
+        if (move != Vector2.zero) Aim = move;
         body.linearVelocity = move * B.moveSpeed * (MoveSpeedMultiplier + ZoneMoveBonus);
 
         // 제한은 쿨타임만. 입력 없으면 조준 방향
         if (kb.spaceKey.wasPressedThisFrame && Time.time >= dashReadyAt)
             StartDash(move != Vector2.zero ? move : Aim);
-    }
-
-    void UpdateAim()
-    {
-        var mouse = Mouse.current;
-        var cam = Camera.main;
-        if (mouse == null || !cam) return;
-        Vector2 d = (Vector2)cam.ScreenToWorldPoint(mouse.position.ReadValue()) - body.position;
-        if (d.sqrMagnitude > 0.0001f) Aim = d.normalized;
     }
 
     void StartDash(Vector2 dir)

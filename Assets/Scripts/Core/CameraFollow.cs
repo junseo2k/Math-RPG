@@ -11,13 +11,24 @@ public class CameraFollow : MonoBehaviour
     public float MaxY { get; set; }
 
     Camera cam;
+    UnityEngine.Rendering.Universal.PixelPerfectCamera ppc;
 
     void Awake() => cam = GetComponent<Camera>();
+
+    // 픽셀 퍼펙트 카메라는 그릴 때 화면 크기에 맞춰 orthographicSize를 바꾼다. 첫 프레임엔 아직 씬 값이라
+    // 그 값으로 경계를 잡으면 실제 화면이 더 넓어 방 밖이 잠깐 보였다(2026-11-13) → 같은 계산을 미리 한다
+    float HalfHeight()
+    {
+        if (!ppc) ppc = GetComponent<UnityEngine.Rendering.Universal.PixelPerfectCamera>();
+        if (!ppc || !ppc.enabled || ppc.refResolutionX <= 0 || ppc.refResolutionY <= 0) return cam.orthographicSize;
+        int zoom = Mathf.Max(1, Mathf.Min(cam.pixelWidth / ppc.refResolutionX, cam.pixelHeight / ppc.refResolutionY));
+        return cam.pixelHeight / (2f * ppc.assetsPPU * zoom);
+    }
 
     void LateUpdate()
     {
         if (!Target) return;
-        float halfH = cam.orthographicSize;
+        float halfH = HalfHeight();
         float halfW = halfH * cam.aspect;
         transform.position = new Vector3(
             Follow(Target.position.x, MinX, MaxX, halfW),

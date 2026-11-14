@@ -24,14 +24,34 @@ public class CombatBalance : ScriptableObject
         [Tooltip("넉백 거리(m)")] public float knockbackDistance = 1f;
     }
 
+    // 3타 콤보의 한 타. 시간은 클릭 순간부터(초). [임시] 2026-11-08
+    [Serializable]
+    public class ComboHit
+    {
+        [Tooltip("판정 시점(초). 그림의 타격 프레임 = 프레임 번호 / comboFps")] public float hitDelay;
+        [Tooltip("다음 클릭을 받는 시점(초). 이보다 이르면 입력을 잠깐 모아 둔다")] public float interval;
+        [Tooltip("피해 배율(공격력에 곱함)")] public float damageMultiplier = 1f;
+        [Tooltip("적중 시 히트스톱(초): 플레이어·맞은 적 애니메이션만 멈춘다(게임 시간은 그대로)")] public float hitStop;
+    }
+
     [Serializable]
     public class SwordStats
     {
         [Tooltip("공격력")] public int damage = 10;
-        [Tooltip("공격 간격(초)")] public float interval = 0.4f;
         [Tooltip("판정 범위(앞쪽 길이, 폭)")] public Vector2 range = new(1.5f, 1f);
         [Tooltip("치명타 확률. 0.05 = 5%"), Range(0f, 1f)] public float critChance = 0.05f;
         [Tooltip("치명타 배율")] public float critMultiplier = 1.5f;
+        [Header("3타 콤보 (2026-11-08 A-2)")]
+        [Tooltip("1·2·3타. 타격 프레임: 1타 f4, 2타 f3, 3타 f2 (16fps)")]
+        public ComboHit[] combo =
+        {
+            new() { hitDelay = 3f / 16f, interval = 5f / 16f, damageMultiplier = 1f, hitStop = 0.05f },
+            new() { hitDelay = 2f / 16f, interval = 5f / 16f, damageMultiplier = 1f, hitStop = 0.05f },
+            new() { hitDelay = 1f / 16f, interval = 9f / 16f, damageMultiplier = 1.5f, hitStop = 0.09f },
+        };
+        [Tooltip("다음 타를 받는 시간(초). 다음 클릭 가능 시점부터 이 안에 누르면 다음 타, 지나면 1타부터")] public float comboWindow = 0.35f;
+        [Tooltip("다음 클릭 가능 시점보다 이만큼(초) 먼저 누른 입력은 모아 두었다가 실행")] public float inputBuffer = 0.15f;
+        [Tooltip("콤보 그림(attack1~3) 재생 속도(초당 프레임)")] public float comboFps = 16f;
     }
 
     [Serializable]

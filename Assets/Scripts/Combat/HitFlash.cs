@@ -49,13 +49,30 @@ public class HitFlash : MonoBehaviour
             if (!overriding)
             {
                 saved = view.color;
+                savedMaterial = view.sharedMaterial;
                 overriding = true;
             }
             view.color = flashColor;
+            if (Silhouette) view.sharedMaterial = Silhouette;
             return;
         }
         if (!overriding) return;
         overriding = false;
         view.color = saved;
+        view.sharedMaterial = savedMaterial;
     }
+
+    // 그림이 있는 스프라이트는 흰색을 곱해도 그대로라 번쩍임이 안 보인다 → 알파 모양을 색 하나로 칠하는 내장 셰이더(2026-11-08 타격감).
+    // 빌드에서 빠져 없으면 색만 바꾼다
+    static Material silhouette;
+    static Material Silhouette
+    {
+        get
+        {
+            if (!silhouette && Shader.Find("GUI/Text Shader") is { } shader) silhouette = new Material(shader);
+            return silhouette;
+        }
+    }
+
+    Material savedMaterial;
 }

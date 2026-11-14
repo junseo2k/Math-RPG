@@ -12,6 +12,13 @@ public class PlayerAttack : MonoBehaviour, IRewindable
         public int bonus;
         public float bonusLeft;
         public (float amount, float left)[] oneShot;
+        public float pendingLeft;
+        public Vector2 pendingDir;
+        public int pendingDamage;
+        public bool pendingCrit;
+        public int pendingStep;
+        public int comboStep;
+        public float comboLeft;
     }
 
     // 수치는 CombatBalance (Tools/전투 밸런스 열기)
@@ -38,6 +45,22 @@ public class PlayerAttack : MonoBehaviour, IRewindable
     float bonusUntil;
     // 다음 공격 1회 피해 증가%(만료 시각). 휘두르면 소모
     readonly List<(float amount, float until)> oneShot = new();
+    // 휘두른 뒤 판정 대기 중인 공격. 방향·피해는 클릭 순간 값 (hitAt < 0 = 없음)
+    float hitAt = -1f;
+    Vector2 pendingDir;
+    int pendingDamage;
+    bool pendingCrit;
+    int pendingStep;
+    // 3타 콤보: 마지막으로 휘두른 타(0~2, -1 = 없음)와 다음 타를 받는 마감 시각
+    int comboStep = -1;
+    float comboUntil;
+    bool buffered;
+
+    // 다음에 휘두를 타. 마감 안에 누르면 이어지고(3타 다음은 1타), 지나면 1타
+    public static int NextStep(int lastStep, float now, float comboUntil, int count) =>
+        lastStep >= 0 && now <= comboUntil ? (lastStep + 1) % count : 0;
+
+    public int ComboStep => comboStep;
 
     public bool HasBonus => bonus > 0 && Time.time < bonusUntil;
     // 피해 증가% 합(0.08 = +8%). 특성·유물이 더한다
@@ -90,6 +113,10 @@ public class PlayerAttack : MonoBehaviour, IRewindable
         oneShot.Clear();
         swingShownUntil = 0f;
         LastHitCrit = false;
+        hitAt = -1f;
+        comboStep = -1;
+        comboUntil = 0f;
+        buffered = false;
     }
 
     public object Capture()
@@ -102,6 +129,13 @@ public class PlayerAttack : MonoBehaviour, IRewindable
             bonus = bonus,
             bonusLeft = Mathf.Max(bonusUntil - Time.time, 0f),
             oneShot = o,
+            pendingLeft = hitAt < 0f ? -1f : Mathf.Max(hitAt - Time.time, 0f),
+            pendingDir = pendingDir,
+            pendingDamage = pendingDamage,
+            pendingCrit = pendingCrit,
+            pendingStep = pendingStep,
+            comboStep = comboStep,
+            comboLeft = comboUntil - Time.time,
         };
     }
 
@@ -113,6 +147,15 @@ public class PlayerAttack : MonoBehaviour, IRewindable
         bonusUntil = Time.time + s.bonusLeft;
         oneShot.Clear();
         foreach (var (amount, left) in s.oneShot) oneShot.Add((amount, Time.time + left));
+        hitAt = s.pendingLeft < 0f ? -1f : Time.time + s.pendingLeft;
+        pendingDir = s.pendingDir;
+        pendingDamage = s.pendingDamage;
+        pendingCrit = s.pendingCrit;
+        pendingStep = s.pendingStep;
+        // 콤보 단계도 역행 복원 대상(CombatDecisions A-2)
+        comboStep = s.comboStep;
+        comboUntil = Time.time + s.comboLeft;
+        buffered = false;
         // 취소된 휘두름 표시는 남기지 않음
         swingShownUntil = 0f;
     }
@@ -148,11 +191,38 @@ public class PlayerAttack : MonoBehaviour, IRewindable
 
     void Update()
     {
+        if (hitAt >= 0f && Time.time >= hitAt) Strike();
+
         var mouse = Mouse.current;
-        if (mouse == null || !controller.CanAttack || !mouse.leftButton.wasPressedThisFrame || Time.time < readyAt) return;
-        readyAt = Time.time + B.interval;
+        bool click = mouse != null && mouse.leftButton.wasPressedThisFrame;
+        if (!controller.CanAttack)
+        {
+            buffered = false;
+            return;
+        }
+        // 다음 클릭 가능 시점 직전의 입력은 모아 두었다가 그 시점에 실행
+        if (click && Time.time < readyAt && readyAt - Time.time <= B.inputBuffer) buffered = true;
+        if (Time.time < readyAt || !(click || buffered)) return;
+        buffered = false;
+        Swing();
+    }
+
+    void Swing()
+    {
+        var combo = B.combo;
+        int step = NextStep(comboStep, Time.time, comboUntil, combo.Length);
+        var hit = combo[step];
+        comboStep = step;
+        readyAt = Time.time + hit.interval;
+        comboUntil = readyAt + B.comboWindow;
         SoundPlayer.Play("sfx_sword_swing", 3);
-        if (anim) anim.PlayOnce("attack");
+        if (anim)
+        {
+            // 그 방향 3연격 그림이 없으면 기존 단일 공격 그림(2026-11-08 사용자: 동쪽만 3연격)
+            string state = "attack" + (step + 1);
+            anim.SetFps(state, B.comboFps);
+            anim.PlayOnce(anim.Has(state) ? state : "attack");
+        }
 
         float swingBonus = 0f;
         foreach (var (amount, until) in oneShot)
@@ -160,23 +230,42 @@ public class PlayerAttack : MonoBehaviour, IRewindable
         oneShot.Clear();
 
         // 공격력 × (1 + 피해 증가% 합) × 치명타 + 고정 추가 피해 (CombatDecisions 2장)
-        LastHitCrit = UnityEngine.Random.value < B.critChance;
-        float scaled = B.damage * (1f + DamageBonus + ZoneDamageBonus + swingBonus) * (LastHitCrit ? B.critMultiplier : 1f);
-        int total = Health.Round(scaled + (HasBonus ? bonus : 0));
+        pendingCrit = UnityEngine.Random.value < B.critChance;
+        float scaled = B.damage * hit.damageMultiplier * (1f + DamageBonus + ZoneDamageBonus + swingBonus) * (pendingCrit ? B.critMultiplier : 1f);
+        pendingDamage = Health.Round(scaled + (HasBonus ? bonus : 0));
+        pendingDir = controller.Aim;
+        pendingStep = step;
+        hitAt = Time.time + hit.hitDelay;
+        if (hitAt <= Time.time) Strike();
+    }
 
-        Vector2 center = HitBoxCenter;
+    // 내리치는 프레임에 판정. 그 전에 경직·사망하면 취소
+    void Strike()
+    {
+        hitAt = -1f;
+        if (!controller.CanAttack) return;
+        LastHitCrit = pendingCrit;
+        int total = pendingDamage;
+        Vector2 center = (Vector2)transform.position + pendingDir * (transform.localScale.x + B.range.x) * 0.5f;
         swingCenter = center;
-        swingAngle = HitBoxAngle;
+        swingAngle = Mathf.Atan2(pendingDir.y, pendingDir.x) * Mathf.Rad2Deg;
         swingShownUntil = Time.time + swingShowTime;
         bool landed = false;
+        float stop = B.combo[Mathf.Clamp(pendingStep, 0, B.combo.Length - 1)].hitStop;
         foreach (var hit in Physics2D.OverlapBoxAll(center, B.range, swingAngle))
             if (hit.gameObject != gameObject && hit.TryGetComponent(out Health target) && !target.IsDead)
             {
                 target.TakeHit(total, transform.position);
                 SoundPlayer.Play("sfx_sword_hit", 3);
                 landed = true;
+                // 타격감: 맞은 적 애니메이션 정지(하얀 번쩍임은 그 적의 HitFlash가 피해를 받으면 처리)
+                if (hit.TryGetComponent(out SpriteAnimator targetAnim)) targetAnim.Freeze(stop);
             }
         if (!landed) return;
+        // 히트스톱: 내 애니메이션도 멈추고, 멈춘 만큼 다음 타 입력 시점·마감을 미룬다
+        if (anim) anim.Freeze(stop);
+        readyAt += stop;
+        comboUntil += stop;
         bonus = 0;
         HitLanded?.Invoke(center, B.range, swingAngle, total);
     }

@@ -129,16 +129,11 @@ public class SunCoreCaster : MonoBehaviour
         SunriseChargeRequested?.Invoke(c.chargeAmount);
     }
 
-    // 조준 방향 앞 → 막히면 플레이어 위치 → 그것도 무효면 null (SolarCoreSpec 2장)
+    // 플레이어 위치에 설치, 지형 안이면 null (2026-10-31 사용자: 조준 앞 → 주인공 주위)
     // ponytail: 지형 = Health 없는 비트리거 콜라이더. M9(막힘·무효 정의) 확정 시 레이어 기준으로 교체
     Vector2? FindSpawnPoint()
     {
         Vector2 origin = transform.position;
-        Vector2 ahead = origin + controller.Aim * S.basic.spawnDistance;
-        bool blocked = InTerrain(ahead);
-        foreach (var hit in Physics2D.LinecastAll(origin, ahead))
-            if (IsTerrain(hit.collider)) { blocked = true; break; }
-        if (!blocked) return ahead;
         return InTerrain(origin) ? null : origin;
     }
 

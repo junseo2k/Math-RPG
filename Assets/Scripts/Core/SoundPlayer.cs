@@ -102,6 +102,27 @@ public class SoundPlayer : MonoBehaviour
             _ => null, // 사망: 페이드 아웃 후 재탄생 시 bgm_start
         };
         if (want != currentBgm) SwitchBgm(want);
+        UpdateAmbience(flow.State == GameState.Playing && !flow.IsBossStage);
+    }
+
+    // 일반 방 배경음(지하수로 동굴 울림, 2026-11-13 Sonniss). BGM과 따로 반복, 켜고 끌 때 1초 페이드
+    [SerializeField, Range(0f, 1f)] float ambienceVolume = 0.35f;
+    AudioSource ambience;
+
+    void UpdateAmbience(bool on)
+    {
+        if (!ambience)
+        {
+            var clip = AssetLibrary.LoadClip("amb_ch1");
+            if (!clip) return;
+            ambience = gameObject.AddComponent<AudioSource>();
+            ambience.clip = clip;
+            ambience.loop = true;
+            ambience.volume = 0f;
+            ambience.Play();
+        }
+        float target = on ? masterVolume * ambienceVolume : 0f;
+        ambience.volume = Mathf.MoveTowards(ambience.volume, target, Time.deltaTime / Mathf.Max(crossfade, 0.01f));
     }
 
     // 보스별 곡이 없으면 축적 보스 곡으로 대체

@@ -11,13 +11,14 @@ public class SkyColor : MonoBehaviour
         if (cam && !cam.GetComponent<SkyColor>()) cam.gameObject.AddComponent<SkyColor>();
     });
 
-    // 18:00 노을 → 19:00 → 20:00 → 21:00 남색 (그 이후는 마지막 색 유지)
+    // 바닥 밖(시작 화면·보스방 여백)에 보이는 색. 탑다운 지하수로라 노을 주황 대신 가장 어두운 석재색에서
+    // 시각마다 조금씩 더 어둡게 (2026-11-13 사용자 "주황색 없애"). 그 이후는 마지막 색 유지
     [SerializeField] Color[] hourColors =
     {
-        new(0.85f, 0.45f, 0.35f),
-        new(0.5f, 0.3f, 0.5f),
-        new(0.22f, 0.2f, 0.42f),
-        new(0.08f, 0.08f, 0.22f),
+        new(0.078f, 0.102f, 0.149f),   // #141a26 석재 가장 어두운 단
+        new(0.063f, 0.078f, 0.122f),
+        new(0.047f, 0.059f, 0.094f),
+        new(0.031f, 0.039f, 0.071f),
     };
     [SerializeField] float transition = 1f;
 

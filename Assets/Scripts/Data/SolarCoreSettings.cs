@@ -10,7 +10,7 @@ public class SolarCoreSettings : ScriptableObject
     [Serializable]
     public class Basic
     {
-        [Tooltip("바라보는 방향으로 소환하는 거리(m)")] public float spawnDistance = 2f;
+        [Tooltip("미사용: 2026-10-31부터 플레이어 위치에 소환")] public float spawnDistance = 2f;
         [Tooltip("효과 반경(m)")] public float radius = 3f;
         [Tooltip("유지시간(초)")] public float lifetime = 6f;
         [Tooltip("소멸 후 쿨타임(초)")] public float cooldown = 6f;
